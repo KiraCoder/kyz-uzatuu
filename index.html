@@ -166,6 +166,35 @@
     height: 100%;
     z-index: 0;
     object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease-in;
+  }
+
+  .hero-bg.loaded {
+    opacity: 1;
+  }
+
+  .hero-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #FAF9F7 0%, #F3EFEA 100%);
+    z-index: 0;
+  }
+
+  .hero-loading.hidden {
+    display: none;
+  }
+
+  .hero-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid #E0D8CF;
+    border-top-color: #9A928B;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
   }
 
   .hero-overlay-1 {
@@ -904,7 +933,10 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <img src="images/hero-shokulo.png" alt="" class="hero-bg">
+    <div class="hero-loading" id="heroLoading">
+      <div class="hero-spinner"></div>
+    </div>
+    <img src="images/hero-shokulo-optimized.jpg" alt="" class="hero-bg" id="heroBg">
     <div class="hero-overlay-1"></div>
     <div class="hero-overlay-2"></div>
 
@@ -942,6 +974,7 @@
     <p class="invitation-text reveal slide-up">узатуу тоюна арналган ак дасторконубуздун кадырлуу коногу болууга чакырабыз!</p>
     <p class="event-title reveal scale-in">Той салтанаты</p>
     <p class="event-date reveal slide-up">8-август 2026-жыл</p>
+    <p class="event-date reveal slide-up" style="margin-top: 12px; font-size: clamp(16px, 4.5vw, 20px); color: #8C837A;">саат 17:00</p>
   </section>
 
   <!-- Calendar -->
@@ -1073,6 +1106,21 @@
 // ========== CONFIGURATION ==========
 // Replace with your Google Apps Script Web App URL
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6jZs-STQ4rw1NmtL1OS7mbtDmbiKUWfF-S5qm_qHROn2ZWPZxK7PLXG1NT_Gf8YJNtg/exec';
+
+// ========== HERO IMAGE LOADING ==========
+const heroBg = document.getElementById('heroBg');
+const heroLoading = document.getElementById('heroLoading');
+
+heroBg.addEventListener('load', () => {
+  heroBg.classList.add('loaded');
+  heroLoading.classList.add('hidden');
+});
+
+// If image is already cached
+if (heroBg.complete) {
+  heroBg.classList.add('loaded');
+  heroLoading.classList.add('hidden');
+}
 
 // ========== MUSIC FUNCTIONALITY ==========
 const musicBtn = document.getElementById('musicBtn');
@@ -1253,25 +1301,17 @@ submitBtn.addEventListener('click', async () => {
       userAgent: navigator.userAgent
     };
 
-    // Send to Google Sheets
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
+    // Send to Google Sheets in background (no-cors mode)
+    fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors', // Required for Google Apps Script
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData)
-    });
+    }).catch(e => console.log('Background submission:', e));
 
-    // Note: With no-cors mode, we can't read the response
-    // but if no error is thrown, we can assume success
-    console.log('RSVP submitted:', formData);
-
-    // Show thank you message
-    rsvpForm.style.display = 'none';
-    thankYou.classList.add('show');
-
-    // Optional: Store in localStorage as backup
+    // Store in localStorage as backup
     try {
       const submissions = JSON.parse(localStorage.getItem('rsvp_submissions') || '[]');
       submissions.push(formData);
@@ -1279,6 +1319,16 @@ submitBtn.addEventListener('click', async () => {
     } catch (e) {
       console.log('LocalStorage not available');
     }
+
+    console.log('RSVP submitted:', formData);
+
+    // Show thank you message immediately (after brief delay for UX)
+    setTimeout(() => {
+      rsvpForm.style.display = 'none';
+      thankYou.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+    }, 800);
 
   } catch (error) {
     console.error('Submission error:', error);
