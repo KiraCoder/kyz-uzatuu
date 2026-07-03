@@ -4,6 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 <title>Алия - Кыз Узатуу 2026</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Сиздерди Алиянын кыз узатуу тоюна чакырабыз! 8-август 2026-жыл, саат 17:00, Ноокат шаары, Уч Бай рестораны">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kiracoder.github.io/kyz-uzatuu/">
+<meta property="og:title" content="Алия - Кыз Узатуу Чакыруу">
+<meta property="og:description" content="Сиздерди Алиянын кыз узатуу тоюна чакырабыз! 8-август 2026-жыл, саат 17:00, Ноокат шаары">
+<meta property="og:image" content="https://kiracoder.github.io/kyz-uzatuu/images/hero-shokulo-optimized.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://kiracoder.github.io/kyz-uzatuu/">
+<meta name="twitter:title" content="Алия - Кыз Узатуу Чакыруу">
+<meta name="twitter:description" content="Сиздерди Алиянын кыз узатуу тоюна чакырабыз! 8-август 2026-жыл, саат 17:00">
+<meta name="twitter:image" content="https://kiracoder.github.io/kyz-uzatuu/images/hero-shokulo-optimized.jpg">
+
+<!-- Additional Meta Tags -->
+<meta name="theme-color" content="#FAF9F7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -329,25 +353,46 @@
 
   .hero-date {
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(18px, 5vw, 22px);
+    font-size: clamp(22px, 6vw, 28px);
     letter-spacing: .34em;
     text-transform: uppercase;
-    color: #5A534C;
+    color: #4C463F;
     padding-left: .34em;
     margin-top: 22px;
     text-shadow: 0 1px 10px rgba(250,249,247,.9);
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .scroll-hint {
     position: absolute;
     bottom: 26px;
     z-index: 2;
-    font-size: clamp(9px, 2.5vw, 11px);
-    letter-spacing: .3em;
-    text-transform: uppercase;
-    color: #A79E95;
-    animation: softpulse 2.6s ease-in-out infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scroll-arrow {
+    width: 32px;
+    height: 32px;
+    animation: bounce 2s ease-in-out infinite, glow 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 4px rgba(154,146,139,0.4));
+      opacity: 0.7;
+    }
+    50% {
+      filter: drop-shadow(0 0 12px rgba(154,146,139,0.8));
+      opacity: 1;
+    }
   }
 
   /* Section styles */
@@ -378,19 +423,21 @@
 
   .invitation .greeting {
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(16px, 4.5vw, 19px);
+    font-size: clamp(18px, 5vw, 22px);
     letter-spacing: .24em;
     text-transform: uppercase;
-    color: #5A534C;
+    color: #4C463F;
     margin: 0 0 26px;
     padding-left: .24em;
+    font-weight: 600;
   }
 
   .invitation .text {
-    font-size: clamp(14px, 3.8vw, 15.5px);
+    font-size: clamp(16px, 4.2vw, 18px);
     line-height: 1.85;
     letter-spacing: .02em;
-    color: #6E665F;
+    color: #5A534C;
+    font-weight: 500;
   }
 
   .invitation .name {
@@ -402,13 +449,14 @@
   }
 
   .invitation .invitation-text {
-    font-size: clamp(14px, 3.8vw, 15.5px);
+    font-size: clamp(16px, 4.2vw, 18px);
     line-height: 1.9;
     letter-spacing: .02em;
-    color: #6E665F;
+    color: #5A534C;
     margin: 0 auto;
-    max-width: 300px;
+    max-width: 320px;
     padding: 0 10px;
+    font-weight: 500;
   }
 
   .invitation .event-title {
@@ -420,11 +468,20 @@
 
   .invitation .event-date {
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(20px, 5.5vw, 24px);
-    font-weight: 600;
+    font-size: clamp(24px, 6.5vw, 30px);
+    font-weight: 700;
     letter-spacing: .06em;
     color: #4C463F;
     margin: 0;
+  }
+
+  .invitation .event-time {
+    font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 700;
+    letter-spacing: .08em;
+    color: #8C837A;
+    margin: 12px 0 0;
   }
 
   /* Calendar */
@@ -440,12 +497,13 @@
 
   .calendar-title {
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(18px, 5vw, 22px);
+    font-size: clamp(22px, 5.5vw, 26px);
     letter-spacing: .22em;
     text-transform: uppercase;
-    color: #7E766E;
+    color: #5A534C;
     margin-bottom: 22px;
     padding-left: .22em;
+    font-weight: 700;
   }
 
   .calendar-weekdays {
@@ -477,17 +535,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: clamp(28px, 7vw, 34px);
-    height: clamp(28px, 7vw, 34px);
-    font-size: clamp(13px, 3.5vw, 15px);
-    color: #6E665F;
+    width: clamp(30px, 7.5vw, 38px);
+    height: clamp(30px, 7.5vw, 38px);
+    font-size: clamp(15px, 4vw, 18px);
+    color: #5A534C;
+    font-weight: 500;
   }
 
   .calendar-day.highlight span {
     border-radius: 50%;
-    border: 1px solid #9A928B;
+    border: 2px solid #8C837A;
     color: #4C463F;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   /* Address */
@@ -529,18 +588,19 @@
 
   .address-city {
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(14px, 3.8vw, 16px);
+    font-size: clamp(16px, 4.2vw, 19px);
     letter-spacing: .18em;
     text-transform: uppercase;
-    color: #6E665F;
+    color: #5A534C;
     margin: 0 0 8px;
     padding: 0 10px .18em;
+    font-weight: 600;
   }
 
   .address-venue {
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(18px, 4.8vw, 20px);
-    font-weight: 600;
+    font-size: clamp(22px, 5.5vw, 26px);
+    font-weight: 700;
     letter-spacing: .1em;
     text-transform: uppercase;
     color: #4C463F;
@@ -552,16 +612,17 @@
     display: inline-flex;
     align-items: center;
     gap: 9px;
-    padding: 14px 30px;
-    border: 1px solid #C4B9AE;
+    padding: 16px 32px;
+    border: 2px solid #C4B9AE;
     border-radius: 40px;
-    font-size: clamp(11px, 2.8vw, 12px);
+    font-size: clamp(13px, 3.2vw, 15px);
     letter-spacing: .2em;
     text-transform: uppercase;
-    color: #5A534C;
+    color: #4C463F;
     text-decoration: none;
-    padding-left: calc(30px + .2em);
+    padding-left: calc(32px + .2em);
     transition: all .2s;
+    font-weight: 600;
   }
 
   .map-button:hover {
@@ -629,24 +690,26 @@
 
   .countdown-value {
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(36px, 10vw, 44px);
-    font-weight: 600;
+    font-size: clamp(40px, 11vw, 50px);
+    font-weight: 700;
     color: #4C463F;
   }
 
   .countdown-separator {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(28px, 8vw, 34px);
-    color: #CFC5BC;
+    font-size: clamp(32px, 9vw, 38px);
+    color: #B9AC9F;
     margin-top: clamp(18px, 5vw, 22px);
+    font-weight: 600;
   }
 
   .countdown-label {
-    font-size: clamp(9px, 2.5vw, 11px);
+    font-size: clamp(11px, 3vw, 14px);
     letter-spacing: .24em;
     text-transform: uppercase;
-    color: #A79E95;
+    color: #8C837A;
     padding-left: .24em;
+    font-weight: 600;
   }
 
   /* Hosts */
@@ -713,10 +776,11 @@
 
   .form-group label {
     display: block;
-    font-size: clamp(11px, 3vw, 12.5px);
+    font-size: clamp(13px, 3.5vw, 15px);
     line-height: 1.6;
-    color: #8A827A;
+    color: #5A534C;
     margin-bottom: 12px;
+    font-weight: 500;
   }
 
   .form-group label .note {
@@ -741,16 +805,17 @@
   }
 
   .rsvp-question {
-    font-size: clamp(13px, 3.5vw, 14px);
+    font-size: clamp(15px, 4vw, 17px);
     letter-spacing: .02em;
-    color: #5A534C;
+    color: #4C463F;
     margin: 0 0 18px;
+    font-weight: 600;
   }
 
   .radio-group {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     margin-bottom: 32px;
   }
 
@@ -761,15 +826,16 @@
     width: 100%;
     text-align: left;
     cursor: pointer;
-    padding: 14px 20px;
+    padding: 16px 20px;
     border-radius: 14px;
     background: transparent;
-    border: 1px solid #E4DCD3;
+    border: 2px solid #E4DCD3;
     color: #4C463F;
     font-family: 'Source Serif 4', serif;
-    font-size: clamp(14px, 3.5vw, 15px);
+    font-size: clamp(16px, 4vw, 18px);
     letter-spacing: .02em;
     transition: all .2s;
+    font-weight: 500;
   }
 
   .radio-option:hover {
@@ -810,18 +876,19 @@
 
   .submit-button {
     width: 100%;
-    padding: 16px;
+    padding: 18px;
     border: none;
     border-radius: 40px;
     background: #9A928B;
     color: #FAF9F7;
     font-family: 'Cormorant Garamond', 'Source Serif 4', serif;
-    font-size: clamp(13px, 3.2vw, 14px);
+    font-size: clamp(15px, 3.8vw, 17px);
     letter-spacing: .24em;
     text-transform: uppercase;
     cursor: pointer;
-    padding-left: calc(16px + .24em);
+    padding-left: calc(18px + .24em);
     transition: all .2s;
+    font-weight: 700;
   }
 
   .submit-button:hover:not(:disabled) {
@@ -960,7 +1027,11 @@
       <div class="hero-divider"></div>
       <div class="hero-date">08 · 08 · 2026</div>
     </div>
-    <div class="scroll-hint">ылдый жылдырыңыз</div>
+    <div class="scroll-hint">
+      <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="#9A928B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </div>
   </section>
 
   <!-- Invitation -->
@@ -974,7 +1045,7 @@
     <p class="invitation-text reveal slide-up">узатуу тоюна арналган ак дасторконубуздун кадырлуу коногу болууга чакырабыз!</p>
     <p class="event-title reveal scale-in">Той салтанаты</p>
     <p class="event-date reveal slide-up">8-август 2026-жыл</p>
-    <p class="event-date reveal slide-up" style="margin-top: 12px; font-size: clamp(16px, 4.5vw, 20px); color: #8C837A;">саат 17:00</p>
+    <p class="event-time reveal slide-up">саат 17:00</p>
   </section>
 
   <!-- Calendar -->
