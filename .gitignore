@@ -1,0 +1,20 @@
+# Development files
+test-music.html
+phone-test.html
+test-phone.html
+
+# Downloaded design files (keep original zip)
+kyrgyz-wedding-invitation-design/
+
+# System files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
