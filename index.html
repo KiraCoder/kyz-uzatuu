@@ -562,6 +562,17 @@
     margin: 0 0 26px;
   }
 
+  .address-icon-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .address-icon-link:hover .address-icon {
+    transform: scale(1.05);
+  }
+
   .address-icon {
     position: relative;
     width: clamp(80px, 20vw, 96px);
@@ -570,6 +581,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: iconGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes iconGlow {
+    0%, 100% {
+      filter: drop-shadow(0 0 4px rgba(230, 224, 208, 0.5));
+    }
+    50% {
+      filter: drop-shadow(0 0 10px rgba(230, 224, 208, 0.8)) drop-shadow(0 0 14px rgba(230, 224, 208, 0.5));
+    }
   }
 
   .address-icon .ring-1 {
@@ -620,7 +641,6 @@
     text-transform: uppercase;
     color: #4C463F;
     text-decoration: none;
-    padding-left: calc(32px + .2em);
     transition: all .2s;
     font-weight: 600;
   }
@@ -633,7 +653,6 @@
   @media (max-width: 380px) {
     .map-button {
       padding: 12px 24px;
-      padding-left: calc(24px + .2em);
     }
   }
 
@@ -1066,17 +1085,18 @@
     </div>
     <p class="address-title reveal scale-in">Дарегибиз</p>
 
-    <div class="address-icon reveal scale-in">
-      <span class="ring-1"></span>
-      <span class="ring-2"></span>
-      <svg width="26" height="32" viewBox="0 0 24 30" fill="none" stroke="#8C837A" stroke-width="1.4"><path d="M12 2C6.8 2 3 5.9 3 10.8 3 16.6 12 27.5 12 27.5S21 16.6 21 10.8C21 5.9 17.2 2 12 2Z"/><circle cx="12" cy="10.6" r="3.1"/></svg>
-    </div>
+    <a href="https://2gis.kg/bishkek/geo/70000001088899275/72.650956,40.290472" target="_blank" rel="noopener" class="address-icon-link reveal scale-in">
+      <div class="address-icon">
+        <span class="ring-1"></span>
+        <span class="ring-2"></span>
+        <img src="images/2gis.png" alt="2GIS" style="width: 48px; height: 48px; object-fit: contain;">
+      </div>
+    </a>
 
     <p class="address-city reveal slide-left">Ноокат шаары</p>
     <p class="address-venue reveal slide-right">«Уч Бай» рестораны</p>
 
     <a href="https://2gis.kg/bishkek/geo/70000001088899275/72.650956,40.290472" target="_blank" rel="noopener" class="map-button reveal scale-in">
-      <svg width="15" height="15" viewBox="0 0 24 30" fill="none" stroke="#8C837A" stroke-width="1.7"><path d="M12 2C6.8 2 3 5.9 3 10.8 3 16.6 12 27.5 12 27.5S21 16.6 21 10.8C21 5.9 17.2 2 12 2Z"/><circle cx="12" cy="10.6" r="3.1"/></svg>
       Картадан кароо
     </a>
   </section>
