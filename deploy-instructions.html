@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>🚀 Deploy Your Wedding Website</title>
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #FAF9F7 0%, #F3EFEA 100%);
+  color: #4C463F;
+  line-height: 1.6;
+}
+
+h1 {
+  color: #4C463F;
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #8C837A;
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+.step {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(76,70,63,0.08);
+}
+
+.step-number {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: #9A928B;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.step h2 {
+  display: inline;
+  color: #4C463F;
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.step-content {
+  margin-top: 20px;
+  padding-left: 55px;
+}
+
+.code-block {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  overflow-x: auto;
+  margin: 15px 0;
+  position: relative;
+}
+
+.code-block::before {
+  content: 'Terminal';
+  position: absolute;
+  top: -10px;
+  left: 15px;
+  background: #4C463F;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #9A928B;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.copy-btn:hover {
+  background: #8C837A;
+}
+
+.highlight {
+  background: #FFF3CD;
+  padding: 15px 20px;
+  border-left: 4px solid #856404;
+  border-radius: 5px;
+  margin: 15px 0;
+}
+
+.success {
+  background: #E8F5E9;
+  padding: 15px 20px;
+  border-left: 4px solid #2E7D32;
+  border-radius: 5px;
+  margin: 15px 0;
+}
+
+.warning {
+  background: #FFE5E5;
+  padding: 15px 20px;
+  border-left: 4px solid #C62828;
+  border-radius: 5px;
+  margin: 15px 0;
+}
+
+ol {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+li {
+  margin: 10px 0;
+}
+
+strong {
+  color: #4C463F;
+}
+
+a {
+  color: #9A928B;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.final-url {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  margin-top: 30px;
+  box-shadow: 0 8px 32px rgba(76,70,63,0.12);
+}
+
+.final-url h3 {
+  color: #4C463F;
+  margin-top: 0;
+}
+
+.url-display {
+  background: #F1ECE6;
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #4C463F;
+  margin: 20px 0;
+  word-break: break-all;
+}
+
+.celebrate {
+  font-size: 48px;
+  margin: 20px 0;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 20px 15px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .step {
+    padding: 20px;
+  }
+
+  .step-content {
+    padding-left: 0;
+  }
+
+  .code-block {
+    font-size: 12px;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>🚀 Deploy Your Wedding Website</h1>
+<p class="subtitle">Follow these simple steps to make your website live!</p>
+
+<div class="step">
+  <span class="step-number">1</span>
+  <h2>Go to GitHub</h2>
+  <div class="step-content">
+    <p>Open <a href="https://github.com/new" target="_blank">https://github.com/new</a> in your browser</p>
+    <div class="highlight">
+      <strong>📝 Note:</strong> If you don't have a GitHub account, create one first at <a href="https://github.com" target="_blank">github.com</a> (it's free!)
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-number">2</span>
+  <h2>Create New Repository</h2>
+  <div class="step-content">
+    <p>Fill in the details:</p>
+    <ol>
+      <li><strong>Repository name:</strong> <code>wedding-invitation</code> or <code>aliya-kyz-uzatuu</code></li>
+      <li><strong>Description:</strong> "Aliya's Wedding Invitation - Kyz Uzatuu 2026"</li>
+      <li><strong>Visibility:</strong> Choose <strong>Public</strong> (required for free GitHub Pages)</li>
+      <li><strong>DO NOT</strong> check "Initialize repository" or add README/gitignore</li>
+      <li>Click <strong>"Create repository"</strong></li>
+    </ol>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-number">3</span>
+  <h2>Connect Your Local Repository</h2>
+  <div class="step-content">
+    <p>After creating the repository, GitHub will show you some commands. <strong>COPY THIS EXACT COMMAND</strong> from GitHub (it will have your username):</p>
+
+    <div class="highlight">
+      <strong>⚠️ IMPORTANT:</strong> Replace <code>YOUR_USERNAME</code> below with your actual GitHub username!
+    </div>
+
+    <div class="code-block">
+git remote add origin https://github.com/YOUR_USERNAME/wedding-invitation.git
+git branch -M main
+git push -u origin main
+    </div>
+
+    <p>Or if you see an SSH URL on GitHub, use:</p>
+
+    <div class="code-block">
+git remote add origin git@github.com:YOUR_USERNAME/wedding-invitation.git
+git branch -M main
+git push -u origin main
+    </div>
+
+    <p><strong>Run these commands in your Terminal</strong> (one at a time or all together)</p>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-number">4</span>
+  <h2>Enable GitHub Pages</h2>
+  <div class="step-content">
+    <ol>
+      <li>Go to your repository on GitHub</li>
+      <li>Click <strong>"Settings"</strong> tab (top menu)</li>
+      <li>Click <strong>"Pages"</strong> in the left sidebar</li>
+      <li>Under "Source", select:
+        <ul>
+          <li><strong>Branch:</strong> main</li>
+          <li><strong>Folder:</strong> / (root)</li>
+        </ul>
+      </li>
+      <li>Click <strong>"Save"</strong></li>
+    </ol>
+
+    <div class="success">
+      <strong>✅ Success!</strong> GitHub will show a message like:<br>
+      "Your site is ready to be published at https://YOUR_USERNAME.github.io/wedding-invitation/"
+    </div>
+
+    <div class="warning">
+      <strong>⏰ Wait 1-2 minutes</strong> for GitHub to build and deploy your site
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <span class="step-number">5</span>
+  <h2>Get Your Live URL</h2>
+  <div class="step-content">
+    <p>Your wedding invitation will be live at:</p>
+
+    <div class="url-display">
+      https://YOUR_USERNAME.github.io/wedding-invitation/
+    </div>
+
+    <p><strong>Replace YOUR_USERNAME</strong> with your actual GitHub username</p>
+
+    <div class="highlight">
+      <strong>📱 Example URLs:</strong><br>
+      • If username is "nuraaly": https://nuraaly.github.io/wedding-invitation/<br>
+      • If username is "johndoe": https://johndoe.github.io/wedding-invitation/
+    </div>
+  </div>
+</div>
+
+<div class="final-url">
+  <div class="celebrate">🎉</div>
+  <h3>Your Wedding Website is LIVE!</h3>
+  <p>Share this URL with your guests:</p>
+  <div class="url-display" id="finalUrl">
+    https://YOUR_USERNAME.github.io/wedding-invitation/
+  </div>
+  <p style="margin-top: 30px; color: #8C837A;">
+    <strong>Той кутмандуу болсун!</strong><br>
+    May your wedding be blessed! 💐
+  </p>
+</div>
+
+<div class="step" style="margin-top: 30px; background: #E8F5E9;">
+  <h2 style="margin: 0;">✅ Checklist - After Deployment</h2>
+  <div class="step-content" style="padding-left: 0; margin-top: 15px;">
+    <ul style="list-style: none; padding: 0;">
+      <li>☐ Test the live website on your phone</li>
+      <li>☐ Check if music plays (click the button)</li>
+      <li>☐ Test RSVP form submission</li>
+      <li>☐ Verify countdown timer is working</li>
+      <li>☐ Test the 2GIS map link</li>
+      <li>☐ Share the URL with family and friends!</li>
+    </ul>
+  </div>
+</div>
+
+<div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(154,146,139,0.1); border-radius: 16px;">
+  <h3 style="margin-top: 0; color: #4C463F;">Need Help?</h3>
+  <p>If you get stuck, check:</p>
+  <p>
+    <a href="https://docs.github.com/en/pages" target="_blank">GitHub Pages Documentation</a> •
+    <a href="SETUP_GUIDE.md">SETUP_GUIDE.md</a>
+  </p>
+</div>
+
+</body>
+</html>
