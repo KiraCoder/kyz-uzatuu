@@ -89,8 +89,8 @@ function ridge(pts, tileW, off, base, fill) {
   for (let k = -1; k < 3; k++) {
     const ox = -o0 + k * tileW;
     if (ox > W || ox + tileW < 0) continue;
-    const p = pts.map(([x, y]) => `${f2(x + ox)},${y}`).join(' ');
-    out += `<polygon points="${f2(ox)},${base} ${p} ${f2(ox + tileW)},${base}" fill="${fill}"/>`;
+    const p = pts.map(([x, y], i) => `${f2(x + ox + (i === pts.length - 1 ? 2 : 0))},${y}`).join(' ');
+    out += `<polygon points="${f2(ox)},${base} ${p} ${f2(ox + tileW + 2)},${base}" fill="${fill}"/>`;
   }
   return out;
 }
