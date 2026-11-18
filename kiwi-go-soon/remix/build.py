@@ -141,7 +141,7 @@ def frame(i):
         if c[0] <= t < c[1]: return draw_card(t, c)
     if t >= END[0]: return draw_end(t)
     img = Image.fromarray(SRCF[min(i, len(SRCF) - 1)].copy())
-    return hook_caption(img, t)
+    return img  # hook stays clean: no text on the original footage
 
 out_v = os.path.join(HERE, '_video.mp4')
 enc = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),
