@@ -1,0 +1,79 @@
+{
+ "budget": 15.0,
+ "balance_before": 465.17,
+ "balance_after": 455.17,
+ "spend": 10.0,
+ "jobs": [
+  {
+   "name": "S6-c",
+   "file": "S6-c.png",
+   "job_id": "b5ab0b88-a618-418e-b26d-1484abbf2d29",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [],
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_085357_b5ab0b88-a618-418e-b26d-1484abbf2d29.png",
+   "qa": "PASS (reposition in post)",
+   "qa_notes": "No people. Strictly side-on, cab left, blank cream box, flat cream hubs, both wheels circular. Truck ~95% of width (target 85), rear wheel centre ~(64.6%, 58%) vs target (59%, 42%), wheel dia ~26.3% W (~284 px at 1080; in the 270-330 spec). Too low by ~16% H: shift plate up ~300 px and extend the blurred paving at 0 cr, or accept for the dolly. Truck slightly simpler than OB-1 (no front bumper).",
+   "picked": true
+  },
+  {
+   "name": "S6-d",
+   "file": "S6-d.png",
+   "job_id": "c4d65eff-62d6-4fcc-866b-69365b78aabc",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "bd9b5b2e-d648-4b15-b14f-ffe3c1fdaf3d"
+   ],
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_085357_c4d65eff-62d6-4fcc-866b-69365b78aabc.png",
+   "qa": "PASS content / FAIL geometry",
+   "qa_notes": "No people (S4-a ref did not leak figures). Closer to OB-1 (bumper, mirror) and S4 city. Rear wheel ~20% W (~220 px, below 270), centre ~(76%, 66%): too small and low. Alternate.",
+   "picked": false
+  },
+  {
+   "name": "S1-c",
+   "file": "S1-c.png",
+   "job_id": "30a03622-bd67-4026-baf5-3565c4a2db05",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "22da48ca-eadf-4013-93c5-ffef7b886d1a",
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09"
+   ],
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_085358_30a03622-bd67-4026-baf5-3565c4a2db05.png",
+   "qa": "PASS",
+   "qa_notes": "Lamp off, only cool phone glow + city bokeh, tired face, lips closed, no smile. Same layout and identity as S1-b, 7 blank-sticker parcels, no text.",
+   "picked": true
+  },
+  {
+   "name": "S5-c",
+   "file": "S5-c.png",
+   "job_id": "4abd8ed0-1599-47a5-b92d-51d0a04b8095",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "037598d3-8527-4ce4-9f72-c22028dbb3f2",
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09"
+   ],
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_085358_4abd8ed0-1599-47a5-b92d-51d0a04b8095.png",
+   "qa": "PASS",
+   "qa_notes": "Warm golden lamp + morning window light (night bokeh gone), parcels gone, relaxed and smiling, same layout/identity. She is sharp rather than softly defocused: add defocus in post if wanted.",
+   "picked": true
+  },
+  {
+   "name": "S2-test",
+   "file": "S2-test.mp4",
+   "job_id": "4c815255-0569-4d3c-9c9e-7b7f97c837e4",
+   "model_config": "kling3_0 pro 4s sound off 9:16, start_image S2-a 91914e32-702a-402f-b2d1-38582d0960fc",
+   "cost_credits": 6.0,
+   "image_references": [
+    "91914e32-702a-402f-b2d1-38582d0960fc"
+   ],
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_085407_4c815255-0569-4d3c-9c9e-7b7f97c837e4.mp4",
+   "prompt": "The courier, already holding the parcel with both hands, turns slowly to his right and walks out of frame to the right; the seller stays in the doorway and her smile grows softly, her hands stay still at her waist. Locked-off camera. The parcel keeps its shape and its blank round sticker; hands stay simple with no extra fingers; no morphing of faces or bodies. All surfaces stay blank: no text, no letters, no numbers, no logos.",
+   "qa": "PASS",
+   "qa_notes": "1080x1912, 24 fps, 97 frames. Camera locked (0 px shift in static regions). Courier turns toward camera then walks right, out of frame ~2.9 s. Identities stable (beard, plain lime cap), 5-finger hands, box rigid, sticker blank (hidden ~1.25 s while box rotates, returns). Seller face stable, smile grows. No text, no morphing.",
+   "picked": true
+  }
+ ]
+}
