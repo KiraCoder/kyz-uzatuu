@@ -15,7 +15,7 @@ def circ(img, size):
 SIZES = [340, 110, 40]
 PAD = 30; HALF = PAD + 340 + 30 + 110 + 30 + 40 + PAD   # one app-background panel
 ROW = 340 + 80
-W = 220 + HALF * 2; H = 70 + ROW * len(names) + 260
+W = 220 + HALF * 2; H = 70 + ROW * len(names) + 520
 sheet = Image.new('RGB', (W, H), '#ECE6D6'); d = ImageDraw.Draw(sheet)
 d.text((24, 22), 'Kiwi Go — Instagram avatar reality check (circle crop at 340 / 110 / 40 px)', font=fB, fill='#111410')
 for i, (nn, name) in enumerate(names):
@@ -34,16 +34,27 @@ for i, (nn, name) in enumerate(names):
 # logo full vs small at 40 / 56 / 110 on white + black
 y = 70 + ROW * len(names) + 10
 d.text((24, y), 'Logo test: FULL vs SMALL version at 40 / 56 / 110 px', font=fB, fill='#111410')
-x = 24
-for kind in ('full', 'small'):
+for k, kind in enumerate(('full', 'small')):
+    x = 24
     lg = Image.open(os.path.join(D, 'logo', f'kiwi-go-logo-{kind}-1024.png'))
     for bgc in ('#FFFFFF', '#000000', '#B8F03C'):
-        sheet.paste(bgc, (x, y + 50, x + 290, y + 230))
+        yy = y + k * 230
+        sheet.paste(bgc, (x, yy + 50, x + 290, yy + 230))
         xx = x + 14
         for s in (40, 56, 110):
-            l = lg.resize((s, s), Image.LANCZOS); sheet.paste(l, (xx, y + 50 + (180 - s) // 2), l); xx += s + 24
-        d.text((x + 6, y + 206), kind, font=fS, fill='#888888')
+            l = lg.resize((s, s), Image.LANCZOS); sheet.paste(l, (xx, yy + 50 + (180 - s) // 2), l); xx += s + 24
+        d.text((x + 6, yy + 206), kind, font=fS, fill='#888888')
         x += 300
-    x += 40
 sheet.save(os.path.join(D, 'preview.png'))
 print(sheet.size)
+
+# zoom strip: every variant at true 40 px, enlarged 5x (nearest) for inspection
+z = Image.new('RGB', (len(names) * 60 + 20, 140), '#FFFFFF')
+for i, (nn, _) in enumerate(names):
+    c = circ(Image.open(os.path.join(D, f'kiwi-go-avatar-{nn}-1080.png')), 40)
+    z.paste(c, (10 + i * 60, 10), c)
+    z.paste('#000000', (0, 70, z.width, 140)); 
+for i, (nn, _) in enumerate(names):
+    c = circ(Image.open(os.path.join(D, f'kiwi-go-avatar-{nn}-1080.png')), 40)
+    z.paste(c, (10 + i * 60, 85), c)
+z.resize((z.width * 4, z.height * 4), Image.NEAREST).save('/tmp/claude-0/-home-user-kyz-uzatuu/70f874b5-f664-5bb7-81c4-002190694b11/scratchpad/zoom40.png')

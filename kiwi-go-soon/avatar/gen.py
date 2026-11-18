@@ -86,10 +86,10 @@ V.append(('Lime', bg(C['lime']) + logo(CX, CY, 360)))
 # 04 Rolling — rotated logo with ink speed lines and ground line, on cream
 def pill(x1, x2, y, h, fill):
     return f'<rect x="{x1}" y="{y-h/2}" width="{x2-x1}" height="{h}" rx="{h/2}" fill="{fill}"/>'
-ox, oy, orr = 600, 510, 290
+ox, oy, orr = 610, 505, 290
 roll = bg(C['cream'])
-roll += pill(128, 300, 420, 34, C['ink']) + pill(176, 290, 510, 34, C['ink']) + pill(128, 300, 600, 34, C['ink'])
-roll += pill(230, 940, oy + orr + 22, 26, C['ink'])
+roll += pill(110, 262, 425, 34, C['ink']) + pill(150, 262, 510, 34, C['ink']) + pill(110, 262, 595, 34, C['ink'])
+roll += pill(250, 890, oy + orr + 30, 26, C['ink'])
 roll += logo(ox, oy, orr, rot=-20)
 V.append(('Rolling', roll))
 
