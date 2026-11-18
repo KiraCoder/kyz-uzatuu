@@ -1,0 +1,248 @@
+{
+ "budget": 23.75,
+ "balance_before": 488.92,
+ "balance_after": 465.17,
+ "spend": 23.75,
+ "jobs": [
+  {
+   "name": "sheet-seller",
+   "file": "sheet-seller.png",
+   "job_id": "c645e52b-ad24-4ace-be1a-21c4ea703a09",
+   "model_config": "seedream_5_5 2k 16:9",
+   "cost_credits": 3.5,
+   "image_references": [],
+   "prompt": "Character turnaround model sheet, four consistent full-body views in a row — front view, three-quarter left view, side profile and back view, evenly spaced — plus two head close-ups at the right end (one calm, one with a soft relieved smile); identical original handmade needle-felted wool doll in all views, plain cream seamless studio background, professional character sheet presentation. ONE character: a Kyrgyz woman about 30, a modern city seller, warm medium skin, simple stitched calm eyes and a small stitched smile, gently blushed felt cheeks, dark hair in a neat low bun with a soft wool finish, cream chunky-knit cardigan over a plain sand dress, ink-coloured slippers, no bag, no jewellery, no headscarf; adult dignified proportions, head about one sixth of body height, never big-headed. Nothing printed on the clothes, no patterns on clothing. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. This is a reference sheet: soft even studio light, every view fully in focus, consistent scale across views. No text, no labels, no captions, no letters, no numbers, no logos, no watermark, no frame borders, no extra characters, no background props, no distorted anatomy, no extra fingers, no babyface, not chibi. Not glossy plastic, not clay, not photoreal skin, not anime eyes, no LEGO studs.",
+   "qa": "PASS",
+   "qa_notes": "One identity across 4 views + 2 close-ups; adult proportions; wool texture; plain clothes; no text. Minor: tiny lime flecks in hair/cardigan and lime leaf bokeh in corners (from STYLE ANCHOR lime + tilt-shift).",
+   "picked": true
+  },
+  {
+   "name": "sheet-courier",
+   "file": "sheet-courier.png",
+   "job_id": "b2a2c378-6003-4277-a4d7-c4f8ceb9e564",
+   "model_config": "seedream_5_5 2k 16:9",
+   "cost_credits": 3.5,
+   "image_references": [],
+   "prompt": "Character turnaround model sheet, five consistent full-body views in a row — front view, three-quarter right view, side profile, back three-quarter view and back view, evenly spaced — plus one extra full-body pose at the right end holding a plain cream card box with both hands at chest height; identical original handmade needle-felted wool doll in all views, plain cream seamless studio background, professional character sheet presentation. ONE character: a Kyrgyz man about 30, short neat dark hair, warm medium skin, simple stitched calm face, plain lime #B8F03C baseball cap with no logo, plain ink #111410 zip jacket with no patches or print, sand trousers, ink trainers, no bag; adult dignified proportions, head about one sixth of body height, neat posture. The cap is the only lime item. The box is completely blank cream card with sand paper tape. Each hand has five simple fingers. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. This is a reference sheet: soft even studio light, every view fully in focus, consistent scale across views. No text, no labels, no captions, no letters, no numbers, no logos, no watermark, no frame borders, no extra characters, no background props, no distorted anatomy, no extra fingers, no babyface, not chibi. Not glossy plastic, not clay, not photoreal skin, not anime eyes, no LEGO studs.",
+   "qa": "PASS",
+   "qa_notes": "Cap plain lime (only lime item), jacket blank, box hold clean, 5 fingers, no text. Issues: trainers carry three sand stripes (reads as a sportswear brand) - suppressed in frame prompts; sheet added a short beard (not in brief, now part of identity).",
+   "picked": true
+  },
+  {
+   "name": "sheet-truck-parcel",
+   "file": "sheet-truck-parcel.png",
+   "job_id": "ddda9053-4096-4e48-a80c-7d1bd4151555",
+   "model_config": "gpt_image_2_6 high 2k 16:9",
+   "cost_credits": 2.75,
+   "image_references": [],
+   "prompt": "Object reference sheet, felt-and-painted-wood toy miniature: (1) a small generic box truck, ink-dark cab, cream box body, completely flat blank side panels, plain windows, no grille badge, no plates, wheels are matte ink tyres with a flat flush featureless cream hub disc (no spokes, no bolts, no hubcap relief, no tread text) — shown strictly side-on (cab facing left) as a true orthographic side elevation with both wheels perfect circles, three-quarter front, and rear; (2) a cream matte card parcel box (proportions 3:2:1.5) with sand paper tape and one blank round cream sticker on its front face, about a quarter of the box width, no print, no barcode, no lines — shown front and three-quarter. Plain cream background, soft even light, consistent scale. No text, no letters, no numbers, no logos; nothing resembles a real truck brand. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. This is a reference sheet: every object fully in focus, no labels or captions.",
+   "qa": "PASS",
+   "qa_notes": "Truck: true side elevation, round wheels with flat cream hubs, blank panels, no badge/plates. Parcel: blank round sticker, sand tape. Issue: model added two unrequested hi-vis worker figures - they leaked into S6.",
+   "picked": true
+  },
+  {
+   "name": "S1-a",
+   "file": "S1-a.png",
+   "job_id": "e1baf8a3-ad93-4a1a-98e5-37e798834cdb",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature living room at night, viewed slightly from above. The seller from the first reference image (the woman's character sheet) sits small on a plain sand sofa in the lower centre of the frame (her face around y 1050 of 1920), surrounded by at least six stacked cream parcels exactly like the parcel in the second reference image, each with its blank round sticker. She holds a phone in both hands at chest height, screen facing her, its plain back toward camera; the cool phone glow lights her face. Behind her a window shows soft warm out-of-focus city lights. Upper third of frame is calm dark wall with soft bokeh (space for chat bubbles). Cold blue night mood with one cool key from the phone. The seller has no lime specks or lime threads in her hair or clothing. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Seller matches SH-1, 7 parcels w/ blank stickers, phone back blank, calm upper third, no text on book spines. Weaker: mitten-like yellow hands; warm lamp ON (undercuts S5's 'lamp on' payoff); smiling rather than tired.",
+   "picked": false
+  },
+  {
+   "name": "S1-b",
+   "file": "S1-b.png",
+   "job_id": "22da48ca-eadf-4013-93c5-ffef7b886d1a",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature living room at night, viewed slightly from above. The seller from the first reference image (the woman's character sheet) sits small on a plain sand sofa in the lower centre of the frame (her face around y 1050 of 1920), surrounded by at least six stacked cream parcels exactly like the parcel in the second reference image, each with its blank round sticker. She holds a phone in both hands at chest height, screen facing her, its plain back toward camera; the cool phone glow lights her face. Behind her a window shows soft warm out-of-focus city lights. Upper third of frame is calm dark wall with soft bokeh (space for chat bubbles). Cold blue night mood with one cool key from the phone. The seller has no lime specks or lime threads in her hair or clothing. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Seller matches SH-1, real felt hands, strong cool phone key on face, 7 blank-sticker parcels, calm upper third, no text. Notes: small lime fleck in hair (paint out in post); warm lamp on at right; smiling (brief: lowers phone and exhales).",
+   "picked": true
+  },
+  {
+   "name": "S2-a",
+   "file": "S2-a.png",
+   "job_id": "91914e32-702a-402f-b2d1-38582d0960fc",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09",
+    "b2a2c378-6003-4277-a4d7-c4f8ceb9e564",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature apartment stairwell landing in warm evening light: a plain cream door open on the left, the seller from the first reference image (the woman's sheet) stands in the doorway, hands resting together at her waist, soft smile. The courier from the second reference image (the man's sheet, plain lime cap, ink jacket) stands right of centre, back three-quarters to camera, already holding the cream parcel from the third reference image with both hands at chest height, its blank round sticker visible. One warm wall lamp, plain walls, no door numbers. Medium shot, subjects within the middle band (y 700–1200 of 1920), empty space on the right for him to walk into. The seller has no lime specks or lime threads in her hair or clothing. The courier wears plain all-ink trainers with no stripes. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Both identities match sheets; courier back-3/4 holding box w/ blank sticker; plain trainers (stripe fix worked); cap only lime; plain door/walls; open space right for exit.",
+   "picked": true
+  },
+  {
+   "name": "S2-b",
+   "file": "S2-b.png",
+   "job_id": "62ee1d05-b2c8-49cd-a050-eef6917d9b89",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09",
+    "b2a2c378-6003-4277-a4d7-c4f8ceb9e564",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature apartment stairwell landing in warm evening light: a plain cream door open on the left, the seller from the first reference image (the woman's sheet) stands in the doorway, hands resting together at her waist, soft smile. The courier from the second reference image (the man's sheet, plain lime cap, ink jacket) stands right of centre, back three-quarters to camera, already holding the cream parcel from the third reference image with both hands at chest height, its blank round sticker visible. One warm wall lamp, plain walls, no door numbers. Medium shot, subjects within the middle band (y 700–1200 of 1920), empty space on the right for him to walk into. The seller has no lime specks or lime threads in her hair or clothing. The courier wears plain all-ink trainers with no stripes. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Same quality as S2-a; slightly flatter light and a green foreground blur bottom-right.",
+   "picked": false
+  },
+  {
+   "name": "S3-end-a",
+   "file": "S3-end-a.png",
+   "job_id": "602189d5-b9ad-4ff0-86a6-1b18773c6d53",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [],
+   "prompt": "Felt miniature city edge at golden dawn, seen from above through thinning soft clouds: rows of small cream and sand card apartment blocks with balconies, lines of flocked poplars, a few apricot trees, a cream ribbon road entering the city from lower left, felt mountains with soft snowy tops behind under a pale golden sky; low warm sun from the right; thin wisps of cloud in the foreground corners. Calm open sky at the top-left (space for an overlay). No landmarks, no signs, no text. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Absolutely no text, letters, numbers, logos or signage anywhere. No yurt, no tunduk, no flags, no emblems, no recognisable monuments.",
+   "qa": "PASS",
+   "qa_notes": "Golden dawn city w/ balconies, poplars, apricot trees, snowy mountains, sun right, cloud wisps foreground, calm top-left sky for PiP, no signs/landmarks. Note: small felt pedestrians on the street (not requested).",
+   "picked": true
+  },
+  {
+   "name": "S3-end-b",
+   "file": "S3-end-b.png",
+   "job_id": "b46acc8f-92c3-4a5e-ad57-f0a9439013db",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [],
+   "prompt": "Felt miniature city edge at golden dawn, seen from above through thinning soft clouds: rows of small cream and sand card apartment blocks with balconies, lines of flocked poplars, a few apricot trees, a cream ribbon road entering the city from lower left, felt mountains with soft snowy tops behind under a pale golden sky; low warm sun from the right; thin wisps of cloud in the foreground corners. Calm open sky at the top-left (space for an overlay). No landmarks, no signs, no text. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Absolutely no text, letters, numbers, logos or signage anywhere. No yurt, no tunduk, no flags, no emblems, no recognisable monuments.",
+   "qa": "PASS",
+   "qa_notes": "Valid but weaker: oversized in-focus pedestrians in foreground break miniature scale and the 'seen from above through clouds' read.",
+   "picked": false
+  },
+  {
+   "name": "S3-start-a",
+   "file": "S3-start-a.png",
+   "job_id": "248e2d8d-8c14-447b-a654-97aa702ad198",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "602189d5-b9ad-4ff0-86a6-1b18773c6d53",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Same miniature world as the first reference image, same horizon height and same sun side, but at blue night and from a low vantage on the mountain road: a cream ribbon road winds up felt hills in switchbacks; the small truck from the second reference image (ink cab, cream blank box, plain wheels with flat cream hubs), tiny (about 60 px long) in the lower middle, climbs with warm headlights on; a thin cloud layer drifts above the ridge in the upper half. Cool blue moonlight, one warm source (the headlights). Take only the truck from the second reference image. There are no people or figures anywhere in the scene. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Night switchback road, truck w/ headlights, plain wheels, same mountains/moon-side as S3-end, no people. Issues: truck ~260 px long (plan: ~60 px); city already visible (pre-reveals the crane payoff); grille slats + small plate-like rectangle on bumper.",
+   "picked": false
+  },
+  {
+   "name": "S3-start-b",
+   "file": "S3-start-b.png",
+   "job_id": "324ec8f8-b5b6-40a1-a6cc-6e80f037b3a4",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "602189d5-b9ad-4ff0-86a6-1b18773c6d53",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Same miniature world as the first reference image, same horizon height and same sun side, but at blue night and from a low vantage on the mountain road: a cream ribbon road winds up felt hills in switchbacks; the small truck from the second reference image (ink cab, cream blank box, plain wheels with flat cream hubs), tiny (about 60 px long) in the lower middle, climbs with warm headlights on; a thin cloud layer drifts above the ridge in the upper half. Cool blue moonlight, one warm source (the headlights). Take only the truck from the second reference image. There are no people or figures anywhere in the scene. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "As S3-start-a with a cleaner, badge-free truck front; road continuous; no people/text. Same issues: truck too large, city visible at night.",
+   "picked": true
+  },
+  {
+   "name": "S4-a",
+   "file": "S4-a.png",
+   "job_id": "bd9b5b2e-d648-4b15-b14f-ffe3c1fdaf3d",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "b2a2c378-6003-4277-a4d7-c4f8ceb9e564",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature city courtyard in golden morning light, low sun from the right: a 4–5-storey card apartment block with blank balconies, a blue-painted entrance door with a plain metal canopy, poplars and an apricot tree. A young Kyrgyz woman of about 23 — dark hair in a low ponytail, sand wool coat over a cream sweater, plain kiwi-brown scarf — stands in the middle band (y 450–950 of 1920) holding the cream parcel from the second reference image against her chest with both arms, its blank round sticker facing camera, a small grateful smile. She is a different person from any sheet and holds no phone. The courier from the first reference image (plain lime cap, ink jacket) stands at the left edge, back to camera, already turning away. Lower part of frame calm paving (space for a caption). No numbers, no signs. The courier wears plain all-ink trainers with no stripes. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Clearly urban (4-5 storey block, balconies, poplars, apricot tree, blue door w/ canopy); recipient distinct from seller (ponytail, coat, brown scarf), no phone, holds box w/ blank sticker; courier matches SH-2 walking out left; blank surfaces. Notes: background truck (bonus continuity); her body extends below band into the P-LOW pill zone (y~989-1211) - pill covers box/torso, not face.",
+   "picked": true
+  },
+  {
+   "name": "S4-b",
+   "file": "S4-b.png",
+   "job_id": "97ab0d7e-ceb3-435c-9428-654c55d7c4aa",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "b2a2c378-6003-4277-a4d7-c4f8ceb9e564",
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature city courtyard in golden morning light, low sun from the right: a 4–5-storey card apartment block with blank balconies, a blue-painted entrance door with a plain metal canopy, poplars and an apricot tree. A young Kyrgyz woman of about 23 — dark hair in a low ponytail, sand wool coat over a cream sweater, plain kiwi-brown scarf — stands in the middle band (y 450–950 of 1920) holding the cream parcel from the second reference image against her chest with both arms, its blank round sticker facing camera, a small grateful smile. She is a different person from any sheet and holds no phone. The courier from the first reference image (plain lime cap, ink jacket) stands at the left edge, back to camera, already turning away. Lower part of frame calm paving (space for a caption). No numbers, no signs. The courier wears plain all-ink trainers with no stripes. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Same as S4-a, slightly tighter; foreground leaf blur top-left.",
+   "picked": false
+  },
+  {
+   "name": "S5-a",
+   "file": "S5-a.png",
+   "job_id": "9c4d2685-3e36-4764-8f99-84dc6da6cdb3",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "22da48ca-eadf-4013-93c5-ffef7b886d1a",
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09"
+   ],
+   "prompt": "The same living room as the first reference image, same camera and layout, now warm: a table lamp on, golden light, the parcel stacks are gone, the sofa tidy. The seller (the same woman as in the second reference image, her character sheet) sits back relaxed, softly out of focus in the middle of the frame, holding her phone loosely in her lap with the screen turned away from camera, a gentle smile. Upper third calm and soft (space for a chat bubble). The seller has no lime specks or lime threads in her hair or clothing. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "Layout matches S1-b (overlay-ready), parcels gone, same seller, phone screen not visible. Issues: still night-cool (window night bokeh), not golden/morning; seller sharp, not soft-focus.",
+   "picked": false
+  },
+  {
+   "name": "S5-b",
+   "file": "S5-b.png",
+   "job_id": "037598d3-8527-4ce4-9f72-c22028dbb3f2",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "22da48ca-eadf-4013-93c5-ffef7b886d1a",
+    "c645e52b-ad24-4ace-be1a-21c4ea703a09"
+   ],
+   "prompt": "The same living room as the first reference image, same camera and layout, now warm: a table lamp on, golden light, the parcel stacks are gone, the sofa tidy. The seller (the same woman as in the second reference image, her character sheet) sits back relaxed, softly out of focus in the middle of the frame, holding her phone loosely in her lap with the screen turned away from camera, a gentle smile. Upper third calm and soft (space for a chat bubble). The seller has no lime specks or lime threads in her hair or clothing. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "PASS",
+   "qa_notes": "As S5-a with a warmer lamp spill; best available. Same note: needs warming (post grade or Gate 3 prompt).",
+   "picked": true
+  },
+  {
+   "name": "S6-a",
+   "file": "S6-a.png",
+   "job_id": "9bf3502f-54da-4b70-ad59-b147d9611ec9",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature city street in golden morning light, low sun from the right: the small truck from the reference sheet parked strictly side-on, perfectly parallel to the camera, cab facing left, flat blank cream box panels, plain wheels with flat featureless cream hubs. Camera at wheel-hub height, level, no perspective tilt. Framing: the front wheel and cab on the left half, the rear wheel at about x 640, y 800 of 1080×1920, about 300 px in diameter; behind the truck a soft-focus apartment block with poplars; plain clean paving below. No text, no plates, no logos, no numbers. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "FAIL",
+   "qa_notes": "Two hi-vis worker dolls carrying a box (leaked from OB-1 sheet despite the negative); truck too small (rear wheel ~145 px at ~x530,y1030 vs plan 300 px at x640,y800). Truck itself is good: side-on, blank, plain round wheels.",
+   "picked": false
+  },
+  {
+   "name": "S6-b",
+   "file": "S6-b.png",
+   "job_id": "90707cfd-7c61-4f44-8f19-524e555c8e03",
+   "model_config": "gpt_image_2_6 medium 2k 9:16",
+   "cost_credits": 1.0,
+   "image_references": [
+    "ddda9053-4096-4e48-a80c-7d1bd4151555"
+   ],
+   "prompt": "Felt miniature city street in golden morning light, low sun from the right: the small truck from the reference sheet parked strictly side-on, perfectly parallel to the camera, cab facing left, flat blank cream box panels, plain wheels with flat featureless cream hubs. Camera at wheel-hub height, level, no perspective tilt. Framing: the front wheel and cab on the left half, the rear wheel at about x 640, y 800 of 1080×1920, about 300 px in diameter; behind the truck a soft-focus apartment block with poplars; plain clean paving below. No text, no plates, no logos, no numbers. From the object sheet use only the truck and the parcel; ignore the small worker figures in hi-vis vests on it and never draw them. Handmade needle-felted wool miniature diorama photographed with a tilt-shift macro lens: soft visible wool fibres, matte card and painted-wood props, dignified adult felt-doll figures with simple stitched faces, narrow sharp focus band with strong soft blur at top and bottom, soft diffused light with gentle bloom, lifted shadows and creamy highlights, muted palette of cream #F6F1E4, sand #ECE6D6 and kiwi-brown #7A5A3C with ink-dark #111410 details and only tiny lime #B8F03C accents; every surface plain and unbranded — no text, no letters, no numbers, no signage, no logos. Use the attached reference images only to keep the identity, proportions, clothing and material of the characters and objects; do not copy their sheet layout, panels or plain background. One single continuous photograph, no panels, no borders. Absolutely no text, letters, numbers, logos, signage or labels anywhere, including on the parcels, phone, clothing, walls, doors and vehicles. Hands simple with five fingers, faces calm and undistorted. No yurt, no tunduk, no flags, no emblems.",
+   "qa": "FAIL",
+   "qa_notes": "Same failure: hi-vis worker dolls + undersized truck (rear wheel ~140 px at ~x515,y1100). Kept as best-of-fail reference for the truck look only.",
+   "picked": true
+  }
+ ]
+}
