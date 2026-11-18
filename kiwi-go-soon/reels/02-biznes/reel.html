@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Kiwi Go Reel 02 Biznes</title>
+<style>
+@font-face{font-family:'ID';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf') format('opentype');font-weight:900}
+@font-face{font-family:'IX';src:url('file:///home/user/kyz-uzatuu/kiwi-go-soon/fonts/Inter-ExtraBold.otf') format('opentype');font-weight:800}
+*{margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#111410}
+svg{display:block}
+</style></head>
+<body>
+<svg id="s" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs"></defs>
+  <g id="root"></g>
+  <g id="measure" opacity="0"></g>
+</svg>
+<script>
+// =====================================================================
+// COPY — every on-screen string lives here.
+// The four BENEFIT lines are pending client confirmation (especially
+// cash-on-delivery and tracking). Edit them here only; layout re-wraps
+// and re-sizes automatically (min 90 px, inside the safe zone).
+// =====================================================================
+const COPY = {
+  hookHeadline:      'Продаёте в Instagram?',
+  hookBubbles:       ['Где моя посылка?', 'Когда привезут?', 'Курьер не пришёл', '???'],
+  sweepLine:         'Отдайте доставку нам',          // last word goes into the ink pill
+  benefit1_pickup:   'Заберём от вашей двери',
+  benefit2_deliver:  'Доставим покупателю',
+  benefit3_cod:      'Наложенный платёж — деньги на следующий рабочий день',  // per kiwigo.kg; short fallback: 'Деньги за товар — на следующий день'
+  benefit4_tracking: 'Статус каждой посылки в приложении',                    // per kiwigo.kg (app «Kiwi Go для магазинов»)
+  endBrand:          'Kiwi Go',
+  endSub:            'для магазинов',
+  endCta:            '',            // dropped per client update; set a string to bring the ink pill back
+  endUrl:            'kiwigo.kg',
+};
+
+// Kiwi Go — Reel 02 «Продаёте в Instagram?». Deterministic: render(t) draws the frame at t seconds.
+const C = { lime:'#B8F03C', ink:'#111410', paper:'#FFFDF7', cream:'#F6F1E4', sand:'#ECE6D6',
+            peel:'#7A5A3C', green:'#3F6212', rim:'#6BA82B' };
+const W = 1080, H = 1920, CX = 530, DUR = 14.0;
+const BEAT = 1.75 / 4;                       // 137.14 BPM: 4 beats per benefit
+const TB = [4.0, 5.75, 7.5, 9.25];           // benefit hit times
+const TEND = 11.0;
+
+// ---------- math / easing ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, u) => a + (b - a) * u;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOutC = u => 1 - Math.pow(1 - u, 3);
+const eInC = u => u * u * u;
+const eInQ = u => u * u;
+const eOutQ = u => 1 - (1 - u) * (1 - u);
+const eInOutC = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+const eOutBack = (u, s = 1.70158) => { const c = s + 1; return 1 + c * Math.pow(u - 1, 3) + s * Math.pow(u - 1, 2); };
+const eOutExpo = u => u >= 1 ? 1 : 1 - Math.pow(2, -10 * u);
+const damped = (tau, f = 3, d = 7) => tau < 0 ? 0 : Math.exp(-d * tau) * Math.cos(2 * Math.PI * f * tau);
+const shake = (t, t0, amp, f = 13) => t < t0 ? 0 : amp * Math.exp(-(t - t0) * 12) * Math.sin((t - t0) * f * 2 * Math.PI);
+const rnd = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const f2 = n => (+n).toFixed(2);
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+// ---------- logo (exactly as given in logo/kiwi-go-logo.svg) ----------
+(function defs() {
+  let seeds = '';
+  for (let i = 0; i < 12; i++) seeds += `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`;
+  document.getElementById('defs').innerHTML =
+    `<g id="logo"><circle r="100" fill="${C.ink}"/><circle r="86" fill="${C.rim}"/><circle r="80.5" fill="${C.lime}"/>` +
+    `<g fill="${C.ink}">${seeds}</g><circle r="26" fill="${C.cream}"/><circle r="8.5" fill="${C.ink}"/></g>`;
+})();
+function wheel(x, groundY, r, angDeg, sx = 1, sy = 1) {
+  return `<g transform="translate(${f2(x)},${f2(groundY)}) scale(${f2(sx)},${f2(sy)}) translate(0,${f2(-r)}) rotate(${f2(angDeg)}) scale(${(r / 100).toFixed(4)})"><use href="#logo"/></g>`;
+}
+function wheelC(x, cy, r, angDeg, sx = 1, sy = 1) { return wheel(x, cy + r, r, angDeg, sx, sy); }
+
+// ---------- text ----------
+function measure(str, font, size, ls) {
+  const m = document.getElementById('measure');
+  m.innerHTML = `<text font-family="${font}" font-size="${size}" style="letter-spacing:${ls * size}px">${esc(str)}</text>`;
+  return m.firstChild.getComputedTextLength();
+}
+function text(str, x, y, size, fill, font = 'ID', ls = -0.035, extra = '') {
+  return `<text x="${f2(x)}" y="${f2(y)}" font-family="${font}" font-size="${f2(size)}" fill="${fill}" text-anchor="middle" style="letter-spacing:${f2(ls * size)}px" ${extra}>${esc(str)}</text>`;
+}
+function popText(t, t0, str, x, y, size, fill, opts = {}) {
+  if (t < t0) return '';
+  const { font = 'ID', dur = .24, from = 1.6, rot = 0, ls = -0.035, back = 2.2 } = opts;
+  const u = prog(t, t0, t0 + dur);
+  const s = lerp(from, 1, eOutBack(u, back));
+  const op = clamp((t - t0) / 0.05);
+  const cy = y - size * 0.36;
+  return `<g opacity="${f2(op)}" transform="translate(${f2(x)},${f2(cy)}) rotate(${f2(rot * (1 - eOutC(u)))}) scale(${s.toFixed(4)}) translate(${f2(-x)},${f2(-cy)})">${text(str, x, y, size, fill, font, ls)}</g>`;
+}
+// Balanced wrap: tries every way to break the words into 1..4 lines and keeps the
+// largest font size that fits maxW wide and maxH tall. "—" never starts a line.
+let WARN = [];
+function wrapFit(str, font, maxW, cap, maxH, lh = 1.03, minS = 90, ls = -0.035) {
+  const raw = str.split(/\s+/).filter(Boolean), words = [];
+  for (const w of raw) { if ((w === '—' || w === '–') && words.length) words[words.length - 1] += ' ' + w; else words.push(w); }
+  const n = words.length;
+  let best = null;
+  const tryBreaks = (k) => {
+    const res = [];
+    const rec = (start, left, acc) => {
+      if (left === 1) { res.push([...acc, words.slice(start).join(' ')]); return; }
+      for (let e = start + 1; e <= n - left + 1; e++) rec(e, left - 1, [...acc, words.slice(start, e).join(' ')]);
+    };
+    rec(0, k, []);
+    return res;
+  };
+  for (let k = 1; k <= Math.min(4, n); k++) {
+    for (const lines of tryBreaks(k)) {
+      const mw = Math.max(...lines.map(l => measure(l, font, cap, ls)));
+      let s = Math.min(cap, cap * maxW / mw, maxH / (lh * (k - 1) + 0.95));
+      // prefer balanced lines slightly
+      const ws = lines.map(l => measure(l, font, cap, ls)), bal = Math.min(...ws) / Math.max(...ws);
+      // never leave a short preposition/conjunction (≤2 letters) hanging at a line end
+      const dangling = lines.slice(0, -1).some(l => { const w = l.split(' ').pop(); return w.length <= 2 && w !== '—'; });
+      const score = s + bal * 2 - (dangling ? 1000 : 0);
+      if (!best || score > best.score + 1e-6) best = { lines, size: Math.floor(s), score };
+    }
+  }
+  if (best.size < minS) WARN.push(`"${str}" only fits at ${best.size}px`);
+  return best;
+}
+
+// ---------- hook: phone + bubbles ----------
+const PH = { x: 270, y: 610, w: 540, h: 860, r: 74 };
+const BUB = [ // [message index, cx, cy, rot, spawn time]
+  [0, 520, 1365, -2], [1, 560, 1212, 2], [2, 520, 1058, -3], [3, 700, 905, 7],
+  [0, 455, 1290, -9], [1, 625, 980, 8], [2, 470, 832, -6], [0, 640, 1135, 10],
+  [3, 300, 1005, -12], [1, 430, 1400, 7], [2, 650, 1310, -10], [0, 520, 770, 5],
+  [3, 820, 1205, -8], [1, 500, 1085, -4],
+];
+const SPAWN = [0.14, 0.44, 0.70, 0.92, 1.10, 1.25, 1.38, 1.49, 1.58, 1.66, 1.73, 1.79, 1.85, 1.90];
+const BUBF = 50, BUBH = 112;
+
+// sweep wheel
+const SW = { R: 300, cy: 1120, t0: 1.98, t1: 2.62, x0: -340, x1: 1460 };
+const sweepX = t => lerp(SW.x0, SW.x1, prog(t, SW.t0, SW.t1));
+function hitTime(edgeX, lead) { // first time the sweep reaches edgeX
+  let a = SW.t0, b = SW.t1;
+  if (sweepX(b) + lead < edgeX) return 99;
+  for (let i = 0; i < 40; i++) { const m = (a + b) / 2; if (sweepX(m) + lead >= edgeX) b = m; else a = m; }
+  return b;
+}
+function flingT(t, th, seed, cx, cy) {
+  if (t < th) return { tr: '', op: 1 };
+  const tau = t - th;
+  const dx = 3100 * tau + 600 * tau * tau;
+  const dy = (-500 - 700 * rnd(seed)) * tau + 2200 * tau * tau;
+  const rot = (rnd(seed + 3) > .4 ? 1 : -1) * (250 + 300 * rnd(seed + 5)) * tau;
+  return { tr: `translate(${f2(dx)},${f2(dy)}) rotate(${f2(rot)} ${f2(cx)} ${f2(cy)})`, op: 1 - prog(tau, .22, .4) };
+}
+
+// ---------- track ----------
+const TRK = { y: 1400, r: 52, xs: [200, 427, 653, 880] };
+function trackX(t) {
+  if (t < 3.45) return -120;
+  if (t < TB[0]) return lerp(-120, TRK.xs[0], eOutC(prog(t, 3.45, TB[0])));
+  for (let i = 1; i < 4; i++) if (t < TB[i]) return lerp(TRK.xs[i - 1], TRK.xs[i], eInOutC(prog(t, TB[i] - .42, TB[i])));
+  return TRK.xs[3];
+}
+
+// ---------- layout (after fonts load) ----------
+let L = {};
+function layout() {
+  L.hook = wrapFit(COPY.hookHeadline, 'ID', 840, 150, 290);
+  L.sweep = wrapFit(COPY.sweepLine, 'ID', 820, 175, 640, 1.02);
+  // A benefit with " — " is shown as a headline (paper) + a lime sub-line; otherwise one block, last line lime.
+  L.ben = [COPY.benefit1_pickup, COPY.benefit2_deliver, COPY.benefit3_cod, COPY.benefit4_tracking].map(s => {
+    const parts = s.split(/\s+—\s+/);
+    if (parts.length < 2) { const w = wrapFit(s, 'ID', 840, 132, 390, 1.02); return { blocks: [{ ...w, last: C.lime, fill: C.paper }] }; }
+    const h = wrapFit(parts[0], 'ID', 840, 120, 200, 1.02);
+    const sub = wrapFit(parts.slice(1).join(' — '), 'ID', 840, 84, 180, 1.06, 60);
+    return { blocks: [{ ...h, fill: C.paper, last: C.paper }, { ...sub, fill: C.lime, last: C.lime, gap: 34, lh: 1.06 }] };
+  });
+  L.bub = COPY.hookBubbles.map(s => measure(s, 'IX', BUBF, -0.015) + 72);
+  L.bubs = BUB.map(([m, cx, cy, rot], i) => {
+    const w = L.bub[m];
+    const pad = 16 + Math.abs(Math.sin(rot * Math.PI / 180)) * BUBH / 2;
+    const lo = 110 + w / 2 + pad, hi = 950 - w / 2 - pad;
+    cx = clamp(cx, lo, Math.max(lo, hi));
+    return { m, cx, cy, rot, w, ts: SPAWN[i], th: hitTime(cx - w / 2, SW.R * .8) };
+  });
+  L.phoneHit = hitTime(PH.x, SW.R * .8);
+  L.hookLines = L.hook.lines.map((s, i) => ({ s, w: measure(s, 'ID', L.hook.size, -0.035) }));
+  L.hookLines.forEach(o => o.th = hitTime(CX - o.w / 2, 0));
+  L.wm = Math.floor(Math.min(180, 180 * 760 / measure(COPY.endBrand, 'ID', 180, -0.04)));
+  L.sub = Math.floor(Math.min(104, 104 * 800 / measure(COPY.endSub, 'ID', 104, -0.035)));
+  L.cta = 62; L.ctaW = COPY.endCta ? measure(COPY.endCta, 'IX', L.cta, -0.02) + 104 : 0;
+  if (L.ctaW > 820) { L.cta = Math.floor(62 * 716 / (L.ctaW - 104)); L.ctaW = 820; }
+  L.url = Math.floor(Math.min(100, 100 * 760 / measure(COPY.endUrl, 'ID', 100, -0.03)));
+  window.TIMING = {
+    spawns: SPAWN, bubbleHits: L.bubs.map(b => +b.th.toFixed(4)), phoneHit: +L.phoneHit.toFixed(4),
+    hookLineHits: L.hookLines.map(o => +o.th.toFixed(4)), benefits: TB, end: TEND, warn: WARN,
+  };
+}
+
+// ---------- scene: hook + sweep (0 – 2.7) ----------
+function bubble(b, scale, extraTr = '', op = 1) {
+  const { cx, cy, rot, w } = b, h = BUBH;
+  const msg = COPY.hookBubbles[b.m];
+  return `<g opacity="${f2(op)}" ${extraTr ? `transform="${extraTr}"` : ''}><g transform="translate(${f2(cx)},${f2(cy)}) rotate(${f2(rot)}) scale(${scale.toFixed(4)})">
+    <path d="M ${-w / 2 + 30} ${h / 2 - 6} l -14 30 l 46 -26 z" fill="${C.paper}" stroke="${C.ink}" stroke-width="7" stroke-linejoin="round"/>
+    <rect x="${f2(-w / 2)}" y="${-h / 2}" width="${f2(w)}" height="${h}" rx="${h / 2}" fill="${C.paper}" stroke="${C.ink}" stroke-width="7"/>
+    <rect x="${f2(-w / 2 + 22)}" y="${h / 2 - 20}" width="44" height="14" fill="${C.paper}"/>
+    ${text(msg, 0, BUBF * .36, BUBF, C.ink, 'IX', -0.015)}
+  </g></g>`;
+}
+function phone(t, count) {
+  const { x, y, w, h, r } = PH;
+  let o = `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${C.ink}"/>`;
+  o += `<rect x="${x + 20}" y="${y + 20}" width="${w - 40}" height="${h - 40}" rx="${r - 18}" fill="${C.sand}"/>`;
+  // generic chat header
+  o += `<rect x="${x + 20}" y="${y + 20}" width="${w - 40}" height="128" rx="${r - 18}" fill="${C.paper}"/>`;
+  o += `<rect x="${x + 20}" y="${y + 100}" width="${w - 40}" height="48" fill="${C.paper}"/>`;
+  o += `<rect x="${x + 20}" y="${y + 146}" width="${w - 40}" height="4" fill="${C.ink}" opacity=".12"/>`;
+  o += `<rect x="${x + w / 2 - 70}" y="${y + 34}" width="140" height="26" rx="13" fill="${C.ink}"/>`;
+  o += `<circle cx="${x + 82}" cy="${y + 104}" r="30" fill="${C.green}"/>`;
+  o += `<rect x="${x + 128}" y="${y + 88}" width="170" height="16" rx="8" fill="${C.ink}" opacity=".75"/>`;
+  o += `<rect x="${x + 128}" y="${y + 114}" width="110" height="12" rx="6" fill="${C.ink}" opacity=".3"/>`;
+  // input bar
+  o += `<rect x="${x + 44}" y="${y + h - 104}" width="${w - 88}" height="62" rx="31" fill="${C.paper}"/>`;
+  // badge
+  if (count > 0) {
+    const ts = SPAWN[count - 1], s = 1 + .35 * damped(t - ts, 5, 9);
+    const bx = x + w - 18, by = y + 22;
+    o += `<g transform="translate(${bx},${by}) scale(${f2(s)})"><circle r="48" fill="${C.lime}" stroke="${C.ink}" stroke-width="7"/>
+      ${text(String(count), 0, 17, 48, C.ink, 'IX', -0.03)}</g>`;
+  }
+  return o;
+}
+function sceneHook(t) {
+  let o = `<rect width="${W}" height="${H}" fill="${C.cream}"/>`;
+  const xw = sweepX(t);
+  if (t >= SW.t0) o += `<rect x="0" y="0" width="${f2(Math.max(0, xw))}" height="${H}" fill="${C.lime}"/>`;
+  // vibration arcs
+  const count = SPAWN.filter(s => s <= t).length;
+  // phone
+  const enter = eOutBack(prog(t, 0, .32), 1.3);
+  const amp = 2.6 * prog(t, .5, 1.95);
+  let pr = Math.sin(t * 2 * Math.PI * 11) * amp;
+  let pdx = 0;
+  for (const s of SPAWN) { pr += shake(t, s, 1.6, 17); pdx += shake(t, s, 7, 21); }
+  const pf = flingT(t, L.phoneHit, 77, PH.x + PH.w / 2, PH.y + PH.h / 2);
+  const pcx = PH.x + PH.w / 2, pcy = PH.y + PH.h / 2;
+  let ph = `<g transform="translate(${f2(pdx)},${f2(900 * (1 - enter))}) rotate(${f2(pr)} ${pcx} ${pcy})">`;
+  // buzz arcs on each ping
+  for (const s of SPAWN) {
+    const a = t - s; if (a < 0 || a > .3) continue;
+    const k = a / .3, op = 1 - k;
+    for (const side of [-1, 1]) {
+      const bx = side < 0 ? PH.x - 24 - 30 * k : PH.x + PH.w + 24 + 30 * k;
+      const sw = side;
+      ph += `<path d="M ${f2(bx)} ${pcy - 330} q ${f2(sw * 34)} 50 0 100" stroke="${C.ink}" stroke-width="10" fill="none" stroke-linecap="round" opacity="${f2(op)}"/>`;
+    }
+  }
+  ph += phone(t, count) + '</g>';
+  o += `<g opacity="${f2(pf.op)}" ${pf.tr ? `transform="${pf.tr}"` : ''}>${ph}</g>`;
+  // bubbles
+  L.bubs.forEach((b, i) => {
+    if (t < b.ts) return;
+    const u = prog(t, b.ts, b.ts + .22);
+    const s = lerp(.25, 1, eOutBack(u, 2.6));
+    const f = flingT(t, b.th, i * 7 + 1, b.cx, b.cy);
+    if (f.op <= 0) return;
+    o += bubble(b, s, f.tr, f.op * clamp((t - b.ts) / .04));
+  });
+  // headline
+  const hs = L.hook.size, y0 = 270 + hs * .73 + Math.max(0, (290 - hs * (1.03 * (L.hook.lines.length - 1) + .95)) / 2);
+  L.hookLines.forEach((ln, i) => {
+    const f = flingT(t, ln.th, 30 + i, CX, y0 + i * hs * 1.03);
+    if (f.op <= 0) return;
+    o += `<g opacity="${f2(f.op)}" ${f.tr ? `transform="${f.tr}"` : ''}>${popText(t, .06 + i * .14, ln.s, CX, y0 + i * hs * 1.03, hs, C.ink, { rot: i ? 5 : -5 })}</g>`;
+  });
+  // sweep wheel + speed lines
+  if (t >= SW.t0 && xw < W + SW.R + 20) {
+    o += speedLines(t, xw - SW.R + 30, SW.cy, 520, C.ink, SW.t0, SW.t1 + .1, 5, 8, 420);
+    o += wheelC(xw, SW.cy, SW.R, xw / SW.R * 180 / Math.PI, 1.06, .96);
+  }
+  return o;
+}
+function speedLines(t, x, cy, spread, color, t0, t1, seed, n = 6, maxLen = 260) {
+  let out = '';
+  const a = prog(t, t0, t0 + .12) * (1 - prog(t, t1 - .12, t1));
+  if (a <= 0) return '';
+  for (let i = 0; i < n; i++) {
+    const r1 = rnd(seed + i), r2 = rnd(seed + i + 50);
+    const y = cy + (r1 - .5) * spread;
+    const len = maxLen * (0.45 + .55 * r2) * a;
+    const phase = ((t * 3.2 + r2) % 1);
+    const xx = x - 30 - phase * 120 - len;
+    const hgt = i % 3 === 0 ? 18 : 10;
+    out += `<rect x="${f2(xx)}" y="${f2(y - hgt / 2)}" width="${f2(len)}" height="${hgt}" rx="${hgt / 2}" fill="${color}" opacity="${f2(a)}"/>`;
+  }
+  return out;
+}
+
+// ---------- scene: calm «Отдайте доставку нам» (2.55 – 4.1) ----------
+function sceneCalm(t) {
+  let o = `<rect width="${W}" height="${H}" fill="${C.lime}"/>`;
+  const S = L.sweep, s = S.size, k = S.lines.length, lh = 1.02;
+  const pillH = s * 1.14;
+  const blockH = s * lh * (k - 1) + s * .73 + (pillH - s * .73) * .5;
+  const top = 560 + Math.max(0, (640 - blockH) / 2);
+  const y0 = top + s * .73;
+  const out = prog(t, 3.78, 3.98);
+  const tr = `translate(0,${f2(-120 * eInC(out))})`;
+  let g = '';
+  const times = [2.6875, 2.90625, 3.125];
+  S.lines.forEach((ln, i) => {
+    const t0 = times[Math.min(i, 2)] + (i > 2 ? .1 * (i - 2) : 0);
+    const y = y0 + i * s * lh + (i === k - 1 ? s * .1 : 0);
+    if (i < k - 1) { g += popText(t, t0, ln, CX, y, s, C.ink, { rot: i % 2 ? 5 : -5 }); return; }
+    if (t < t0) return;
+    const pw = measure(ln, 'ID', s, -0.035) + s * .7;
+    const u = prog(t, t0, t0 + .26), sc = eOutBack(u, 2.6);
+    const pcy = y - s * .36;
+    g += `<g transform="translate(${CX},${f2(pcy)}) rotate(${f2(-3 + 7 * (1 - u))}) scale(${f2(sc)}) translate(${-CX},${f2(-pcy)})">
+      <rect x="${f2(CX - pw / 2)}" y="${f2(pcy - pillH / 2)}" width="${f2(pw)}" height="${f2(pillH)}" rx="${f2(pillH / 2)}" fill="${C.ink}"/>
+      ${text(ln, CX, y, s, C.lime)}</g>`;
+  });
+  o += `<g opacity="${f2(1 - out)}" transform="${tr}">${g}</g>`;
+  return o;
+}
+
+// ---------- benefit icons (ink on a lime disc), u = local time ----------
+const IC = { x: 540, y: 620, r: 230 };
+function icon(i, u) {
+  const k = C.ink;
+  let g = '';
+  if (i === 0) { // door opens, parcel comes out
+    const op = eInOutC(prog(u, .22, .55));
+    g += `<rect x="-150" y="146" width="310" height="16" rx="8" fill="${k}"/>`;
+    g += `<rect x="-110" y="-150" width="150" height="300" rx="12" fill="${C.lime}" stroke="${k}" stroke-width="18"/>`;
+    g += `<rect x="-92" y="-132" width="114" height="280" fill="${C.green}" opacity=".35"/>`;
+    const px = lerp(-35, 92, eOutBack(prog(u, .42, .78), 1.4)), prot = -14 * Math.sin(Math.PI * prog(u, .42, .78));
+    g += `<g transform="translate(${f2(px)},146) rotate(${f2(prot)})"><rect x="-56" y="-96" width="112" height="96" rx="8" fill="${C.sand}" stroke="${k}" stroke-width="12"/>
+          <rect x="-11" y="-96" width="22" height="96" fill="${C.peel}"/><rect x="-56" y="-96" width="112" height="96" rx="8" fill="none" stroke="${k}" stroke-width="12"/></g>`;
+    const dw = 150 * (1 - .78 * op);
+    g += `<g transform="translate(-110,0)"><rect x="0" y="-150" width="${f2(dw)}" height="300" rx="12" fill="${k}"/>
+          <circle cx="${f2(dw - 26)}" cy="6" r="${f2(12 * (1 - .5 * op))}" fill="${C.lime}"/></g>`;
+  } else if (i === 1) { // parcel lands in the customer's hands + check
+    g += `<circle cx="60" cy="-92" r="54" fill="${k}"/>`;
+    g += `<path d="M -40 160 Q -40 -8 60 -8 Q 160 -8 160 160 Z" fill="${k}"/>`;
+    const v = prog(u, .12, .5), px = lerp(-300, -30, eOutBack(v, 1.3)), py = 60 - 120 * Math.sin(Math.PI * v) * (1 - v);
+    const land = damped(u - .5, 4, 10), rot = lerp(-40, 0, eOutC(v)) + 6 * land;
+    if (u > .1) g += `<g transform="translate(${f2(px)},${f2(py)}) rotate(${f2(rot)})"><rect x="-70" y="-56" width="140" height="112" rx="10" fill="${C.sand}" stroke="${k}" stroke-width="12"/>
+          <rect x="-13" y="-56" width="26" height="112" fill="${C.peel}"/><rect x="-70" y="-56" width="140" height="112" rx="10" fill="none" stroke="${k}" stroke-width="12"/></g>`;
+    const cs = eOutBack(prog(u, .62, .84), 2.4);
+    if (u > .62) g += `<g transform="translate(-118,-108) scale(${f2(cs)})"><circle r="48" fill="${k}"/><path d="M -22 2 L -6 18 L 24 -16" stroke="${C.lime}" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  } else if (i === 2) { // banknotes + on-time clock
+    const v = eOutBack(prog(u, .08, .4), 1.5), v2 = eOutBack(prog(u, .18, .5), 1.5);
+    const note = (dx, dy, rot, sc) => `<g transform="translate(${f2(dx)},${f2(dy)}) rotate(${f2(rot)}) scale(${f2(sc)})">
+      <rect x="-150" y="-86" width="300" height="172" rx="18" fill="${C.lime}" stroke="${k}" stroke-width="15"/>
+      <rect x="-122" y="-60" width="244" height="120" rx="10" fill="none" stroke="${k}" stroke-width="6" opacity=".5"/>
+      <circle r="38" fill="none" stroke="${k}" stroke-width="13"/><circle cx="-96" cy="0" r="10" fill="${k}"/><circle cx="96" cy="0" r="10" fill="${k}"/></g>`;
+    g += note(-26, lerp(-260, -48, v), lerp(-30, -10, v), 1);
+    g += note(14, lerp(-260, 18, v2), lerp(20, 4, v2), 1);
+    const cs = eOutBack(prog(u, .4, .62), 2.2);
+    if (u > .4) {
+      const ang = 360 * 2.2 * eOutC(prog(u, .4, .95));
+      g += `<g transform="translate(118,118) scale(${f2(cs)})"><circle r="70" fill="${k}"/><circle r="54" fill="${C.lime}"/>
+        <line x1="0" y1="0" x2="0" y2="-36" stroke="${k}" stroke-width="10" stroke-linecap="round" transform="rotate(${f2(ang)})"/>
+        <line x1="0" y1="0" x2="26" y2="0" stroke="${k}" stroke-width="10" stroke-linecap="round" transform="rotate(${f2(ang / 12)})"/>
+        <circle r="8" fill="${k}"/></g>`;
+    }
+  } else { // status list ticking
+    for (let r = 0; r < 3; r++) {
+      const y = -100 + r * 100, tk = .2 + r * BEAT / 2;
+      const on = u >= tk, a = eOutBack(prog(u, tk, tk + .16), 2.4);
+      const slide = eOutC(prog(u, .02 + r * .06, .3 + r * .06));
+      g += `<g transform="translate(${f2(-60 * (1 - slide))},0)" opacity="${f2(slide)}">`;
+      g += `<circle cx="-112" cy="${y}" r="36" fill="none" stroke="${k}" stroke-width="12"/>`;
+      if (on) g += `<g transform="translate(-112,${y}) scale(${f2(a)})"><circle r="40" fill="${k}"/><path d="M -17 1 L -5 13 L 19 -13" stroke="${C.lime}" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+      const bw = 210 * (on ? 1 : .55) ;
+      g += `<rect x="-50" y="${y - 15}" width="${f2(bw)}" height="30" rx="15" fill="${k}" opacity="${on ? 1 : .3}"/></g>`;
+    }
+  }
+  return g;
+}
+
+function benefit(t, i) {
+  const t0 = TB[i], tOut = i < 3 ? TB[i + 1] - .2 : TEND - .18, tEnd = i < 3 ? TB[i + 1] - .03 : TEND;
+  if (t < t0 || t >= tEnd) return '';
+  const u = t - t0, out = eInC(prog(t, tOut, tEnd));
+  let o = `<g transform="translate(${f2(-170 * out)},0)" opacity="${f2(1 - out)}">`;
+  // disc
+  const ds = eOutBack(prog(u, 0, .28), 2.0), wob = 1 + .03 * damped(u - .28, 3, 6);
+  o += `<g transform="translate(${IC.x},${IC.y}) scale(${f2(ds * wob)})"><circle r="${IC.r}" fill="${C.lime}"/>${icon(i, u)}</g>`;
+  // text (blocks stacked, centred in y 880–1290)
+  const blocks = L.ben[i].blocks;
+  const hts = blocks.map(B => B.size * (B.lh || 1.02) * (B.lines.length - 1) + B.size * .93);
+  const total = hts.reduce((a, b) => a + b, 0) + blocks.reduce((a, B) => a + (B.gap || 0), 0);
+  let yTop = 880 + Math.max(0, (410 - total) / 2), n = 0;
+  blocks.forEach((B, bi) => {
+    yTop += B.gap || 0;
+    const s = B.size, lh = B.lh || 1.02, k = B.lines.length, y0 = yTop + s * .73;
+    B.lines.forEach((ln, j) => {
+      o += popText(t, t0 + .1 + n * .09, ln, CX, y0 + j * s * lh, s, j === k - 1 ? B.last : B.fill, { rot: n % 2 ? 4 : -4, from: 1.45 });
+      n++;
+    });
+    yTop += hts[bi];
+  });
+  return o + '</g>';
+}
+
+function track(t) {
+  let o = '';
+  const g = eOutC(prog(t, 4.02, 4.4));
+  const x0 = TRK.xs[0], x3 = TRK.xs[3];
+  const wx = trackX(t);
+  if (g > 0) {
+    o += `<rect x="${x0}" y="${TRK.y - 5}" width="${f2((x3 - x0) * g)}" height="10" rx="5" fill="${C.rim}" opacity=".55"/>`;
+    o += `<rect x="${x0}" y="${TRK.y - 5}" width="${f2(Math.max(0, wx - x0))}" height="10" rx="5" fill="${C.lime}"/>`;
+    TRK.xs.forEach((x, i) => {
+      const vis = prog(t, 4.02 + i * .08, 4.2 + i * .08);
+      if (vis <= 0) return;
+      const done = t >= TB[i];
+      const pop = done ? 1 + .5 * damped(t - TB[i], 4, 9) : 1;
+      o += `<circle cx="${x}" cy="${TRK.y}" r="${f2(16 * vis * pop)}" fill="${done ? C.lime : C.ink}" stroke="${done ? C.lime : C.rim}" stroke-width="7"/>`;
+    });
+  }
+  return o;
+}
+
+// ---------- end card (11.0 – 14.0) ----------
+const EC = { x: 540, y: 600, r: 210 };
+function sceneEnd(t) {
+  let o = '';
+  const ir = 2300 * eOutC(prog(t, TEND, TEND + .4));
+  const u = eInOutC(prog(t, TEND, TEND + .5));
+  const wx = lerp(TRK.xs[3], EC.x, u), wy = lerp(TRK.y - TRK.r, EC.y, u) - 160 * Math.sin(Math.PI * u);
+  const wr = lerp(TRK.r, EC.r, eOutC(prog(t, TEND, TEND + .5)));
+  o += `<circle cx="${f2(lerp(TRK.xs[3], EC.x, eOutC(prog(t, TEND, TEND + .3))))}" cy="${f2(lerp(TRK.y - TRK.r, EC.y, eOutC(prog(t, TEND, TEND + .3))))}" r="${f2(ir)}" fill="${C.paper}"/>`;
+  const breathe = 1 + .02 * prog(t, 12.4, 14);
+  let g = '';
+  const land = damped(t - (TEND + .5), 3.5, 9);
+  const sq = t > TEND + .5 ? land : 0;
+  const ang = -720 * eOutC(prog(t, TEND, TEND + .62)) + 8 * Math.sin(2 * Math.PI * .5 * Math.max(0, t - 11.6)) * prog(t, 11.6, 12.2);
+  g += wheelC(wx, wy, wr, ang, 1 + .07 * sq, 1 - .09 * sq);
+  const wy1 = 1015;
+  g += popText(t, 11.6, COPY.endBrand, CX, wy1, L.wm, C.ink, { from: .4, rot: -4, dur: .3, ls: -0.04, back: 2.4 });
+  g += popText(t, 11.78, COPY.endSub, CX, wy1 + L.sub * 1.18, L.sub, C.ink, { from: 1.5, rot: 3 });
+  const pu = prog(t, 12.0, 12.28);
+  const py = wy1 + L.sub * 1.18 + 70, phh = COPY.endCta ? 116 : -70;
+  if (t >= 12.0 && COPY.endCta) {
+    const s = eOutBack(pu, 2.4);
+    g += `<g transform="translate(${CX},${f2(py + phh / 2)}) scale(${f2(s)}) translate(${-CX},${f2(-(py + phh / 2))})">
+      <rect x="${f2(CX - L.ctaW / 2)}" y="${f2(py)}" width="${f2(L.ctaW)}" height="${phh}" rx="${phh / 2}" fill="${C.ink}"/>
+      ${text(COPY.endCta, CX, py + phh / 2 + L.cta * .36, L.cta, C.lime, 'IX', -0.02)}</g>`;
+  }
+  const uy = py + phh + (COPY.endCta ? 60 : 90) + L.url * .73;
+  if (t >= 12.0) {
+    const v = eOutC(prog(t, 12.0, 12.3));
+    g += `<g opacity="${f2(clamp((t - 12.0) / .12))}" transform="translate(0,${f2(40 * (1 - v))})">${text(COPY.endUrl, CX, uy, L.url, C.ink, 'ID', -0.03)}</g>`;
+  }
+  L.endBottom = uy + L.url * .25;
+  o += `<g transform="translate(540,900) scale(${breathe.toFixed(4)}) translate(-540,-900)">${g}</g>`;
+  return o;
+}
+
+function render(t) {
+  let o = '';
+  if (t < 2.7) o += sceneHook(t);
+  if (t >= 2.55 && t < 4.3) {
+    // lime field already fills the frame after the sweep; calm scene draws on top
+    o += sceneCalm(t);
+  }
+  if (t >= 3.4 && t < TEND + .45) {
+    const ir = 2300 * eOutExpo(prog(t, TB[0], TB[0] + .3));
+    if (t >= TB[0]) o += `<circle cx="${TRK.xs[0]}" cy="${TRK.y - TRK.r}" r="${f2(ir)}" fill="${C.ink}"/>`;
+    for (let i = 0; i < 4; i++) o += benefit(t, i);
+    o += track(t);
+    if (t < TEND) {
+      const wx = trackX(t);
+      let sq = 0; for (const tb of TB) sq += damped(t - tb, 4, 10) * (t >= tb ? 1 : 0);
+      o += wheel(wx, TRK.y - 5, TRK.r, wx / TRK.r * 180 / Math.PI, 1 + .08 * sq, 1 - .1 * sq);
+    }
+  }
+  if (t >= TEND) o += sceneEnd(t);
+  document.getElementById('root').innerHTML = o;
+}
+
+window.READY = false;
+Promise.all([document.fonts.load('900 100px ID'), document.fonts.load('800 100px IX')])
+  .then(() => document.fonts.ready)
+  .then(() => { layout(); render(0); window.READY = true; });
+</script>
+</body></html>

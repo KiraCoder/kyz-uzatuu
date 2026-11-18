@@ -82,7 +82,7 @@ const PING = ORDER.map((_, i) => T0 + i * STEP);
 const LIT = 6.85;                          // whole-country chord
 const HUB = G.hub;
 const DOT = { 'KG.NA': [500, 205], 'KG.DA': [236, 168], 'KG.YK': [664, 118], 'KG.834': [430, 72],
-              'KG.OS': [318, 312], 'KG.TL': [214, 88], 'KG.BA': [128, 345] };
+              'KG.OS': [318, 312], 'KG.TL': [196, 96], 'KG.BA': [128, 345] };
 let ROUTES = [], HW = null, HWLEN = 0, OUTLEN = 0, outEl = null;
 
 function quadAt(p0, p1, p2, u) { const a = 1 - u; return [a * a * p0[0] + 2 * a * u * p1[0] + u * u * p2[0], a * a * p0[1] + 2 * a * u * p1[1] + u * u * p2[1]]; }
@@ -217,11 +217,11 @@ function mapLayer(t) {
 // ---------- layout constants (once fonts are ready) ----------
 let Lh = {};
 function layout() {
-  Lh.h = fit(['Доставка', 'по всему', 'Кыргызстану'], 'ID', 800, 150);
+  Lh.h = fit(['Доставка', 'по всему', 'Кыргызстану'], 'ID', 770, 150);
   Lh.kw = measure('Кыргызстану', 'ID', Lh.h, -0.035);
   Lh.pill = fit(['от 350 сом'], 'ID', 640, 120);
   Lh.pillW = measure('от 350 сом', 'ID', Lh.pill, -0.03) + 110;
-  Lh.url = 80;
+  Lh.url = 86;
   buildRoutes();
 }
 
@@ -230,15 +230,15 @@ function render(t) {
   // map transform: centred in the safe zone, then shrinks to the top for the copy
   const mu = eInOutC(prog(t, 6.95, 7.45));
   const sc0 = 1 + .045 * damped(t - LIT, 2.2, 6) * (t >= LIT ? 1 : 0) + .02 * eOutC(prog(t, .0, 1.9)) - .02;
-  const sc = lerp(1, .74, mu) * sc0;
-  const cy = lerp(870, 288 + MAP.h * .74 / 2, mu);
+  const sc = lerp(1, .8, mu) * sc0;
+  const cy = lerp(870, 282 + MAP.h * .8 / 2, mu);
   const { o: mo, dyn } = mapLayer(t);
   document.getElementById('dyn').innerHTML = dyn;
   o += `<g transform="translate(${CX},${f2(cy)}) scale(${sc.toFixed(4)}) translate(${f2(-MAP.w / 2)},${f2(-MAP.h / 2)})">${mo}</g>`;
   // celebration seeds when the whole country is lit
   o += seedBurst(t, LIT, CX, 870, C.ink, 5, 14, 520);
   // ---- headline 7.2 – 8.5
-  const hy = 800, hs = Lh.h * 1.06, out = [8.42, 8.52];
+  const hy = 830, hs = Lh.h * 1.06, out = [8.42, 8.52];
   o += popWrap(t, 7.2, text('Доставка', CX, hy, Lh.h, C.ink), CX, hy - Lh.h * .36, { out, rot: -5 });
   o += popWrap(t, 7.36, text('по всему', CX, hy + hs, Lh.h, C.ink), CX, hy + hs - Lh.h * .36, { out });
   {
@@ -251,14 +251,14 @@ function render(t) {
   if (t >= 8.55) {
     const u = prog(t, 8.55, 9.0), s = eOutBack(u, 1.8);
     const ang = -300 * (1 - eOutC(u)) + 8 * damped(t - 9.0, 1.6, 4);
-    o += logo(CX, 820, 155 * s, ang);
+    o += logo(CX, 880, 175 * s, ang);
   }
   {
-    const py = 1035, ph = Lh.pill * 1.22;
+    const py = 1120, ph = Lh.pill * 1.22;
     const pill = `<rect x="${f2(CX - Lh.pillW / 2)}" y="${py}" width="${f2(Lh.pillW)}" height="${f2(ph)}" rx="${f2(ph / 2)}" fill="${C.ink}"/>` +
       text('от 350 сом', CX, py + ph / 2 + Lh.pill * .36, Lh.pill, C.lime, 'ID', -0.03);
     o += popWrap(t, 8.9, pill, CX, py + ph / 2, { from: .3, back: 2.6, rot: -4 });
-    const uy = py + ph + 135;
+    const uy = py + ph + 150;
     if (t >= 9.2) {
       const v = eOutC(prog(t, 9.2, 9.5));
       o += `<g opacity="${f2(clamp((t - 9.2) / .12))}" transform="translate(0,${f2(40 * (1 - v))})">${text('kiwigo.kg', CX, uy, Lh.url, C.ink, 'IX', -0.02)}</g>`;

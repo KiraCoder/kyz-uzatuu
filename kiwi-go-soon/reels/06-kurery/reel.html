@@ -241,11 +241,11 @@ function iconPhone(t, t0) {
 // ---------- layout (after fonts) ----------
 let L = {};
 function layout() {
-  L.hook = fit([COPY.hook1, COPY.hook2], 'ID', 660, 210);
+  L.hook = fit([COPY.hook1, COPY.hook2], 'ID', 630, 210);
   L.ben = [COPY.benefit1, COPY.benefit2, COPY.benefit3, COPY.benefit4].map(s => wrap(s, 'ID', 820, 400, 150));
   L.ben[2].size = Math.min(L.ben[2].size, wrap(COPY.benefit3, 'ID', 820, 310, 150).size);
   L.note = 60;
-  L.end = wrap(COPY.endTitle, 'ID', 820, 250, 130);
+  L.end = wrap(COPY.endTitle, 'ID', 790, 250, 130);
   L.cta1 = fit([COPY.endCta1], 'IX', 820, 72, -0.02);
   L.cta2 = fit([COPY.endCta2], 'IX', 720, 66, -0.02);
   L.ctaW = measure(COPY.endCta2, 'IX', L.cta2, -0.02) + 100;
@@ -257,7 +257,7 @@ function hook(t) { // 0 – 2.1: lime, stamp «Ищем курьеров!»
   const T1 = .30, T2 = .70;
   const sx = shake(t, T1, 16) + shake(t, T2, 26), sy = shake(t, T1, 12, 11) - shake(t, T2, 18, 11);
   const s1 = L.hook, y1 = 760, y2 = y1 + s1 * 1.02;
-  const boxW = 780, boxTop = y1 - s1 * .98, boxH = s1 * 2.1;
+  const boxW = 750, boxTop = y1 - s1 * .98, boxH = s1 * 2.1;
   o += `<g transform="translate(${f2(sx)},${f2(sy)})">`;
   o += road(t, C.ink, prog(t, .9, 1.1));
   // courier zips in 1.0–1.45 and keeps riding in place

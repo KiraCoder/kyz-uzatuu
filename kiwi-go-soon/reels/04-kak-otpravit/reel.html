@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Kiwi Go Reel 04</title>
+<style>
+@font-face{font-family:'ID';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf') format('opentype');font-weight:900}
+@font-face{font-family:'IX';src:url('file:///home/user/kyz-uzatuu/kiwi-go-soon/fonts/Inter-ExtraBold.otf') format('opentype');font-weight:800}
+@font-face{font-family:'IB';src:url('file:///home/user/kyz-uzatuu/kiwi-go-soon/fonts/Inter-Bold.otf') format('opentype');font-weight:700}
+*{margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#F6F1E4}
+svg{display:block}
+</style></head>
+<body>
+<svg id="s" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs"></defs>
+  <g id="root"></g>
+  <g id="measure" opacity="0"></g>
+</svg>
+<script>
+// Kiwi Go — Reel 04 «Как отправить посылку». Deterministic: render(t) draws the frame at time t (s).
+const C = { lime:'#B8F03C', ink:'#111410', paper:'#FFFDF7', cream:'#F6F1E4', sand:'#ECE6D6',
+            peel:'#7A5A3C', green:'#3F6212', rim:'#6BA82B' };
+const W = 1080, H = 1920, CX = 530, DUR = 12;
+// timeline (mirrored in audio.py)
+const S = [1.8, 3.85, 5.9, 7.95], END = 10.0;
+const TYPE0 = 0.42, TYPE1 = 1.12;
+const G = 1400, R = 150;            // ground line, wheel radius in the journey
+const NUM = { x: CX, y: 470, r: 118 };
+const HEAD_Y = 772;
+
+// ---------- math / easing ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, u) => a + (b - a) * u;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOutC = u => 1 - Math.pow(1 - u, 3);
+const eInC = u => u * u * u;
+const eInQ = u => u * u;
+const eOutQ = u => 1 - (1 - u) * (1 - u);
+const eInOutC = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+const eOutBack = (u, s = 1.70158) => { const c = s + 1; return 1 + c * Math.pow(u - 1, 3) + s * Math.pow(u - 1, 2); };
+const eOutExpo = u => u >= 1 ? 1 : 1 - Math.pow(2, -10 * u);
+const damped = (tau, f = 3, d = 7) => tau < 0 ? 0 : Math.exp(-d * tau) * Math.cos(2 * Math.PI * f * tau);
+const rnd = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const f2 = n => (+n).toFixed(2);
+
+// ---------- logo (exactly as given) ----------
+(function defs() {
+  let seeds = '';
+  for (let i = 0; i < 12; i++) seeds += `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`;
+  document.getElementById('defs').innerHTML =
+    `<g id="logo"><circle r="100" fill="${C.ink}"/><circle r="86" fill="${C.rim}"/><circle r="80.5" fill="${C.lime}"/>` +
+    `<g fill="${C.ink}">${seeds}</g><circle r="26" fill="${C.cream}"/><circle r="8.5" fill="${C.ink}"/></g>` +
+    `<clipPath id="numclip"><circle cx="${NUM.x}" cy="${NUM.y}" r="${NUM.r - 2}"/></clipPath>`;
+})();
+function wheel(x, groundY, r, angDeg, sx = 1, sy = 1) {
+  return `<g transform="translate(${f2(x)},${f2(groundY)}) scale(${f2(sx)},${f2(sy)}) translate(0,${f2(-r)}) rotate(${f2(angDeg)}) scale(${r / 100})"><use href="#logo"/></g>`;
+}
+
+// ---------- text ----------
+function measure(str, font, size, ls) {
+  const m = document.getElementById('measure');
+  m.innerHTML = `<text font-family="${font}" font-size="${size}" style="letter-spacing:${ls * size}px">${str}</text>`;
+  return m.firstChild.getComputedTextLength();
+}
+function fit(strs, font, maxW, cap, ls = -0.035) {
+  let s = cap;
+  for (const str of strs) s = Math.min(s, cap * maxW / measure(str, font, cap, ls));
+  return Math.floor(s);
+}
+function text(str, x, y, size, fill, font = 'ID', ls = -0.035, anchor = 'middle') {
+  return `<text x="${f2(x)}" y="${f2(y)}" font-family="${font}" font-size="${f2(size)}" fill="${fill}" text-anchor="${anchor}" style="letter-spacing:${f2(ls * size)}px">${str}</text>`;
+}
+function popText(t, t0, str, x, y, size, fill, opts = {}) {
+  if (t < t0) return '';
+  const { font = 'ID', dur = .24, from = 1.6, rot = 0, out = null, ls = -0.035, back = 2.2 } = opts;
+  const u = prog(t, t0, t0 + dur);
+  let s = lerp(from, 1, eOutBack(u, back));
+  let op = clamp((t - t0) / 0.05);
+  let dy = 0;
+  if (out) { const v = prog(t, out[0], out[1]); if (v >= 1) return ''; op *= 1 - eInQ(v); dy = -50 * eInC(v); s *= 1 - .12 * eInC(v); }
+  const cy = y - size * 0.36;
+  return `<g opacity="${f2(op)}" transform="translate(${f2(x)},${f2(cy + dy)}) rotate(${f2(rot * (1 - eOutC(u)))}) scale(${s.toFixed(4)}) translate(${f2(-x)},${f2(-cy)})">${text(str, x, y, size, fill, font, ls)}</g>`;
+}
+
+// ---------- props ----------
+function parcel(x, bottomY, rot, sc = 1, label = 0) {
+  const w = 196, h = 150;
+  let lab = '';
+  if (label > 0) {
+    lab = `<g transform="translate(-52,-48) scale(${f2(label)})">
+      <rect x="-40" y="-27" width="80" height="54" rx="7" fill="${C.paper}" stroke="${C.ink}" stroke-width="5"/>
+      <rect x="-27" y="-12" width="54" height="7" rx="3.5" fill="${C.ink}"/>
+      <rect x="-27" y="4" width="34" height="7" rx="3.5" fill="${C.ink}"/></g>`;
+  }
+  return `<g transform="translate(${f2(x)},${f2(bottomY)}) rotate(${f2(rot)}) scale(${f2(sc)})">
+    <rect x="${-w / 2}" y="${-h}" width="${w}" height="${h}" rx="10" fill="${C.sand}"/>
+    <rect x="-20" y="${-h}" width="40" height="${h}" fill="${C.peel}"/>
+    <rect x="${-w / 2}" y="${-h}" width="${w}" height="${h}" rx="10" fill="none" stroke="${C.ink}" stroke-width="9"/>
+    <path d="M 40 ${-h + 40} l 22 -16 l 22 16 M 62 ${-h + 24} v 40" stroke="${C.ink}" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    ${lab}
+  </g>`;
+}
+function speedLines(t, x, cy, spread, color, t0, t1, seed, n = 6, maxLen = 260) {
+  let out = '';
+  const a = prog(t, t0, t0 + .15) * (1 - prog(t, t1 - .15, t1));
+  if (a <= 0) return '';
+  for (let i = 0; i < n; i++) {
+    const r1 = rnd(seed + i), r2 = rnd(seed + i + 50);
+    const y = cy + (r1 - .5) * spread;
+    const len = maxLen * (0.45 + .55 * r2) * a;
+    const phase = ((t * 3.2 + r2) % 1);
+    const xx = x - 30 - phase * 120 - len;
+    const hgt = i % 3 === 0 ? 14 : 8;
+    out += `<rect x="${f2(xx)}" y="${f2(y - hgt / 2)}" width="${f2(len)}" height="${hgt}" rx="${hgt / 2}" fill="${color}" opacity="${f2(a)}"/>`;
+  }
+  return out;
+}
+function seedBurst(t, t0, x, y, color, seed, n = 12, dist = 260) {
+  const u = prog(t, t0, t0 + .55);
+  if (t < t0 || u >= 1) return '';
+  let out = '';
+  for (let i = 0; i < n; i++) {
+    const ang = (i / n) * 360 + rnd(seed + i) * 18;
+    const d = 80 + dist * eOutExpo(u) * (0.7 + .3 * rnd(seed + i + 9));
+    const sc = 1 - eInQ(u);
+    out += `<g transform="rotate(${f2(ang)} ${x} ${y}) translate(${x} ${f2(y - d)}) scale(${f2(sc)})"><ellipse rx="8" ry="18" fill="${color}"/></g>`;
+  }
+  return out;
+}
+const FAR = [[0, 1160], [150, 1020], [270, 1100], [430, 960], [580, 1080], [720, 990], [850, 1100], [1000, 970], [1110, 1080], [1200, 1160]];
+const MID = [[0, 1290], [170, 1140], [300, 1230], [470, 1090], [640, 1220], [780, 1130], [930, 1250], [1100, 1290]];
+function ridge(pts, tileW, off, base, fill) {
+  let out = '';
+  const o0 = ((off % tileW) + tileW) % tileW;
+  for (let k = -1; k < 3; k++) {
+    const ox = -o0 + k * tileW;
+    if (ox > W || ox + tileW < 0) continue;
+    const p = pts.map(([x, y], i) => `${f2(x + ox + (i === pts.length - 1 ? 2 : 0))},${y}`).join(' ');
+    out += `<polygon points="${f2(ox)},${base} ${p} ${f2(ox + tileW + 2)},${base}" fill="${fill}"/>`;
+  }
+  return out;
+}
+function snow(pts, tileW, off, fill) {
+  let out = '';
+  const o0 = ((off % tileW) + tileW) % tileW;
+  for (let k = -1; k < 3; k++) {
+    const ox = -o0 + k * tileW;
+    if (ox > W || ox + tileW < 0) continue;
+    for (let i = 1; i < pts.length - 1; i++) {
+      const [px, py] = pts[i], [ax, ay] = pts[i - 1], [bx, by] = pts[i + 1];
+      if (py > ay || py > by) continue;
+      const f = 0.3;
+      const L_ = [lerp(px, ax, f), lerp(py, ay, f)], R_ = [lerp(px, bx, f), lerp(py, by, f)];
+      const m1 = [lerp(R_[0], L_[0], .3), lerp(R_[1], L_[1], .3) - 14], m2 = [lerp(R_[0], L_[0], .55), lerp(R_[1], L_[1], .55) + 9], m3 = [lerp(R_[0], L_[0], .8), lerp(R_[1], L_[1], .8) - 11];
+      const pp = [[px, py], R_, m1, m2, m3, L_].map(([x, y]) => `${f2(x + ox)},${f2(y)}`).join(' ');
+      out += `<polygon points="${pp}" fill="${fill}"/>`;
+    }
+  }
+  return out;
+}
+
+// ---------- layout ----------
+let L = {};
+const HOOK = ['Отправить', 'посылку —', 'как написать', 'сообщение'];
+const HEAD = ['Оформите заказ', 'Курьер заберёт', 'Посылка в пути', 'Вручили!'];
+function layout() {
+  L.hook = fit(HOOK, 'ID', 650, 130, -0.03);
+  L.head = fit(HEAD, 'ID', 820, 120);
+  L.sub = fit(['в приложении или WhatsApp'], 'IX', 800, 58, -0.02);
+  L.num = 190;
+  L.wm = fit(['Kiwi Go'], 'ID', 760, 190, -0.04);
+  L.url = 84;
+  L.urlW = measure('kiwigo.kg', 'IX', L.url, -0.02) + 120;
+  L.nChars = HOOK.join('').length;
+  L.lineH = L.hook * 1.12;
+  L.bw = 780; L.bh = Math.round(4 * L.lineH + 150);
+  L.bx1 = 930; L.by1 = 1270;   // bubble anchor: bottom-right
+}
+
+// ---------- world state ----------
+const V = 820;
+function scroll(t) {
+  const a = S[2], r = .3, d0 = S[3], dd = .5;
+  if (t <= a) return 0;
+  if (t <= a + r) { const τ = t - a; return V * τ * τ / (2 * r); }
+  let s = V * r / 2;
+  if (t <= d0) return s + V * (t - a - r);
+  s += V * (d0 - a - r);
+  const u = prog(t, d0, d0 + dd);
+  return s + V * dd * (1 - Math.pow(1 - u, 3)) / 3;
+}
+const S_END = (() => { const a = .3, d = .5; return V * (a / 2 + (7.95 - 5.9 - a) + d / 3); })();
+const HX = 760;   // house screen x when the scroll stops
+function wheelX(t) {
+  let x = lerp(-220, 380, eOutBack(prog(t, S[1], S[1] + .6), 1.3));
+  x = lerp(x, 540, eInOutC(prog(t, 5.3, 5.85)));
+  x = lerp(x, 380, eInOutC(prog(t, S[3], S[3] + .5)));
+  return x;
+}
+function bounce(t) {   // beat hop while riding the road (beat = 0.5125 s from S[2])
+  if (t < S[2] + .2 || t > S[3] + .3) return { hop: 0, sq: 0 };
+  const bt = t - S[2], beat = (S[1] - S[0]) / 4, ph = (bt % beat) / beat;
+  const a = prog(t, S[2] + .2, S[2] + .5) * (1 - prog(t, S[3], S[3] + .3));
+  return { hop: 26 * a * Math.sin(Math.PI * ph), sq: a * damped(bt % beat, 4, 14) };
+}
+
+// ---------- scenes ----------
+function bubbleShape(x1, y1, w, h, fill) { // bottom-right anchored chat bubble with tail
+  const x0 = x1 - w, y0 = y1 - h, r = Math.min(56, h / 2);
+  return `<path d="M ${f2(x0 + r)} ${f2(y0)} H ${f2(x1 - r)} Q ${f2(x1)} ${f2(y0)} ${f2(x1)} ${f2(y0 + r)} V ${f2(y1 - 6)}
+    Q ${f2(x1 + 4)} ${f2(y1 + 2)} ${f2(x1 + 26)} ${f2(y1 + 4)} Q ${f2(x1 - 10)} ${f2(y1 + 14)} ${f2(x1 - 40)} ${f2(y1)} H ${f2(x0 + r)}
+    Q ${f2(x0)} ${f2(y1)} ${f2(x0)} ${f2(y1 - r)} V ${f2(y0 + r)} Q ${f2(x0)} ${f2(y0)} ${f2(x0 + r)} ${f2(y0)} Z" fill="${fill}"/>`;
+}
+function ticks(x, y, n, col) { // ✓✓ read-receipt icon, right edge at x
+  let o = '';
+  for (let i = 0; i < n; i++) {
+    const ox = x - 62 + i * 24;
+    o += `<path d="M ${ox} ${y} l 14 14 l 28 -30" stroke="${col}" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+  return o;
+}
+function hook(t) {
+  let o = '';
+  // input bar slides away when the message is sent
+  const barOut = eInC(prog(t, 1.42, 1.72));
+  const by = 1338 + 260 * barOut;
+  const press = t > 1.18 ? 1 - .16 * Math.sin(Math.PI * prog(t, 1.18, 1.32)) : 1;
+  const barIn = eOutBack(prog(t, 0, .25), 1.4);
+  o += `<g transform="translate(0,${f2(by + 200 * (1 - barIn) - 1338)})">
+    <rect x="130" y="1338" width="800" height="124" rx="62" fill="${C.paper}" stroke="${C.ink}" stroke-width="6"/>
+    <rect x="190" y="1376" width="${f2(300 * (1 - prog(t, TYPE0, TYPE0 + .1)))}" height="16" rx="8" fill="${C.sand}"/>
+    <rect x="190" y="1408" width="${f2(190 * (1 - prog(t, TYPE0, TYPE0 + .1)))}" height="16" rx="8" fill="${C.sand}"/>
+    <g transform="translate(866,1400) scale(${f2(press)})">
+      <circle r="48" fill="${C.ink}"/>
+      <path d="M -20 -2 L 22 -2 M 4 -22 L 24 -2 L 4 18" stroke="${C.lime}" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g></g>`;
+  if (t < .08) return o;
+  // bubble: dots (small) -> expands -> text types -> ticks -> flies into the parcel
+  const eu = eOutBack(prog(t, .36, .52), 1.5);
+  const bw = lerp(250, L.bw, eu), bh = lerp(130, L.bh, eu);
+  const app = eOutBack(prog(t, .08, .26), 2.2);
+  // send flight
+  const fu = prog(t, 1.42, 1.8);
+  const fly = eInOutC(fu);
+  const cx0 = L.bx1 - L.bw / 2, cy0 = L.by1 - L.bh / 2;
+  const cx1 = 680, cy1 = G - 75;
+  const fcx = lerp(cx0, cx1, fly), fcy = lerp(cy0, cy1, fly) - 260 * Math.sin(Math.PI * fly);
+  const fs = lerp(1, .2, eInQ(fu)), frot = 14 * Math.sin(Math.PI * fu);
+  const fop = 1 - prog(t, 1.68, 1.78);
+  if (fop <= 0) return o;
+  let b = bubbleShape(L.bx1, L.by1, bw, bh, C.lime);
+  // typing dots
+  const dop = 1 - prog(t, .36, .42);
+  if (dop > 0) {
+    for (let i = 0; i < 3; i++) {
+      const jy = -14 * Math.max(0, Math.sin(2 * Math.PI * (t * 2.6 - i * .18)));
+      b += `<circle cx="${L.bx1 - 190 + i * 64}" cy="${f2(L.by1 - 65 + jy)}" r="17" fill="${C.ink}" opacity="${f2(dop)}"/>`;
+    }
+  }
+  // typed text
+  if (t >= TYPE0) {
+    const n = Math.min(L.nChars, Math.floor((t - TYPE0) / ((TYPE1 - TYPE0) / L.nChars)) + 1);
+    let left = n, lastX = 0, lastY = 0;
+    const x0 = L.bx1 - L.bw + 62, y0 = L.by1 - L.bh + 58 + L.hook * .76;
+    for (let i = 0; i < HOOK.length; i++) {
+      const vis = HOOK[i].slice(0, Math.max(0, left));
+      left -= HOOK[i].length;
+      const y = y0 + i * L.lineH;
+      if (vis.length) {
+        b += text(vis, x0, y, L.hook, C.ink, 'ID', -0.03, 'start');
+        lastX = x0 + measure(vis, 'ID', L.hook, -0.03); lastY = y;
+      }
+      if (left <= 0) break;
+    }
+    const blink = t < TYPE1 + .02 || (Math.floor((t - TYPE1) / .16) % 2 === 1);
+    if (t < 1.2 && blink) b += `<rect x="${f2(lastX + 6)}" y="${f2(lastY - L.hook * .78)}" width="9" height="${f2(L.hook * .92)}" rx="3" fill="${C.ink}"/>`;
+  }
+  if (t >= 1.26) b += ticks(L.bx1 - 40, L.by1 - 64, t >= 1.33 ? 2 : 1, C.green);
+  o += `<g opacity="${f2(fop)}" transform="translate(${f2(fcx)},${f2(fcy)}) rotate(${f2(frot)}) scale(${f2(fs * app)}) translate(${f2(-cx0)},${f2(-cy0)})">${b}</g>`;
+  return o;
+}
+
+function numberBadge(t) {
+  if (t < S[0] - .02) return '';
+  const pu = eOutBack(prog(t, S[0] - .02, S[0] + .26), 2);
+  let k = 0; for (let i = 0; i < 4; i++) if (t >= S[i] - .06) k = i;
+  // pulse on each change
+  let pulse = 0; for (let i = 1; i < 4; i++) pulse += .1 * damped(t - S[i] + .06, 3, 9) * (t > S[i] - .06 ? 1 : 0);
+  const sc = pu * (1 + pulse);
+  let o = `<g transform="translate(${NUM.x},${NUM.y}) scale(${f2(sc)}) translate(${-NUM.x},${-NUM.y})">`;
+  o += `<circle cx="${NUM.x}" cy="${NUM.y}" r="${NUM.r}" fill="${C.ink}"/>`;
+  o += `<g clip-path="url(#numclip)">`;
+  for (let i = 0; i < 4; i++) {
+    const tin = S[i] - .06, tout = i < 3 ? S[i + 1] - .06 : 99;
+    if (t < tin - .01 || t > tout + .3) continue;
+    const vin = i === 0 ? 0 : 1 - eOutBack(prog(t, tin, tin + .3), 1.6);
+    const vout = eInOutC(prog(t, tout, tout + .22));
+    const dy = 260 * vin - 260 * vout;
+    o += text(String(i + 1), NUM.x, NUM.y + L.num * .36 + dy, L.num, C.lime, 'ID', -0.02);
+  }
+  o += `</g></g>`;
+  // progress: 4 segments under the safe top edge
+  const segW = 150, gap = 22, x0 = CX - (4 * segW + 3 * gap) / 2;
+  const bin = eOutC(prog(t, S[0] - .1, S[0] + .2));
+  let bar = `<g opacity="${f2(bin)}">`;
+  for (let i = 0; i < 4; i++) {
+    const x = x0 + i * (segW + gap);
+    const f = eOutC(prog(t, S[i], S[i] + .35));
+    bar += `<rect x="${f2(x)}" y="290" width="${segW}" height="18" rx="9" fill="${C.ink}" opacity=".14"/>`;
+    if (f > 0) bar += `<rect x="${f2(x)}" y="290" width="${f2(segW * f)}" height="18" rx="9" fill="${C.ink}"/>`;
+  }
+  bar += '</g>';
+  return bar + o;
+}
+
+function headlines(t) {
+  let o = '';
+  for (let i = 0; i < 4; i++) {
+    const out = i < 3 ? [S[i + 1] - .16, S[i + 1] - .04] : null;
+    o += popText(t, S[i] + .06, HEAD[i], CX, HEAD_Y, L.head, C.ink, { out, rot: i % 2 ? 4 : -4 });
+  }
+  // step 1 sub-line (order channel, confirmed on kiwigo.kg)
+  const t0 = S[0] + .2;
+  if (t >= t0 && t < S[1] - .04) {
+    const v = eOutC(prog(t, t0, t0 + .28)), w = prog(t, S[1] - .16, S[1] - .04);
+    o += `<g opacity="${f2(clamp((t - t0) / .12) * (1 - w))}" transform="translate(0,${f2(30 * (1 - v) - 40 * eInC(w))})">${text('в приложении или WhatsApp', CX, HEAD_Y + 92, L.sub, C.green, 'IX', -0.02)}</g>`;
+  }
+  return o;
+}
+
+function formCard(t) { // step 1 icon: an order form that fills itself in
+  const tin = S[0] + .05;
+  if (t < tin) return '';
+  const inU = eOutBack(prog(t, tin, tin + .35), 1.6);
+  const outU = eInC(prog(t, S[1] - .25, S[1] + .05));
+  if (outU >= 1) return '';
+  const cx = 270, by = G;
+  const w = 250, h = 320;
+  let o = `<g transform="translate(${f2(cx - 520 * outU)},${by}) rotate(${f2(-8 * (1 - inU) - 10 * outU)}) scale(${f2(inU)}) translate(${-cx},${-by})">`;
+  o += `<rect x="${cx - w / 2}" y="${by - h}" width="${w}" height="${h}" rx="24" fill="${C.paper}" stroke="${C.ink}" stroke-width="8"/>`;
+  o += `<rect x="${cx - w / 2 + 4}" y="${by - h + 4}" width="${w - 8}" height="54" rx="20" fill="${C.ink}"/>`;
+  o += `<rect x="${cx - w / 2 + 4}" y="${by - h + 34}" width="${w - 8}" height="24" fill="${C.ink}"/>`;
+  o += `<circle cx="${cx - 82}" cy="${by - h + 31}" r="9" fill="${C.lime}"/>`;
+  const rows = [[S[0] + .3, 150], [S[0] + .5, 120], [S[0] + .7, 140]];
+  rows.forEach(([t0, len], i) => {
+    const y = by - h + 100 + i * 52;
+    o += `<circle cx="${cx - 88}" cy="${y}" r="13" fill="none" stroke="${C.ink}" stroke-width="5"/>`;
+    const u = eOutC(prog(t, t0, t0 + .17));
+    if (u > 0) {
+      o += `<rect x="${cx - 62}" y="${y - 8}" width="${f2(len * u)}" height="16" rx="8" fill="${C.ink}"/>`;
+      o += `<circle cx="${cx - 88}" cy="${y}" r="${f2(7 * u)}" fill="${C.ink}"/>`;
+    }
+  });
+  const bu = eOutBack(prog(t, S[0] + .95, S[0] + 1.15), 2.4);
+  const bty = by - 62;
+  o += `<rect x="${cx - 95}" y="${bty - 32}" width="190" height="64" rx="32" fill="${t >= S[0] + .95 ? C.lime : C.sand}" stroke="${C.ink}" stroke-width="5"/>`;
+  if (bu > 0) o += `<g transform="translate(${cx},${bty}) scale(${f2(bu)})"><path d="M -22 0 l 14 14 l 30 -28" stroke="${C.ink}" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  o += '</g>';
+  return o;
+}
+
+const LABEL_T0 = S[0] + 1.18, LABEL_T1 = S[0] + 1.48;
+function parcelState(t) {
+  const wx = wheelX(t), { hop, sq } = bounce(t);
+  const riding = { x: wx - 6, y: G - 2 * R * (1 - .06 * sq) + 6 - hop, rot: 0 };
+  let p = { x: 680, y: G, rot: 0, sc: 1 };
+  // pops in at the end of the message flight
+  p.sc = eOutBack(prog(t, 1.7, 1.92), 2.2);
+  // label slap wobble
+  p.rot = -6 * damped(t - LABEL_T1, 3, 8) * (t > LABEL_T1 ? 1 : 0);
+  // hop onto the wheel
+  const h1 = prog(t, 4.7, 5.15);
+  if (h1 > 0) {
+    const u = eInOutC(h1);
+    p.x = lerp(680, riding.x, u); p.y = lerp(G, riding.y, u) - 190 * Math.sin(Math.PI * h1); p.rot = -18 * Math.sin(Math.PI * h1);
+  }
+  if (h1 >= 1) { p.x = riding.x; p.y = riding.y; p.rot = (Math.floor((t - S[2]) / .5125) % 2 ? 1 : -1) * 5 * (hop / 26); }
+  // hop off to the door
+  const h2 = prog(t, 8.45, 8.82);
+  if (h2 > 0) {
+    const u = eInOutC(h2);
+    p.x = lerp(riding.x, HX, u); p.y = lerp(riding.y, G, u) - 170 * Math.sin(Math.PI * h2); p.rot = 16 * Math.sin(Math.PI * h2);
+  }
+  if (h2 >= 1) { const d = damped(t - 8.82, 3.5, 9); p.rot = 0; p.sq = d; }
+  return p;
+}
+
+function house(t, x) {
+  if (x > 1400) return '';
+  const w = 380, hw = 330, top = G - hw;
+  const dw = 170, dh = 250;
+  const open = eInOutC(prog(t, 8.22, 8.45));
+  let o = `<g transform="translate(${f2(x)},0)">`;
+  o += `<rect x="${-w / 2}" y="${top}" width="${w}" height="${hw}" fill="${C.paper}" stroke="${C.ink}" stroke-width="8"/>`;
+  o += `<path d="M ${-w / 2 - 34} ${top + 6} L 0 ${top - 150} L ${w / 2 + 34} ${top + 6} Z" fill="${C.ink}" stroke="${C.ink}" stroke-width="8" stroke-linejoin="round"/>`;
+  o += `<rect x="${-dw / 2}" y="${G - dh}" width="${dw}" height="${dh}" fill="${C.ink}"/>`;
+  // door panel swings open (hinge on the left)
+  const pw = dw * (1 - .78 * open);
+  o += `<rect x="${-dw / 2}" y="${G - dh}" width="${f2(pw)}" height="${dh}" fill="${C.peel}" stroke="${C.ink}" stroke-width="6"/>`;
+  if (open < .6) o += `<circle cx="${f2(-dw / 2 + pw - 22)}" cy="${G - dh / 2}" r="8" fill="${C.lime}"/>`;
+  // window
+  o += `<rect x="${-w / 2 + 28}" y="${top + 40}" width="64" height="64" rx="8" fill="${C.lime}" stroke="${C.ink}" stroke-width="6"/>`;
+  o += '</g>';
+  return o;
+}
+
+function journey(t) {
+  let o = '';
+  const s = scroll(t);
+  // hills rise for the road (step 3) and stay
+  const hu = eOutC(prog(t, S[2], S[2] + .45));
+  if (hu > 0) {
+    const dy = 520 * (1 - hu);
+    o += `<g transform="translate(0,${f2(dy)})">${ridge(FAR, 1200, s * .12, G, C.sand)}${ridge(MID, 1100, s * .3, G, C.green)}${snow(MID, 1100, s * .3, C.paper)}</g>`;
+  }
+  // house (arrives on the scroll)
+  o += house(t, HX + (S_END - s));
+  // ground below: cream; road band grows in step 3
+  const ru = eOutC(prog(t, S[2], S[2] + .3));
+  const roadH = lerp(12, 130, ru);
+  o += `<rect x="0" y="${G}" width="${W}" height="${H - G}" fill="${C.cream}"/>`;
+  const gIn = eOutExpo(prog(t, S[0] - .1, S[0] + .3));
+  o += `<rect x="${f2(540 - 600 * gIn)}" y="${G}" width="${f2(1200 * gIn)}" height="${f2(roadH)}" rx="${ru > .05 ? 0 : 6}" fill="${C.ink}"/>`;
+  if (ru > 0) {
+    const dash = 150, off = s % dash;
+    for (let k = -1; k < 9; k++) o += `<rect x="${f2(k * dash - off)}" y="${f2(G + roadH / 2 - 6)}" width="80" height="12" rx="6" fill="${C.paper}" opacity="${f2(ru)}"/>`;
+  }
+  o += formCard(t);
+  // wheel
+  const wx = wheelX(t), { hop, sq } = bounce(t);
+  let wsx = 1 + .04 * sq, wsy = 1 - .06 * sq;
+  // stop wobble after arrival (step 2) + happy hop at the end
+  const hh = t > 9.05 ? 50 * Math.sin(Math.PI * prog(t, 9.05, 9.4)) : 0;
+  const land = t > S[1] + .6 ? damped(t - S[1] - .6, 3, 9) : 0;
+  wsx *= 1 + .05 * land; wsy *= 1 - .07 * land;
+  const ang = (s + wx) / R * 180 / Math.PI;
+  o += speedLines(t, wx - R + 20, G - R - 30, 280, C.ink, S[1], S[1] + .6, 21, 5, 220);
+  o += speedLines(t, wx - R + 20, G - R - 30, 300, C.ink, S[2] + .2, S[3] + .4, 31, 6, 260);
+  if (t >= S[1]) o += wheel(wx, G - hop - hh, R, ang, wsx, wsy);
+  // parcel
+  if (t >= 1.7) {
+    const p = parcelState(t);
+    const lab = t >= LABEL_T1 ? 1 : 0;
+    const sq2 = p.sq || 0;
+    o += `<g transform="translate(${f2(p.x)},${f2(p.y)}) scale(${f2(1 + .06 * sq2)},${f2(1 - .08 * sq2)}) translate(${f2(-p.x)},${f2(-p.y)})">${parcel(p.x, p.y, p.rot, p.sc, lab)}</g>`;
+  }
+  // flying label
+  if (t >= LABEL_T0 && t < LABEL_T1) {
+    const u = prog(t, LABEL_T0, LABEL_T1), e = eInOutC(u);
+    const x = lerp(270, 680 - 52, e), y = lerp(G - 62, G - 48, e) - 200 * Math.sin(Math.PI * u);
+    o += `<g transform="translate(${f2(x)},${f2(y)}) rotate(${f2(-360 * e)}) scale(${f2(1.25 - .25 * e)})">
+      <rect x="-40" y="-27" width="80" height="54" rx="7" fill="${C.paper}" stroke="${C.ink}" stroke-width="5"/>
+      <rect x="-27" y="-12" width="54" height="7" rx="3.5" fill="${C.ink}"/><rect x="-27" y="4" width="34" height="7" rx="3.5" fill="${C.ink}"/></g>`;
+  }
+  // delivered: check badge on the parcel
+  const BX = HX + 100, BY = G - 172;
+  if (t >= 8.85) {
+    const u = eOutBack(prog(t, 8.85, 9.12), 2.6);
+    o += seedBurst(t, 8.85, BX, BY, C.green, 5, 12, 170);
+    o += `<g transform="translate(${BX},${BY}) scale(${f2(u)}) rotate(${f2(-20 * (1 - u))})">
+      <circle r="74" fill="${C.lime}" stroke="${C.ink}" stroke-width="8"/>
+      <path d="M -32 2 l 22 22 l 44 -46" stroke="${C.ink}" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  }
+  return o;
+}
+
+function endCard(t) {
+  const LY = 610, ER = 200, EG = LY + ER;
+  let o = `<rect width="${W}" height="${H}" fill="${C.lime}"/>`;
+  const gl = eOutC(prog(t, END, END + .4));
+  o += `<rect x="${f2(CX - 300 * gl)}" y="${EG + 2}" width="${f2(600 * gl)}" height="12" rx="6" fill="${C.ink}"/>`;
+  const u = prog(t, END, END + .62);
+  const x = lerp(-300, CX, eOutBack(u, 1.5));
+  const ang = (x - CX) / ER * 180 / Math.PI;
+  const sq = damped(t - (END + .62), 3.5, 10) * (t > END + .62 ? 1 : 0);
+  o += speedLines(t, x - ER + 20, LY, 280, C.ink, END, END + .6, 71, 6, 260);
+  o += wheel(x, EG, ER, ang, 1 + .05 * sq, 1 - .07 * sq);
+  const wy = 1035;
+  o += popText(t, END + .55, 'Kiwi Go', CX, wy, L.wm, C.ink, { from: .4, rot: -4, dur: .3, ls: -0.04, back: 2.4 });
+  if (t >= END + .78) {
+    const pu = eOutBack(prog(t, END + .78, END + 1.05), 2.4);
+    const py = 1110, ph = 136;
+    o += `<g transform="translate(${CX},${py + ph / 2}) scale(${f2(pu)}) translate(${-CX},${-(py + ph / 2)})">
+      <rect x="${f2(CX - L.urlW / 2)}" y="${py}" width="${f2(L.urlW)}" height="${ph}" rx="${ph / 2}" fill="${C.ink}"/>
+      ${text('kiwigo.kg', CX, py + ph / 2 + L.url * .36, L.url, C.lime, 'IX', -0.02)}</g>`;
+  }
+  return o;
+}
+
+function render(t) {
+  let o = `<rect width="${W}" height="${H}" fill="${C.cream}"/>`;
+  if (t < END) {
+    o += journey(t);
+    o += numberBadge(t);
+    o += headlines(t);
+    if (t < 1.8) o += hook(t);
+  }
+  // iris from the check badge into the end card
+  const iu = prog(t, 9.72, END);
+  if (iu > 0 && t < END) o += `<circle cx="${HX + 100}" cy="${G - 172}" r="${f2(74 + 2300 * eInC(iu))}" fill="${C.lime}"/>`;
+  if (t >= END) o += endCard(t);
+  document.getElementById('root').innerHTML = o;
+}
+
+window.READY = false;
+Promise.all([document.fonts.load('900 100px ID'), document.fonts.load('800 100px IX')])
+  .then(() => document.fonts.ready)
+  .then(() => { layout(); render(0); window.READY = true; });
+</script>
+</body></html>
