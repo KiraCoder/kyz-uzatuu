@@ -63,9 +63,9 @@ const designs = [];
 {
   // mountain ridge polyline from a list of [x,y]; closed to the bottom
   const ridge = (pts, fill) => `<path d="M0 1080 L${pts.map(p => p.join(' ')).join(' L')} L1080 1080 Z" fill="${fill}"/>`;
-  const back = [[0,640],[70,600],[150,520],[200,560],[260,470],[330,545],[380,520],[450,600],[520,660],[600,640],[660,560],[720,480],[790,430],[850,500],[900,470],[980,540],[1040,520],[1080,560]];
-  const mid = [[0,720],[90,650],[170,690],[260,600],[330,650],[400,620],[480,700],[560,720],[640,690],[720,640],[800,600],[880,660],[960,620],[1080,700]];
-  const front = [[0,800],[120,750],[220,790],[330,740],[440,800],[540,770],[640,810],[760,760],[880,790],[980,750],[1080,780]];
+  const back = [[0,600],[70,560],[150,480],[200,520],[260,440],[320,520],[370,560],[430,660],[500,740],[560,760],[620,720],[680,640],[730,520],[790,430],[850,500],[900,470],[980,540],[1040,520],[1080,560]];
+  const mid = [[0,700],[90,630],[170,670],[260,590],[330,650],[400,700],[480,780],[560,800],[640,770],[720,690],[800,610],[880,660],[960,620],[1080,690]];
+  const front = [[0,800],[120,750],[220,790],[330,760],[440,820],[540,840],[640,820],[760,770],[880,790],[980,750],[1080,780]];
   // snow caps on back ridge peaks
   const cap = (x, y, w) => `<path d="M${x} ${y} L${x - w} ${y + w * 1.05} L${x - w * 0.45} ${y + w * 0.85} L${x - w * 0.1} ${y + w * 1.15} L${x + w * 0.35} ${y + w * 0.8} L${x + w} ${y + w * 1.0} Z" fill="${C.cream}"/>`;
   // rays
@@ -76,7 +76,7 @@ const designs = [];
     rays += `<path d="M540 640 L${540 + 1400 * Math.cos(a)} ${640 + 1400 * Math.sin(a)} L${540 + 1400 * Math.cos(a2)} ${640 + 1400 * Math.sin(a2)} Z"/>`;
   }
   // winding road on front layer
-  const road = 'M380 1080 C 420 1000, 700 990, 620 920 S 470 850, 560 800';
+  const road = 'M660 1080 C 640 1010, 620 990, 600 940 S 520 880, 545 845';
   designs.push({
     name: 'Рассвет над Тянь-Шанем',
     html: page('Kiwi Go — 01', `
@@ -95,13 +95,12 @@ const designs = [];
   <circle cx="540" cy="640" r="300" fill="none" stroke="${C.paper}" stroke-opacity="0.35" stroke-width="3"/>
   <circle cx="540" cy="640" r="370" fill="none" stroke="${C.paper}" stroke-opacity="0.2" stroke-width="3"/>
 </svg>
-${logo(460, 540, 640, -18)}
+${logo(440, 540, 650, -18)}
 <svg class="scene" width="1080" height="1080">
   ${ridge(back, '#5d8a2a')}
-  ${cap(150,520,46)}${cap(260,470,52)}${cap(790,430,62)}${cap(900,470,40)}${cap(720,480,30)}
+  ${cap(150,480,46)}${cap(260,440,52)}${cap(790,430,62)}${cap(900,470,40)}
   ${ridge(mid, C.green)}
   ${ridge(front, C.ink)}
-  <path d="${road}" fill="none" stroke="${C.lime}" stroke-width="10" stroke-linecap="round" stroke-dasharray="26 22"/>
 </svg>
 <div class="t" style="left:72px;top:64px;font-weight:600;font-size:30px;letter-spacing:0.18em;color:${C.lime}">KIWI GO · КУРЬЕРСКАЯ СЛУЖБА</div>
 <div class="t D" style="left:66px;top:118px;font-weight:900;font-size:150px;letter-spacing:-0.045em;color:${C.paper};line-height:0.92">Скоро<br>запуск</div>
@@ -142,8 +141,8 @@ ${wordmark(752, 948, C.paper, 56, 40)}
     <polygon points="${cx - s},${cy - s} ${cx - s + 40},${cy - s + 40} ${cx - s + 40},${cy + s - 40} ${cx - s},${cy + s}" fill="#8e6638" stroke-width="5"/>
     <!-- fragile stamp on right flap -->
     <g transform="translate(${cx + s + f / 2 + 4} ${cy}) rotate(90)" stroke="none">
-      <rect x="-118" y="-30" width="236" height="60" rx="8" fill="none" stroke="#B3261E" stroke-width="5"/>
-      <text x="0" y="13" text-anchor="middle" font-family="Inter" font-weight="900" font-size="36" fill="#B3261E" letter-spacing="2">ОСТОРОЖНО</text>
+      <rect x="-128" y="-28" width="256" height="56" rx="8" fill="none" stroke="#B3261E" stroke-width="5"/>
+      <text x="0" y="11" text-anchor="middle" font-family="Inter" font-weight="900" font-size="30" fill="#B3261E" letter-spacing="1">ОСТОРОЖНО</text>
     </g>
   </g>
 </svg>
@@ -151,46 +150,37 @@ ${logo(300, cx + 8, cy + 6, 12, 'filter:drop-shadow(0 18px 0 rgba(17,20,16,0.35)
 <div class="t D" style="left:64px;top:56px;font-weight:900;font-size:128px;letter-spacing:-0.045em">Что внутри?</div>
 <div class="t D" style="left:64px;top:920px;font-weight:900;font-size:92px;letter-spacing:-0.04em">Скоро узнаете.</div>
 <div class="t" style="left:68px;top:1022px;font-weight:700;font-size:28px;letter-spacing:0.02em;opacity:0.75">Kiwi Go — курьерская служба</div>
-<div class="abs" style="right:56px;top:72px;width:150px;height:150px;border-radius:50%;background:${C.ink};color:${C.lime};display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:26px;line-height:1.08;transform:rotate(12deg)">ОТКРОЙТЕ<br>ПЕРВЫМИ</div>
+<div class="abs" style="right:48px;top:60px;width:176px;height:176px;border-radius:50%;background:${C.ink};color:${C.lime};display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:26px;line-height:1.08;transform:rotate(12deg)">ОТКРОЙТЕ<br>ПЕРВЫМИ</div>
 `, C.lime),
   });
 }
 
-// ===== 03 — Kinetic type, wheel at speed =====
+// ===== 03 — Kinetic type: the wheel paints the word =====
 {
-  const rows = [
-    { t: 'СКОРО СКОРО СКОРО', x: -60, fill: false },
-    { t: 'СКОРО СКОРО СКОРО', x: -320, fill: false },
-    { t: 'СКОРО СКОРО СКОРО', x: -140, fill: true },
-    { t: 'СКОРО СКОРО СКОРО', x: -420, fill: false },
-  ];
-  const rowH = 186, y0 = 30;
-  const rowHtml = rows.map((r, i) => `<div class="t D row ${r.fill ? 'fill' : ''}" style="left:${r.x}px;top:${y0 + i * rowH}px">${r.t}</div>`).join('');
-  const wcx = 800, wd = 400, wcy = 840 - wd / 2 + 8; // wheel sits on the band
-  let lines = '';
-  const L = [[-150, 210, 22, C.lime], [-90, 300, 12, C.paper], [-20, 260, 28, C.lime], [50, 330, 12, C.paper], [120, 220, 22, C.lime]];
-  for (const [dy, len, h, c] of L) {
-    const y = wcy + dy, dx = Math.sqrt(Math.max(0, (wd / 2) ** 2 - dy ** 2));
-    const end = wcx - dx - 36;
-    lines += `<rect x="${end - len}" y="${y - h / 2}" width="${len}" height="${h}" rx="${h / 2}" fill="${c}"/>`;
-  }
+  const rowH = 186, y0 = 24;
+  const xs = [-60, -330, 24, -430];
+  const wcx = 860, wd = 310;
+  const fillRow = 2;
+  let rowHtml = '';
+  xs.forEach((x, i) => {
+    rowHtml += `<div class="t D row" style="left:${x}px;top:${y0 + i * rowH}px">СКОРО СКОРО СКОРО</div>`;
+    if (i === fillRow) rowHtml += `<div class="t D row fill" style="left:${x}px;top:${y0 + i * rowH}px;clip-path:inset(0 ${2400 - (wcx - x)}px 0 0)">СКОРО СКОРО СКОРО</div>`;
+  });
+  const wcy = y0 + fillRow * rowH + 104;
   designs.push({
-    name: 'Скорость шрифта',
+    name: 'Колесо красит слово',
     html: page('Kiwi Go — 03', `
 ${rowHtml}
 <svg class="scene" width="1080" height="1080">
+  <circle cx="${wcx}" cy="${wcy}" r="${wd / 2 + 22}" fill="${C.ink}"/>
   <rect x="0" y="840" width="1080" height="240" fill="${C.lime}"/>
-  <g fill="${C.ink}">${[0,1,2,3,4,5,6,7].map(i => `<rect x="${i * 150 - 40}" y="852" width="80" height="10" rx="5"/>`).join('')}</g>
-  <rect x="${wcx - wd / 2 - 40}" y="${wcy - wd / 2 - 40}" width="0" height="0"/>
-  <circle cx="${wcx}" cy="${wcy}" r="${wd / 2 + 26}" fill="${C.ink}"/>
-  ${lines}
 </svg>
 ${logo(wd, wcx, wcy, -32)}
-<div class="t D" style="left:64px;top:900px;font-weight:900;font-size:84px;letter-spacing:-0.04em;color:${C.ink}">Kiwi Go скоро в пути</div>
-<div class="t" style="left:68px;top:1000px;font-weight:700;font-size:34px;color:${C.ink}">Курьерская доставка по всему Кыргызстану</div>
+<div class="t D" style="left:64px;top:888px;font-weight:900;font-size:88px;letter-spacing:-0.04em;color:${C.ink}">Kiwi Go скоро в пути</div>
+<div class="t" style="left:68px;top:996px;font-weight:700;font-size:34px;color:${C.ink}">Курьерская доставка по всему Кыргызстану</div>
 `, C.ink, `
-.row{font-weight:900;font-style:italic;font-size:200px;letter-spacing:-0.035em;color:transparent;-webkit-text-stroke:3px ${C.lime};line-height:1}
-.row.fill{color:${C.lime};-webkit-text-stroke:0}
+.row{width:2400px;font-weight:900;font-style:italic;font-size:200px;letter-spacing:-0.035em;color:transparent;-webkit-text-stroke:3px ${C.lime};line-height:1}
+.row.fill{color:${C.lime};-webkit-text-stroke:3px ${C.lime}}
 `),
   });
 }
@@ -284,10 +274,10 @@ ${logo(wd, wcx, wcy, -32)}
   <div class="rule"></div>
   <div class="foot">Доставка по всему Кыргызстану</div>
 </div>
-<svg class="abs" style="left:640px;top:96px" width="360" height="200" viewBox="0 0 360 200"><path d="M100 104 C 180 30, 260 40, 360 0" fill="none" stroke="${C.cream}" stroke-width="5"/></svg>
-<div class="abs sticker"><div>Скоро<br>в продаже</div></div>
+<svg class="abs" style="left:640px;top:96px" width="360" height="200" viewBox="0 0 360 200"><path d="M113 140 C 170 50, 260 40, 360 0" fill="none" stroke="${C.cream}" stroke-width="5"/></svg>
+<div class="abs sticker"><div>Скоро<br>запуск!</div></div>
 `, C.peel, `
-.tag{left:150px;top:170px;width:700px;background:${C.paper};border-radius:36px;padding:56px 60px 50px;transform:rotate(-4deg);box-shadow:0 22px 0 rgba(17,20,16,0.35)}
+.tag{left:150px;top:190px;width:700px;background:${C.paper};border-radius:36px;padding:56px 60px 50px;transform:rotate(-4deg);box-shadow:0 22px 0 rgba(17,20,16,0.35)}
 .tag .hole{position:absolute;right:56px;top:46px;width:44px;height:44px;border-radius:50%;background:${C.peel};box-shadow:inset 0 0 0 7px ${C.sand}}
 .row1{display:flex;gap:18px;align-items:baseline;font-size:30px}
 .row1 span:first-child{font-weight:800;letter-spacing:0.14em;text-transform:uppercase;font-size:24px;color:${C.peel}}
@@ -297,8 +287,8 @@ ${logo(wd, wcx, wcy, -32)}
 .lab{font-weight:800;letter-spacing:0.14em;text-transform:uppercase;font-size:24px;color:${C.peel}}
 .price{font-weight:900;font-size:76px;letter-spacing:-0.035em;line-height:1;margin-top:12px}
 .foot{font-weight:700;font-size:32px}
-.sticker{left:690px;top:640px;width:250px;height:250px;border-radius:50%;background:${C.lime};border:7px solid ${C.ink};display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(12deg);box-shadow:0 14px 0 rgba(17,20,16,0.35)}
-.sticker div{font-weight:900;font-size:46px;letter-spacing:-0.03em;line-height:1.02}
+.sticker{left:740px;top:740px;width:240px;height:240px;border-radius:50%;background:${C.lime};border:7px solid ${C.ink};display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(12deg);box-shadow:0 14px 0 rgba(17,20,16,0.35)}
+.sticker div{font-weight:900;font-size:52px;letter-spacing:-0.03em;line-height:1.02}
 `),
   });
 }
