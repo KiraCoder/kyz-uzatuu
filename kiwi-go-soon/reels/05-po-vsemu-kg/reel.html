@@ -243,12 +243,12 @@ function render(t) {
   document.getElementById('dyn').innerHTML = dyn;
   o += `<g transform="translate(${CX},${f2(cy)}) scale(${sc.toFixed(4)}) translate(${f2(-MAP.w / 2)},${f2(-MAP.h / 2)})">${mo}</g>`;
   // celebration seeds when the whole country is lit
-  o += seedBurst(t, LIT, CX, MAPY, C.ink, 5, 14, 520);
+  o += seedBurst(t, LIT, CX, MAPY, C.ink, 5, 14, 400);
   // ---- hook question 0 – 6.9 (answered by the headline below)
   {
     const qy = 1250, qs = Lh.q * 1.06, qo = [6.85, 6.97];
     o += popWrap(t, -0.1, text('Куда', CX, qy, Lh.q, C.ink), CX, qy - Lh.q * .36, { out: qo, rot: -5 });
-    o += popWrap(t, 0.08, text('доставляем?', CX, qy + qs, Lh.q, C.ink), CX, qy + qs - Lh.q * .36, { out: qo, rot: 4 });
+    o += popWrap(t, 0.0, text('доставляем?', CX, qy + qs, Lh.q, C.ink), CX, qy + qs - Lh.q * .36, { out: qo, rot: 4 });
   }
   // ---- headline 7.2 – 8.5
   const hy = 830, hs = Lh.h * 1.06, out = [8.42, 8.52];

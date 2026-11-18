@@ -250,6 +250,13 @@ def swish(d=.42, level=1.0):
 
 
 # 0.00 paper flick as the pen lands
+# 0.00 hook question «Куда доставляем?» pops in
+add(pop(1.2), 0.0, .45, -.15)
+add(blip(79), 0.0, .25)
+add(pop(1.3), 0.06, .45, .15)
+add(blip(83), 0.06, .25)
+# 1.45–1.95 lake shore drawn: short light scratch
+add(pen_scratch(.5), 1.45, .3, .35)
 add(whoosh(.2, 2500, 800, bw=1.5), 0.0, .25)
 add(fft_filter(rng.standard_normal(int(.05 * SR)), 2000, 9000) * np.exp(-tt(.05) * 90), .14, .35, -.2)
 
