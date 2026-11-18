@@ -38,19 +38,16 @@ const f2 = n => (+n).toFixed(2);
 
 // ---------- logo (exactly as given) ----------
 (function defs() {
+  // The user's real logo (logo/kiwi-go-logo.svg), used unchanged at every size.
   let seeds = '';
-  for (let i = 0; i < 16; i++) seeds += `<ellipse cx="0" cy="${i % 2 === 0 ? -40 : -52}" rx="5.5" ry="11" transform="rotate(${i * 22.5})"/>`;
-  let seedsS = '';
-  for (let i = 0; i < 8; i++) seedsS += `<ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(${i * 45})"/>`;
+  for (let i = 0; i < 12; i++) seeds += `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`;
   document.getElementById('defs').innerHTML =
-    `<g id="logo"><circle r="100" fill="${C.ink}"/><circle r="80" fill="${C.rim}"/><circle r="73" fill="${C.lime}"/>` +
-    `<g fill="${C.ink}">${seeds}</g><circle r="20" fill="${C.cream}"/><circle r="7" fill="${C.ink}"/></g>` +
-    `<g id="logoS"><circle r="100" fill="${C.ink}"/><circle r="78" fill="${C.lime}"/><g fill="${C.ink}">${seedsS}</g>` +
-    `<circle r="24" fill="${C.cream}"/><circle r="8" fill="${C.ink}"/></g>`;
+    `<g id="logo"><circle r="100" fill="${C.ink}"/><circle r="86" fill="${C.rim}"/><circle r="80.5" fill="${C.lime}"/>` +
+    `<g fill="${C.ink}">${seeds}</g><circle r="26" fill="${C.cream}"/><circle r="8.5" fill="${C.ink}"/></g>`;
 })();
 // wheel whose contact point sits on groundY; squash (sx, sy) is anchored at the contact point
-function wheel(x, groundY, r, angDeg, sx = 1, sy = 1, id = 'logo') {
-  return `<g transform="translate(${f2(x)},${f2(groundY)}) scale(${f2(sx)},${f2(sy)}) translate(0,${f2(-r)}) rotate(${f2(angDeg)}) scale(${r / 100})"><use href="#${id}"/></g>`;
+function wheel(x, groundY, r, angDeg, sx = 1, sy = 1) {
+  return `<g transform="translate(${f2(x)},${f2(groundY)}) scale(${f2(sx)},${f2(sy)}) translate(0,${f2(-r)}) rotate(${f2(angDeg)}) scale(${r / 100})"><use href="#logo"/></g>`;
 }
 
 // ---------- text ----------
@@ -118,7 +115,7 @@ function parcel(x, bottomY, rot) {
     <rect x="${-w / 2}" y="${-h}" width="${w}" height="${h}" rx="10" fill="${C.sand}" stroke="${C.ink}" stroke-width="9"/>
     <rect x="-20" y="${-h}" width="40" height="${h}" fill="${C.peel}"/>
     <rect x="${-w / 2}" y="${-h}" width="${w}" height="${h}" rx="10" fill="none" stroke="${C.ink}" stroke-width="9"/>
-    <g transform="translate(-62,${-h / 2 + 8}) scale(0.27)"><use href="#logoS"/></g>
+    <g transform="translate(-62,${-h / 2 + 8}) scale(0.27)"><use href="#logo"/></g>
     <path d="M 40 ${-h + 40} l 22 -16 l 22 16 M 62 ${-h + 24} v 40" stroke="${C.ink}" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </g>`;
 }
@@ -306,16 +303,16 @@ function sceneD(t) { // 7.0 – end: paper end card
   const ir = 1700 * eOutC(prog(t, 7.0, 7.32));
   o += `<circle cx="540" cy="${LY}" r="${f2(ir)}" fill="${C.paper}"/>`;
     // road line laid ahead of the wheel
-  const gl = eOutC(prog(t, 7.12, 7.55));
+  const gl = eOutC(prog(t, 7.02, 7.45));
   o += `<rect x="${f2(240)}" y="${G + 2}" width="${f2(600 * gl)}" height="12" rx="6" fill="${C.ink}"/>`;
   // wheel rolls in and stops with overshoot
-  const u = prog(t, 7.15, 7.95);
+  const u = prog(t, 7.04, 7.92);
   const x = lerp(-320, 540, eOutBack(u, 1.6));
   const hop = t > 8.0 ? 34 * Math.sin(Math.PI * prog(t, 8.0, 8.32)) : 0;
   const land = damped(t - 8.32, 3.5, 10);
   const sq = t > 8.32 ? land : 0;
   const ang = (x - 540) / R * 180 / Math.PI;
-  o += speedLines(t, x - R + 20, LY, 300, C.ink, 7.15, 8.05, 71, 6, 260);
+  o += speedLines(t, x - R + 20, LY, 300, C.ink, 7.04, 8.0, 71, 6, 260);
   if (u > 0) o += wheel(x, G - hop, R, ang, 1 + .06 * sq, 1 - .08 * sq);
   // copy
   const wy = 1075;

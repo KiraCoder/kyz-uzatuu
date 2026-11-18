@@ -304,7 +304,7 @@ for i in range(4):
 # 7.00 iris whoosh, 7.15–7.95 roll-in rumble, 7.92 + 8.08 bike bell
 add(whoosh(.35, 500, 2500, bw=1.4), 6.95, .45)
 t = tt(.8)
-add(rumble(.8, rate=16) * np.clip(1 - t / .8, 0, 1) ** .5, 7.15, .4)
+add(rumble(.8, rate=16) * np.clip(1 - t / .8, 0, 1) ** .5, 7.05, .4)
 add(bike_bell(), 7.90, .75, .25)
 add(bike_bell(), 8.06, .6, .25)
 
