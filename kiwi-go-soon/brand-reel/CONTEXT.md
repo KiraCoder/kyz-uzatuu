@@ -60,3 +60,6 @@ kiwi-go-soon/brand-reel/research/reference/reference.mp4 (17 s; contact sheets a
 
 ## Deliverable folder
 kiwi-go-soon/brand-reel/ — each agent writes its own markdown file there (named in its task). Write in English, but keep all on-screen copy in Russian.
+
+## Client contact details (confirmed 2026-11-18)
+- WhatsApp and phone for ads: **+996 224 222 221**. This replaces +996 506 016 199 everywhere.

@@ -103,7 +103,7 @@ Paper #FFFDF7 with a 4 % cream radial vignette and 2 % grain. Everything sits in
 | 5 | **за посылку** | SemiBold 40, ink at 70 % (#585A55) | baseline y 982, width 221 | 16.00 |
 | 6 | **Оформите доставку** | SemiBold 48, ink | baseline y 1052, width 475 | **16.50 (B9.2)** |
 | 7 | Lime pill **kiwigo.kg** | Pill 520×96, r 48, lime #B8F03C, with a 1.5 px stroke of ink at 15 %. Text SemiBold 60, ink (272 px) | centre y 1120 (spans 1072–1168) | 16.50 |
-| 8 | **или напишите в WhatsApp** | SemiBold 40, ink at 70 %. Text only; no WhatsApp icon or green unless the client approves (Q-4) | baseline y 1226, width 520 | 17.00 (B9.3) |
+| 8 | **WhatsApp: +996 224 222 221** (client decision 2026-11-18; U+00A0 between digit groups) | SemiBold 40, ink at 70 %. Text only, no WhatsApp icon | baseline y 1226 (measure the width; must stay inside x 100–880) | 17.00 (B9.3) |
 | — | Loop fog | cream #F6F1E4 to 20 % | full frame | 19.60–20.00 |
 
 The CTA (rows 6–7) holds 16.50–19.60 = **3.1 s**. Nothing is grey and nothing goes to black.
@@ -493,7 +493,7 @@ ffmpeg -framerate 24 -i comp/%04d.png -c:v libx264 -profile:v high -preset slow 
 
 ## 6. Client questions (answers needed before Gate 1)
 
-**Already decided:** coverage «По всему Кыргызстану», «от 350 сом», CTA «Оформите доставку» + kiwigo.kg + WhatsApp, Russian only.
+**Already decided:** coverage «По всему Кыргызстану» (confirmed by the client after the warning), «от 350 сом», CTA «Оформите доставку» + kiwigo.kg + «WhatsApp: +996 224 222 221» on the card, Russian only, felt-toy miniature style (Q-2), status labels «Забрали ✓ / В пути / В городе / У курьера» approved as is (Q-3).
 
 | # | Question | Why it blocks Gate 1 | Default if no answer |
 |---|---|---|---|
