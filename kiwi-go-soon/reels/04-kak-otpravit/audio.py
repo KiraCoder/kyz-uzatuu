@@ -351,7 +351,7 @@ def measure(path):
     return I, pk
 
 
-def limiter(x, ceiling_db=-1.3, block=32, look=4, release=.06):
+def limiter(x, ceiling_db=-1.7, block=32, look=4, release=.06):
     c = 10 ** (ceiling_db / 20)
     nb = int(np.ceil(len(x) / block))
     pad_ = np.zeros((nb * block, 2)); pad_[:len(x)] = x

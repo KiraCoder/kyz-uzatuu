@@ -2,7 +2,7 @@
 import subprocess, os
 from PIL import Image, ImageDraw, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__)); os.chdir(HERE)
-TIMES = [0.60, 1.40, 2.60, 3.70, 5.00, 6.40, 7.00, 7.95, 9.70]
+TIMES = [0.60, 1.40, 2.60, 3.70, 5.00, 6.40, 7.95, 9.70]
 POSTER_T = 7.95
 def grab(t, path):
     subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-ss', f'{t:.3f}', '-i', 'kiwi-go-reel-05-po-vsemu-kg.mp4',

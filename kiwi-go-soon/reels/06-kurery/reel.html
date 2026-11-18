@@ -67,7 +67,7 @@ const f2 = n => (+n).toFixed(2);
     // rubber-stamp ink texture: speckled knock-outs
     `<filter id="stampink" x="-10%" y="-10%" width="120%" height="120%">
        <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="4" result="n"/>
-       <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.2" result="m"/>
+       <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 7.0" result="m"/>
        <feComposite in="SourceGraphic" in2="m" operator="in"/>
      </filter>`;
 })();
@@ -257,7 +257,7 @@ function hook(t) { // 0 – 2.1: lime, stamp «Ищем курьеров!»
   const T1 = .30, T2 = .70;
   const sx = shake(t, T1, 16) + shake(t, T2, 26), sy = shake(t, T1, 12, 11) - shake(t, T2, 18, 11);
   const s1 = L.hook, y1 = 760, y2 = y1 + s1 * 1.02;
-  const boxW = 750, boxTop = y1 - s1 * .98, boxH = s1 * 2.1;
+  const boxW = 750, boxTop = y1 - s1 * 1.0, boxH = s1 * 2.4;
   o += `<g transform="translate(${f2(sx)},${f2(sy)})">`;
   o += road(t, C.ink, prog(t, .9, 1.1));
   // courier zips in 1.0–1.45 and keeps riding in place
