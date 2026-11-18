@@ -20,7 +20,7 @@ svg{display:block}
 // Kiwi Go — Reel 05 «По всему Кыргызстану». Deterministic: render(t) draws the frame at time t (s).
 const C = { lime:'#B8F03C', ink:'#111410', paper:'#FFFDF7', cream:'#F6F1E4', sand:'#ECE6D6',
             peel:'#7A5A3C', green:'#3F6212', rim:'#6BA82B' };
-const W = 1080, H = 1920, CX = 530, DUR = 10.0;
+const W = 1080, H = 1920, CX = 530, DUR = 10.0, MAPY = 740;
 
 // ---------- math / easing ----------
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -81,7 +81,7 @@ const T0 = 3.0, STEP = .55;               // ping times 3.00, 3.55 … 6.30 (bea
 const PING = ORDER.map((_, i) => T0 + i * STEP);
 const LIT = 6.85;                          // whole-country chord
 const HUB = G.hub;
-const DOT = { 'KG.NA': [500, 205], 'KG.DA': [236, 168], 'KG.YK': [664, 118], 'KG.834': [430, 72],
+const DOT = { 'KG.NA': [500, 205], 'KG.DA': [236, 168], 'KG.YK': [652, 168], 'KG.834': [430, 72],
               'KG.OS': [318, 312], 'KG.TL': [196, 96], 'KG.BA': [128, 345] };
 let ROUTES = [], HW = null, HWLEN = 0, OUTLEN = 0, outEl = null;
 
@@ -154,6 +154,12 @@ function mapLayer(t) {
   // ---- internal (oblast) borders, appear after the outline closes
   const ib = prog(t, 2.0, 2.5);
   if (ib > 0) o += `<g clip-path="url(#cc)"><path d="${G.inner}" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 9" opacity="${f2(.55 * ib)}"/></g>`;
+  // ---- Lake Issyk-Kul (real OSM-derived polygon): paper water with a thin ink shore, drawn 1.45–1.95
+  const lk = eInOutS(prog(t, 1.45, 1.95));
+  if (lk > 0) {
+    o += `<path d="${G.lake}" fill="${C.paper}" opacity="${f2(clamp(lk * 3))}"/>`;
+    o += `<path d="${G.lake}" fill="none" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round" pathLength="1000" stroke-dasharray="${f2(1000 * lk)} 1010"/>`;
+  }
   // ---- outline drawing (ink stroke) 0.15–1.85
   const dp = eInOutS(prog(t, .15, 1.85));
   if (dp > 0) {
@@ -218,6 +224,7 @@ function mapLayer(t) {
 let Lh = {};
 function layout() {
   Lh.h = fit(['Доставка', 'по всему', 'Кыргызстану'], 'ID', 770, 150);
+  Lh.q = fit(['Куда', 'доставляем?'], 'ID', 800, 150);
   Lh.kw = measure('Кыргызстану', 'ID', Lh.h, -0.035);
   Lh.pill = fit(['от 350 сом'], 'ID', 640, 120);
   Lh.pillW = measure('от 350 сом', 'ID', Lh.pill, -0.03) + 110;
@@ -231,12 +238,18 @@ function render(t) {
   const mu = eInOutC(prog(t, 6.95, 7.45));
   const sc0 = 1 + .045 * damped(t - LIT, 2.2, 6) * (t >= LIT ? 1 : 0) + .02 * eOutC(prog(t, .0, 1.9)) - .02;
   const sc = lerp(1, .8, mu) * sc0;
-  const cy = lerp(870, 282 + MAP.h * .8 / 2, mu);
+  const cy = lerp(MAPY, 282 + MAP.h * .8 / 2, mu);
   const { o: mo, dyn } = mapLayer(t);
   document.getElementById('dyn').innerHTML = dyn;
   o += `<g transform="translate(${CX},${f2(cy)}) scale(${sc.toFixed(4)}) translate(${f2(-MAP.w / 2)},${f2(-MAP.h / 2)})">${mo}</g>`;
   // celebration seeds when the whole country is lit
-  o += seedBurst(t, LIT, CX, 870, C.ink, 5, 14, 520);
+  o += seedBurst(t, LIT, CX, MAPY, C.ink, 5, 14, 520);
+  // ---- hook question 0 – 6.9 (answered by the headline below)
+  {
+    const qy = 1250, qs = Lh.q * 1.06, qo = [6.85, 6.97];
+    o += popWrap(t, -0.1, text('Куда', CX, qy, Lh.q, C.ink), CX, qy - Lh.q * .36, { out: qo, rot: -5 });
+    o += popWrap(t, 0.08, text('доставляем?', CX, qy + qs, Lh.q, C.ink), CX, qy + qs - Lh.q * .36, { out: qo, rot: 4 });
+  }
   // ---- headline 7.2 – 8.5
   const hy = 830, hs = Lh.h * 1.06, out = [8.42, 8.52];
   o += popWrap(t, 7.2, text('Доставка', CX, hy, Lh.h, C.ink), CX, hy - Lh.h * .36, { out, rot: -5 });

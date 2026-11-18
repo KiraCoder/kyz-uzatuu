@@ -500,8 +500,8 @@ function sceneD(t) {
   const gl = eOutC(prog(t, 9.3, 9.6));
   o += `<rect x="${f2(530 - 300 * gl)}" y="${G + 4}" width="${f2(600 * gl)}" height="12" rx="6" fill="${C.ink}"/>`;
   // wheel spins in from nothing, stops on 9.5 (bell)
-  const u = prog(t, 9.0, 9.5);
-  if (t >= 9.0) {
+  const u = prog(t, 8.93, 9.5);
+  if (t >= 8.93) {
     const s = eOutBack(u, 1.9);
     const ang = -720 * Math.pow(1 - eOutC(u), 1) + (t > 9.5 ? 6 * damped(t - 9.5, 2.2, 4) : 0);
     const land = t > 9.5 ? damped(t - 9.5, 3.5, 9) : 0;
