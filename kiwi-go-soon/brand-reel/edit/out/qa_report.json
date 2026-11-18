@@ -1,0 +1,272 @@
+{
+ "checks": [
+  {
+   "check": "copy BU-1",
+   "ok": true,
+   "detail": "где моя посылка?"
+  },
+  {
+   "check": "copy BU-2",
+   "ok": true,
+   "detail": "уже отправили?"
+  },
+  {
+   "check": "copy BU-3",
+   "ok": true,
+   "detail": "??"
+  },
+  {
+   "check": "copy BU-4",
+   "ok": true,
+   "detail": "Отправлено ✓"
+  },
+  {
+   "check": "copy BU-5",
+   "ok": true,
+   "detail": "получила, спасибо!"
+  },
+  {
+   "check": "copy SP-1",
+   "ok": true,
+   "detail": "Заберём у двери"
+  },
+  {
+   "check": "copy SP-2",
+   "ok": true,
+   "detail": "По всему / Кыргызстану"
+  },
+  {
+   "check": "copy SP-3",
+   "ok": true,
+   "detail": "Видно каждый шаг"
+  },
+  {
+   "check": "copy SP-4",
+   "ok": true,
+   "detail": "Вручаем / по коду получения"
+  },
+  {
+   "check": "copy card wordmark (incl. U+00A0)",
+   "ok": true,
+   "detail": "Kiwi⍽Go"
+  },
+  {
+   "check": "copy card descriptor (incl. U+00A0)",
+   "ok": true,
+   "detail": "Посылка⍽— как сообщение"
+  },
+  {
+   "check": "copy card price (incl. U+00A0)",
+   "ok": true,
+   "detail": "от⍽350⍽сом"
+  },
+  {
+   "check": "copy card price_note (incl. U+00A0)",
+   "ok": true,
+   "detail": "за посылку"
+  },
+  {
+   "check": "copy card cta (incl. U+00A0)",
+   "ok": true,
+   "detail": "Оформите доставку"
+  },
+  {
+   "check": "copy card url_pill (incl. U+00A0)",
+   "ok": true,
+   "detail": "kiwigo.kg"
+  },
+  {
+   "check": "copy card whatsapp (incl. U+00A0)",
+   "ok": true,
+   "detail": "WhatsApp: +996⍽224⍽222⍽221"
+  },
+  {
+   "check": "copy chips",
+   "ok": true,
+   "detail": "Забрали ✓, В пути, В городе, У курьера"
+  },
+  {
+   "check": "PiP title",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "«Заберём» keeps ё",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "single tick ✓ (no ✓✓ / ✔)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "no «Вручено» chip",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "no lime text",
+   "ok": true,
+   "detail": "ink, green_ink, ink, ink70, ink, ink, ink70"
+  },
+  {
+   "check": "no lime fillText in gfx.html",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Onest Local loaded (600/700) incl. ёЁ«»—…✓",
+   "ok": true,
+   "detail": "{\"f600\": true, \"f700\": true, \"computed\": \"\\\"Onest Local\\\"\"}"
+  },
+  {
+   "check": "Onest 600 cmap has ёЁ«»—✓ NBSP",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Onest 700 cmap has ёЁ«»—✓ NBSP",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "width BU-1 vs plan",
+   "ok": true,
+   "detail": "590.9 vs 591"
+  },
+  {
+   "check": "width BU-2 vs plan",
+   "ok": true,
+   "detail": "442.8 vs 443"
+  },
+  {
+   "check": "width BU-5 vs plan",
+   "ok": true,
+   "detail": "646.7 vs 644"
+  },
+  {
+   "check": "width CARD-wordmark vs plan",
+   "ok": true,
+   "detail": "467.7 vs 468"
+  },
+  {
+   "check": "width CARD-descriptor vs plan",
+   "ok": true,
+   "detail": "603.4 vs 603"
+  },
+  {
+   "check": "width CARD-price vs plan",
+   "ok": true,
+   "detail": "565.8 vs 566"
+  },
+  {
+   "check": "width CARD-price_note vs plan",
+   "ok": true,
+   "detail": "220.6 vs 221"
+  },
+  {
+   "check": "width CARD-cta vs plan",
+   "ok": true,
+   "detail": "475.1 vs 475"
+  },
+  {
+   "check": "width CARD-url_pill vs plan",
+   "ok": true,
+   "detail": "272.2 vs 272"
+  },
+  {
+   "check": "logo SVG has 12 seeds",
+   "ok": true,
+   "detail": "77ec7e802c02"
+  },
+  {
+   "check": "card logo pixel-exact vs SVG render (opaque px)",
+   "ok": true,
+   "detail": "max diff 0.00/255 over 52508 px"
+  },
+  {
+   "check": "master: all UI/text inside x80–900 y270–1250",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "master: no text over faces",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "master: clips used only inside QA windows",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "master: loop fog f0 == f_last",
+   "ok": true,
+   "detail": "0.2 / 0.2"
+  },
+  {
+   "check": "cutdown: all UI/text inside x80–900 y270–1250",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "cutdown: no text over faces",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "cutdown: clips used only inside QA windows",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "check": "cutdown: loop fog f0 == f_last",
+   "ok": true,
+   "detail": "0.2 / 0.2"
+  },
+  {
+   "check": "master: export spec",
+   "ok": true,
+   "detail": "h264 High yuv420p 1080x1920 24/1 frames=480 dur=20.000s audio=0 16.6 Mbps"
+  },
+  {
+   "check": "master: +faststart (moov before mdat)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "master: duplicate-frame ratio < 2 %",
+   "ok": true,
+   "detail": "0/479 = 0.00 %"
+  },
+  {
+   "check": "cutdown: export spec",
+   "ok": true,
+   "detail": "h264 High yuv420p 1080x1920 24/1 frames=240 dur=10.000s audio=0 17.2 Mbps"
+  },
+  {
+   "check": "cutdown: +faststart (moov before mdat)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "cutdown: duplicate-frame ratio < 2 %",
+   "ok": true,
+   "detail": "0/239 = 0.00 %"
+  }
+ ],
+ "issues": [],
+ "loop_mean_rgb_diff": {
+  "master": 149.76,
+  "cutdown": 149.73
+ },
+ "sources": {
+  "S1": "clip gate3/S1.mp4",
+  "S2": "clip gate2/S2-test.mp4",
+  "S3": "clip gate3/S3.mp4",
+  "S4": "clip gate3/S4.mp4",
+  "S5": "clip gate3/S5.mp4",
+  "S6": "2.5D parallax from gate2/S6-c.png"
+ }
+}

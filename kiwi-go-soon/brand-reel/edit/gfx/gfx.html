@@ -20,10 +20,11 @@ function col(name, a) {
   const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
   return a === undefined ? `rgb(${r},${g},${b})` : `rgba(${r},${g},${b},${a})`;
 }
-function font(w, px) { return `${w} ${px * S}px "Onest Local"`; }
+function font(w, px) { return `${w} ${px}px "Onest Local"`; }   // drawing contexts are already scaled by S
+function mfont(w, px) { return `${w} ${px * S}px "Onest Local"`; }
 function measure(text, w, px) {
   const c = document.createElement('canvas').getContext('2d');
-  c.font = font(w, px);
+  c.font = mfont(w, px);
   const m = c.measureText(text);
   return { w: m.width / S, asc: m.fontBoundingBoxAscent / S, desc: m.fontBoundingBoxDescent / S,
            aasc: m.actualBoundingBoxAscent / S, adesc: m.actualBoundingBoxDescent / S };

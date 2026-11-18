@@ -1,0 +1,16 @@
+# Kiwi Go hero Reel — cut-down 10.000 s, 24 fps, 120 BPM, 4/4. TC = seconds; frame = TC*24
+0.000  f000  B1.1  HIT    hook frame 0, bubble 1 «где моя посылка?»
+0.500  f012  B1.2  pop    bubble «??»
+1.500  f036  B1.4  SEND   lime bubble «Отправлено ✓»
+2.000  f048  B2.1  HIT    light-leak cut to pickup
+2.500  f060  B2.2  accent courier turns
+3.500  f084  B2.4  whip   whip-pan cut to journey
+4.000  f096  B3.1  SWELL  chip «В пути»; swell B3.1–B3.4
+5.500  f132  B3.4  cut    haze cut to truck
+5.700  f137  —     accent front wheel turns kiwi (light sweep)
+6.000  f144  B4.1  HIT    kiwi wheel born (rear wheel)
+6.500  f156  B4.2  PEAK   flash cut to card
+7.000  f168  B4.3  accent price
+7.500  f180  B4.4  CTA    «Оформите доставку» + kiwigo.kg
+8.000  f192  B5.1  accent WhatsApp line
+9.500  f228  B5.4  loop   resolve; loop point at 10.000 → 0.000
