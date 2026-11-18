@@ -1,0 +1,44 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Kiwi Go — 02</title><style>
+@font-face{font-family:'Inter';src:url('file:///usr/share/fonts/opentype/inter/Inter-Black.otf') format('opentype');font-weight:900;font-style:normal}@font-face{font-family:'Inter';src:url('file:///usr/share/fonts/opentype/inter/Inter-ExtraBold.otf') format('opentype');font-weight:800;font-style:normal}@font-face{font-family:'Inter';src:url('file:///usr/share/fonts/opentype/inter/Inter-Bold.otf') format('opentype');font-weight:700;font-style:normal}@font-face{font-family:'Inter';src:url('file:///usr/share/fonts/opentype/inter/Inter-SemiBold.otf') format('opentype');font-weight:600;font-style:normal}@font-face{font-family:'Inter';src:url('file:///usr/share/fonts/opentype/inter/Inter-Medium.otf') format('opentype');font-weight:500;font-style:normal}
+@font-face{font-family:'Inter';src:url('file:///usr/share/fonts/opentype/inter/Inter-BlackItalic.otf') format('opentype');font-weight:900;font-style:italic}@font-face{font-family:'Inter';src:url('file:///usr/share/fonts/opentype/inter/Inter-BoldItalic.otf') format('opentype');font-weight:700;font-style:italic}
+@font-face{font-family:'InterD';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf') format('opentype');font-weight:900;font-style:normal}@font-face{font-family:'InterD';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-ExtraBold.otf') format('opentype');font-weight:800;font-style:normal}@font-face{font-family:'InterD';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-BlackItalic.otf') format('opentype');font-weight:900;font-style:italic}@font-face{font-family:'InterD';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Bold.otf') format('opentype');font-weight:700;font-style:normal}@font-face{font-family:'InterD';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-SemiBold.otf') format('opentype');font-weight:600;font-style:normal}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1080px;overflow:hidden;background:#B8F03C}
+body{font-family:'Inter',sans-serif;color:#111410;position:relative;-webkit-font-smoothing:antialiased}
+.abs,.t,.wm{position:absolute}
+.t{white-space:nowrap;line-height:1}
+.D{font-family:'InterD','Inter',sans-serif}
+.wm{display:flex;align-items:center;gap:16px}
+.wm span{font-weight:900;letter-spacing:-0.02em;line-height:1}
+svg.scene{position:absolute;left:0;top:0}
+
+</style></head><body>
+<svg class="scene" width="1080" height="1080">
+  <rect width="1080" height="1080" fill="#B8F03C"/>
+  <g fill="#FFFDF7" opacity="0.55"><path d="M540 590 L1439.5950303740888 616.9959501822461 L1427.0262902186046 742.2641141602965 Z"/><path d="M540 590 L1376.1096529876618 923.0475164009658 L1321.4546652130618 1036.462323401137 Z"/><path d="M540 590 L1211.7771117866562 1188.9286368838766 L1121.6280745402687 1276.8105873576642 Z"/><path d="M540 590 L966.4183365299202 1382.5701245133178 L851.6485541617517 1434.319358234128 Z"/><path d="M540 590 L669.6272166232801 1480.6159580371896 L544.0796187085225 1489.9907536809437 Z"/><path d="M540 590 L357.20114129790534 1471.2403629301211 L236.01862103028571 1437.109981784934 Z"/><path d="M540 590 L66.82330615583135 1355.5741743310714 L-35.377736056852655 1282.0552440738318 Z"/><path d="M540 590 L-166.48243636438178 1147.5684416362237 L-237.3750465045391 1043.5284302798068 Z"/><path d="M540 590 L-314.5759704887507 872.3117260462444 L-345.6094535099829 750.2993944272699 Z"/><path d="M540 590 L-359.59503037408876 563.0040498177538 L-347.0262902186047 437.73588583970377 Z"/><path d="M540 590 L-296.1096529876619 256.95248359903405 L-241.45466521306184 143.53767659886307 Z"/><path d="M540 590 L-131.77711178665595 -8.92863688387672 L-41.62807454026881 -96.81058735766408 Z"/><path d="M540 590 L113.58166347007904 -202.57012451331707 L228.3514458382478 -254.31935823412778 Z"/><path d="M540 590 L410.3727833767194 -300.61595803718967 L535.9203812914774 -309.9907536809437 Z"/><path d="M540 590 L722.7988587020938 -291.24036293012136 L843.9813789697139 -257.109981784934 Z"/><path d="M540 590 L1013.1766938441683 -175.57417433107184 L1115.3777360568529 -102.05524407383155 Z"/><path d="M540 590 L1246.482436364381 32.43155836377548 L1317.3750465045391 136.4715697201931 Z"/><path d="M540 590 L1394.5759704887505 307.68827395375433 L1425.6094535099828 429.7006055727296 Z"/></g>
+  <g transform="rotate(-7 540 590)" stroke="#111410" stroke-width="7" stroke-linejoin="round">
+    <!-- flaps: top, bottom, left, right -->
+    <polygon points="350,400 730,400 700,250 380,250" fill="#DDB683"/>
+    <polygon points="350,780 730,780 700,930 380,930" fill="#DDB683"/>
+    <polygon points="350,400 350,780 200,750 200,430" fill="#C99A62"/>
+    <polygon points="730,400 730,780 880,750 880,430" fill="#C99A62"/>
+    <!-- torn tape on flaps -->
+    <rect x="504" y="254" width="72" height="110" fill="#7A5A3C" stroke-width="4"/>
+    <rect x="504" y="816" width="72" height="110" fill="#7A5A3C" stroke-width="4"/>
+    <!-- inside -->
+    <rect x="350" y="400" width="380" height="380" fill="#A97A45"/>
+    <polygon points="350,400 730,400 690,440 390,440" fill="#7f5a31" stroke-width="5"/>
+    <polygon points="350,400 390,440 390,740 350,780" fill="#8e6638" stroke-width="5"/>
+    <!-- fragile stamp on right flap -->
+    <g transform="translate(809 590) rotate(90)" stroke="none">
+      <rect x="-118" y="-30" width="236" height="60" rx="8" fill="none" stroke="#B3261E" stroke-width="5"/>
+      <text x="0" y="13" text-anchor="middle" font-family="Inter" font-weight="900" font-size="36" fill="#B3261E" letter-spacing="2">ОСТОРОЖНО</text>
+    </g>
+  </g>
+</svg>
+<svg class="abs" width="300" height="300" viewBox="-100 -100 200 200" style="left:398px;top:446px;transform:rotate(12deg);filter:drop-shadow(0 18px 0 rgba(17,20,16,0.35))"><circle r="100" fill="#111410"/><circle r="80" fill="#6BA82B"/><circle r="73" fill="#B8F03C"/><g fill="#111410"><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(0)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(22.5)"/><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(45)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(67.5)"/><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(90)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(112.5)"/><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(135)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(157.5)"/><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(180)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(202.5)"/><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(225)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(247.5)"/><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(270)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(292.5)"/><ellipse cx="0" cy="-40" rx="5.5" ry="11" transform="rotate(315)"/><ellipse cx="0" cy="-52" rx="5.5" ry="11" transform="rotate(337.5)"/></g><circle r="20" fill="#F6F1E4"/><circle r="7" fill="#111410"/></svg>
+<div class="t D" style="left:64px;top:56px;font-weight:900;font-size:128px;letter-spacing:-0.045em">Что внутри?</div>
+<div class="t D" style="left:64px;top:920px;font-weight:900;font-size:92px;letter-spacing:-0.04em">Скоро узнаете.</div>
+<div class="t" style="left:68px;top:1022px;font-weight:700;font-size:28px;letter-spacing:0.02em;opacity:0.75">Kiwi Go — курьерская служба</div>
+<div class="abs" style="right:56px;top:72px;width:150px;height:150px;border-radius:50%;background:#111410;color:#B8F03C;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:26px;line-height:1.08;transform:rotate(12deg)">ОТКРОЙТЕ<br>ПЕРВЫМИ</div>
+</body></html>
