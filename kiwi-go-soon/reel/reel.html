@@ -15,7 +15,7 @@ text{font-kerning:normal}
   <g id="measure" opacity="0"></g>
 </svg>
 <script>
-// Kiwi Go — "coming soon" reel. Deterministic: render(t) draws the frame at time t (seconds).
+// Kiwi Go — launch reel ("already delivering"). Deterministic: render(t) draws the frame at time t (seconds).
 const C = { lime:'#B8F03C', ink:'#111410', paper:'#FFFDF7', cream:'#F6F1E4', sand:'#ECE6D6',
             peel:'#7A5A3C', green:'#3F6212', rim:'#6BA82B' };
 const W = 1080, H = 1920, CX = 530, DUR = 9.6;
@@ -156,11 +156,13 @@ function layout() {
   L.a2w = measure('колесо!', 'ID', L.a2, -0.035);
   L.b1 = fit(['Курьерская', 'служба'], 'ID', 840, 150);
   L.b2 = fit(['Платите', 'только за', 'доставку'], 'ID', 820, 128);
-  L.c = fit(['Скоро', 'запуск'], 'ID', 840, 290);
+  L.c1 = fit(['Уже'], 'ID', 840, 290);
+  L.c2 = fit(['доставляем'], 'ID', 770, 290); // narrower than 840: drift + shake must stay inside x 110–950
   L.wm = fit(['Kiwi Go'], 'ID', 760, 190, -0.04);
   L.tag = fit(['Доставка по всему', 'Кыргызстану'], 'IX', 820, 70, -0.02);
   L.pill = 58;
-  L.pillW = measure('Скоро запуск', 'IX', L.pill, -0.02) + 96;
+  L.pillW = measure('Уже доставляем', 'IX', L.pill, -0.02) + 96;
+  L.url = 56;
 }
 
 // ---------- scenes ----------
@@ -282,16 +284,18 @@ function sceneB(t) { // 1.9 – 5.4: road through the mountains with a parcel
   return o;
 }
 
-function sceneC(t) { // 5.4 – 7.3: ink. "Скоро" / "запуск"
+function sceneC(t) { // 5.4 – 7.3: ink. "Уже" / "доставляем"
   let o = `<rect width="${W}" height="${H}" fill="${C.ink}"/>`;
   const sx = shake(t, 5.5, 14) + shake(t, 6.0, 18), sy = shake(t, 5.5, 10, 11) - shake(t, 6.0, 12, 11);
   const drift = 1 + .035 * prog(t, 6.2, 7.3);
-  const y1 = 860, y2 = y1 + L.c * .98;
-  o += seedBurst(t, 5.5, CX, y1 - L.c * .36, C.lime, 3, 12, 560);
-  o += seedBurst(t, 6.0, CX, y2 - L.c * .36, C.lime, 40, 14, 600);
+  // big «Уже» over a full-width «доставляем», block centred on y = 960
+  const cap1 = L.c1 * .73, cap2 = L.c2 * .73, gap = 70, top = 960 - (cap1 + gap + cap2) / 2;
+  const y1 = top + cap1, y2 = y1 + gap + cap2;
+  o += seedBurst(t, 5.5, CX, y1 - L.c1 * .36, C.lime, 3, 12, 560);
+  o += seedBurst(t, 6.0, CX, y2 - L.c2 * .36, C.lime, 40, 14, 600);
   o += `<g transform="translate(${f2(sx)},${f2(sy)}) translate(${CX},960) scale(${drift.toFixed(4)}) translate(${-CX},-960)">`;
-  o += popText(t, 5.5, 'Скоро', CX, y1, L.c, C.paper, { from: 2.3, rot: -8, dur: .26 });
-  o += popText(t, 6.0, 'запуск', CX, y2, L.c, C.lime, { from: 2.3, rot: 8, dur: .26 });
+  o += popText(t, 5.5, 'Уже', CX, y1, L.c1, C.paper, { from: 2.3, rot: -8, dur: .26 });
+  o += popText(t, 6.0, 'доставляем', CX, y2, L.c2, C.lime, { from: 2.3, rot: 8, dur: .26 });
   o += '</g>';
   return o;
 }
@@ -315,7 +319,7 @@ function sceneD(t) { // 7.0 – end: paper end card
   o += speedLines(t, x - R + 20, LY, 300, C.ink, 7.04, 8.0, 71, 6, 260);
   if (u > 0) o += wheel(x, G - hop, R, ang, 1 + .06 * sq, 1 - .08 * sq);
   // copy
-  const wy = 1075;
+  const wy = 1050; // v2: block moved up 25 px to make room for kiwigo.kg
   o += popText(t, 8.0, 'Kiwi Go', CX, wy, L.wm, C.ink, { from: .4, rot: -4, dur: .3, ls: -0.04, back: 2.4 });
   const tagY = wy + 110;
   for (const [i, str] of ['Доставка по всему', 'Кыргызстану'].entries()) {
@@ -325,10 +329,13 @@ function sceneD(t) { // 7.0 – end: paper end card
   }
   const pu = prog(t, 8.5, 8.78);
   if (t >= 8.5) {
-    const py = tagY + L.tag * 1.18 + 70, ph = 104, s = eOutBack(pu, 2.4);
+    const py = tagY + L.tag * 1.18 + 48, ph = 104, s = eOutBack(pu, 2.4);
     o += `<g transform="translate(${CX},${py + ph / 2}) scale(${f2(s)}) translate(${-CX},${-(py + ph / 2)})">
       <rect x="${f2(CX - L.pillW / 2)}" y="${py}" width="${f2(L.pillW)}" height="${ph}" rx="${ph / 2}" fill="${C.ink}"/>
-      ${text('Скоро запуск', CX, py + ph / 2 + L.pill * .36, L.pill, C.lime, 'IX', -0.02)}</g>`;
+      ${text('Уже доставляем', CX, py + ph / 2 + L.pill * .36, L.pill, C.lime, 'IX', -0.02)}</g>`;
+    // website under the pill
+    const uy = py + ph + 26 + L.url * .73, uv = eOutC(prog(t, 8.62, 8.9));
+    if (t >= 8.62) o += `<g opacity="${f2(clamp((t - 8.62) / .12))}" transform="translate(0,${f2(30 * (1 - uv))})">${text('kiwigo.kg', CX, uy, L.url, C.ink, 'IX', -0.01)}</g>`;
   }
   return o;
 }

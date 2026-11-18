@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
 
-const FPS = 30, DUR = 9.6, SUB = 8, SHUTTER = 0.5; // 180° shutter, 8 samples
+const FPS = 30, DUR = 9.6, SUB = 2, SHUTTER = 0.5; // 180° shutter, 2 samples (v2: cut from 8 to keep the render lean)
 const DIR = __dirname;
 
 (async () => {

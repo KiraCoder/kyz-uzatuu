@@ -30,7 +30,7 @@ svg{position:absolute;left:0;top:0}
   ${speed}
   <g transform="translate(${wheelX} ${wheelY}) rotate(-12) scale(${wheelR/100})">${LOGO}</g>
 </svg>
-<div class="t" style="left:${vx(80)}px;top:150px;font-size:250px">Скоро<br>в пути</div>
+<div class="t" style="left:${vx(80)}px;top:150px;font-size:250px">Уже<br>в пути</div>
 <div class="t" style="left:${vx(V)}px;width:${V}px;text-align:center;top:160px;font-size:150px">Kiwi Go</div>
 <div class="t" style="left:${vx(2*V+70)}px;top:150px;font-size:132px;line-height:1">Доставка<br>по всему<br>Кыргызстану</div>
 <div class="pill" style="left:${vx(2*V+70)}px;top:1192px">Платите только за доставку</div>

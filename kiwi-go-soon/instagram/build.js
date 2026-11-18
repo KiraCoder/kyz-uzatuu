@@ -45,7 +45,7 @@ const cover = (svg) => `<svg xmlns="http://www.w3.org/2000/svg" width="1080" hei
   </style></head><body>
   <div class="top">kiwigo.kg</div>
   <div class="head"><div class="av"></div><div class="stats"><div class="name">Kiwi Go · Курьерская служба</div><div class="nums"><div><b>6</b>публикаций</div><div><b>0</b>подписчиков</div><div><b>0</b>подписок</div></div></div></div>
-  <div class="bio"><div class="cat">Курьерская служба</div>🥝 Курьерская доставка по всему Кыргызстану<br>💸 Платите только за доставку<br>🚀 Скоро запуск — подпишитесь!<div class="link">🔗 kiwigo.kg</div></div>
+  <div class="bio"><div class="cat">Курьерская служба</div>🥝 Курьерская доставка по всему Кыргызстану<br>💸 Платите только за доставку<br>🚀 Уже доставляем — заказ по ссылке ↓<div class="link">🔗 kiwigo.kg</div></div>
   <div class="btns"><div>Подписаться</div><div>Сообщение</div><div>Связаться</div></div>
   <div class="hls">${hl}</div>
   <div class="grid">${['banner/kiwi-go-banner-1-post3.png','banner/kiwi-go-banner-2-post2.png','banner/kiwi-go-banner-3-post1.png','../creative/kiwi-go-creative-03.png','../reel/poster.png','../creative/kiwi-go-creative-04.png'].map(f => `<div style="background-image:url(${img(f)})"></div>`).join('')}</div>

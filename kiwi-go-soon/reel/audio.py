@@ -206,6 +206,10 @@ def rumble(d, level=1.0, rate=11.0):
 
 
 # ---------------------------------------------------------------- arrangement
+# v2: the hero hits (land, «колесо!», «Уже», «доставляем», «Kiwi Go») get extra level so the
+# master has real transients: ~-14 LUFS integrated with true peaks near -1 dBFS (v1 peaked at -5).
+ACC = 1.5
+TARGET_LUFS = -14.0
 # 0.00–0.22 fall: descending whistle + air
 t = tt(.24)
 whistle = np.sin(osc_phase(2200 * np.exp(-t * 6) + 300)) * np.minimum(1, t / .02) * .25
@@ -213,7 +217,7 @@ add(whistle, 0.0, .5)
 add(whoosh(.24, 900, 300, bw=1.4), 0.0, .35)
 
 # 0.22 LAND: kick + boing + dust + pop (line 1), 0.32 pop (line 2)
-add(kick(1.0, .6), .22, 1.0)
+add(kick(1.0, .6), .22, 1.0 * ACC)
 add(boing(), .22, .45)
 add(fft_filter(rng.standard_normal(int(.25 * SR)), 200, 3000) * np.exp(-tt(.25) * 18), .22, .25)
 add(pop(), .22, .45, -.2)
@@ -228,7 +232,7 @@ for k in range(4):
 add(hat(.6), .5, .25, -.3)
 
 # 1.30 «Это колесо!»: kick + clap + pops, then burn-out rev 1.30–1.88
-add(kick(.9), 1.30, .9)
+add(kick(.9), 1.30, .9 * ACC)
 add(clap(), 1.30, .55)
 add(pop(), 1.30, .45)
 add(pop(1.2), 1.38, .5)
@@ -284,13 +288,13 @@ t = tt(.9)
 add(whoosh(.9, 300, 7000, bw=1.0, shape=lambda u: u ** 2.2), 4.5, .55)
 add(np.sin(osc_phase(200 * 2 ** (t / .9 * 2.5))) * (t / .9) ** 2 * .3, 4.5, .45)
 
-# 5.40 suck-in silence (tiny gap), 5.50 «Скоро» HIT, 6.00 «запуск» HIT + ding
-add(kick(1.0, .7), 5.5, 1.0)
-add(clap(1.2), 5.5, .55)
+# 5.40 suck-in silence (tiny gap), 5.50 «Уже» HIT, 6.00 «доставляем» HIT + ding
+add(kick(1.0, .7), 5.5, 1.0 * ACC)
+add(clap(1.2), 5.5, .55 * ACC)
 add(stab([62, 66, 69, 74], .8, bright=5000), 5.5, .55)
 add(fft_filter(rng.standard_normal(int(1.2 * SR)), 5000, 15000) * np.exp(-tt(1.2) * 4), 5.5, .12)  # crash air
-add(kick(1.0, .7), 6.0, 1.0)
-add(clap(1.2), 6.0, .5)
+add(kick(1.0, .7), 6.0, 1.0 * ACC)
+add(clap(1.2), 6.0, .5 * ACC)
 add(stab([66, 69, 74, 78], .8, bright=6000), 6.0, .5)
 add(bell(1568, 2.6), 6.0, .55, .15)        # bright ding (G6)
 add(bell(2349, 1.2), 6.0, .25, -.2)        # sparkle (D7)
@@ -309,7 +313,7 @@ add(bike_bell(), 7.90, .75, .25)
 add(bike_bell(), 8.06, .6, .25)
 
 # 8.00 «Kiwi Go» slam + final chord; 8.25/8.37 tagline blips; 8.32 hop landing; 8.50 pill pop
-add(kick(1.0, .7), 8.0, .95)
+add(kick(1.0, .7), 8.0, .95 * ACC)
 add(clap(), 8.0, .35)
 add(pad([50, 62, 66, 69, 76], 1.6), 8.0, .6)
 add(stab([62, 66, 69, 74], .9, bright=4000), 8.0, .35)
@@ -322,6 +326,8 @@ add(bell(3136, .9), 8.52, .12)
 
 # ---------------------------------------------------------------- master
 # gentle glue: soft saturation + fades
+print(f"raw mix peak {np.max(np.abs(mix)):.2f}")
+mix *= 0.8 / np.max(np.abs(mix))   # v2: scale first so the soft saturation only rounds the very top, keeping transients
 mix = np.tanh(mix * 1.1) / 1.1
 fi, fo = int(.015 * SR), int(.35 * SR)
 mix[:fi] *= np.linspace(0, 1, fi)[:, None]
@@ -366,9 +372,9 @@ out = os.path.join(HERE, 'audio.wav')
 mix /= np.max(np.abs(mix))
 mix *= 10 ** (-6 / 20)
 write_wav(tmp, mix)
-for it in range(4):
+for it in range(6):
     I, pk = measure(tmp)
-    gain = -14.0 - I
+    gain = TARGET_LUFS - I
     print(f'pass {it}: I={I:.2f} LUFS  peak={pk:.2f} dBFS  -> gain {gain:+.2f} dB')
     if abs(gain) < .25 and pk <= -1.0:
         break

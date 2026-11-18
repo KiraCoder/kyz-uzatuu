@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Kiwi Go Reel 06</title>
+<style>
+@font-face{font-family:'ID';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf') format('opentype');font-weight:900}
+@font-face{font-family:'IX';src:url('file:///home/user/kyz-uzatuu/kiwi-go-soon/fonts/Inter-ExtraBold.otf') format('opentype');font-weight:800}
+*{margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#B8F03C}
+svg{display:block}
+text{font-kerning:normal}
+</style></head>
+<body>
+<svg id="s" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs"></defs>
+  <g id="root"></g>
+  <g id="measure" opacity="0"></g>
+</svg>
+<script>
+// =====================================================================================
+// COPY: every on-screen line lives here. The BENEFITS STILL NEED CLIENT CONFIRMATION —
+// edit the strings, re-render. Lines wrap automatically; use "|" to force a line break.
+// No numbers / amounts anywhere (public brief rule).
+// =====================================================================================
+const COPY = {
+  hook1:        'Ищем',
+  hook2:        'курьеров!',
+  benefit1:     'Стабильный оклад',
+  benefit2:     'Сами выбираете рабочие дни',
+  benefit3:     'Топливо компенсируем',
+  benefit3note: '(на своём авто)',
+  benefit4:     'Удобное приложение курьера',
+  endTitle:     'Стань курьером|Kiwi Go',
+  endCta1:      'Скачайте «Kiwi Go · Курьер»',
+  endCta2:      '→ «Хочу стать курьером»',
+};
+
+// Reel 06 «Стань курьером Kiwi Go». Deterministic: render(t) draws the frame at time t (s).
+const C = { lime:'#B8F03C', ink:'#111410', paper:'#FFFDF7', cream:'#F6F1E4', sand:'#ECE6D6',
+            peel:'#7A5A3C', green:'#3F6212', rim:'#6BA82B' };
+const W = 1080, H = 1920, CX = 530, DUR = 12.0;
+const BEAT = 60 / 137.142857;          // 0.4375 s; one benefit = 4 beats
+const TB = [2.0, 2.0 + 4 * BEAT, 2.0 + 8 * BEAT, 2.0 + 12 * BEAT]; // 2.00 3.75 5.50 7.25
+const TEND = 2.0 + 16 * BEAT;          // 9.00
+const GROUND = 1468;
+
+// ---------- math / easing ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, u) => a + (b - a) * u;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOutC = u => 1 - Math.pow(1 - u, 3);
+const eInC = u => u * u * u;
+const eInQ = u => u * u;
+const eInOutC = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+const eOutBack = (u, s = 1.70158) => { const c = s + 1; return 1 + c * Math.pow(u - 1, 3) + s * Math.pow(u - 1, 2); };
+const eOutExpo = u => u >= 1 ? 1 : 1 - Math.pow(2, -10 * u);
+const damped = (tau, f = 3, d = 7) => tau < 0 ? 0 : Math.exp(-d * tau) * Math.cos(2 * Math.PI * f * tau);
+const shake = (t, t0, amp, f = 13) => t < t0 ? 0 : amp * Math.exp(-(t - t0) * 11) * Math.sin((t - t0) * f * 2 * Math.PI);
+const rnd = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const f2 = n => (+n).toFixed(2);
+
+// ---------- logo (exact; only scaled / rotated) ----------
+(function defs() {
+  let seeds = '';
+  for (let i = 0; i < 12; i++) seeds += `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`;
+  document.getElementById('defs').innerHTML =
+    `<g id="logo"><circle r="100" fill="${C.ink}"/><circle r="86" fill="${C.rim}"/><circle r="80.5" fill="${C.lime}"/>` +
+    `<g fill="${C.ink}">${seeds}</g><circle r="26" fill="${C.cream}"/><circle r="8.5" fill="${C.ink}"/></g>` +
+    // rubber-stamp ink texture: speckled knock-outs
+    `<filter id="stampink" x="-10%" y="-10%" width="120%" height="120%">
+       <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="4" result="n"/>
+       <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 6.2" result="m"/>
+       <feComposite in="SourceGraphic" in2="m" operator="in"/>
+     </filter>`;
+})();
+function logo(x, y, r, ang = 0) {
+  return `<g transform="translate(${f2(x)},${f2(y)}) rotate(${f2(ang)}) scale(${(r / 100).toFixed(4)})"><use href="#logo"/></g>`;
+}
+
+// ---------- text ----------
+function measure(str, font, size, ls) {
+  const m = document.getElementById('measure');
+  m.innerHTML = `<text font-family="${font}" font-size="${size}" style="letter-spacing:${ls * size}px">${str}</text>`;
+  return m.firstChild.getComputedTextLength();
+}
+function fit(strs, font, maxW, cap, ls = -0.035) {
+  let s = cap;
+  for (const str of strs) s = Math.min(s, cap * maxW / measure(str, font, cap, ls));
+  return Math.floor(s);
+}
+// choose line breaks (1..3 lines) that give the largest type within maxW x maxH
+function wrap(str, font, maxW, maxH, cap, ls = -0.035, lead = 1.04) {
+  if (str.includes('|')) { const lines = str.split('|'); return { lines, size: Math.min(fit(lines, font, maxW, cap, ls), Math.floor(maxH / (lines.length * lead))) }; }
+  const w = str.split(/\s+/);
+  let best = null;
+  const tryLines = lines => {
+    const s = Math.min(fit(lines, font, maxW, cap, ls), Math.floor(maxH / (lines.length * lead)));
+    if (!best || s > best.size + 2) best = { lines, size: s };
+  };
+  tryLines([w.join(' ')]);
+  for (let i = 1; i < w.length; i++) {
+    tryLines([w.slice(0, i).join(' '), w.slice(i).join(' ')]);
+    for (let j = i + 1; j < w.length; j++) tryLines([w.slice(0, i).join(' '), w.slice(i, j).join(' '), w.slice(j).join(' ')]);
+  }
+  return best;
+}
+function text(str, x, y, size, fill, font = 'ID', ls = -0.035, extra = '') {
+  return `<text x="${f2(x)}" y="${f2(y)}" font-family="${font}" font-size="${f2(size)}" fill="${fill}" text-anchor="middle" style="letter-spacing:${f2(ls * size)}px" ${extra}>${str}</text>`;
+}
+function popText(t, t0, str, x, y, size, fill, opts = {}) {
+  if (t < t0) return '';
+  const { font = 'ID', dur = .24, from = 1.6, rot = 0, out = null, ls = -0.035, back = 2.2 } = opts;
+  const u = prog(t, t0, t0 + dur);
+  let s = lerp(from, 1, eOutBack(u, back));
+  let op = clamp((t - t0) / 0.05);
+  let dy = 0;
+  if (out) { const v = prog(t, out[0], out[1]); if (v >= 1) return ''; op *= 1 - eInQ(v); dy = -50 * eInC(v); s *= 1 - .2 * eInC(v); }
+  const cy = y - size * 0.36;
+  return `<g opacity="${f2(op)}" transform="translate(${f2(x)},${f2(cy + dy)}) rotate(${f2(rot * (1 - eOutC(u)))}) scale(${s.toFixed(4)}) translate(${f2(-x)},${f2(-cy)})">${text(str, x, y, size, fill, font, ls)}</g>`;
+}
+
+// ---------- courier on a scooter (flat, stylised; wheels = the logo) ----------
+const SK = 9; // outline width
+function courier(x, g, sc, t, wheelAng, lean = 0, bob = 0) {
+  const st = `stroke="${C.ink}" stroke-width="${SK}" stroke-linejoin="round" stroke-linecap="round"`;
+  const blink = (t % 2.6) > 2.48;
+  const head = `
+    <circle cx="-8" cy="-438" r="44" fill="${C.sand}" ${st}/>
+    ${blink ? `<path d="M 14 -440 h 14" ${st} fill="none"/>` : `<circle cx="21" cy="-440" r="7" fill="${C.ink}"/>`}
+    <path d="M 6 -416 q 14 12 28 -4" fill="none" ${st}/>
+    <circle cx="-12" cy="-424" r="9" fill="${C.peel}" opacity=".35"/>
+    <path d="M -58 -446 a 52 52 0 0 1 104 -6 l 6 10 l -110 2 z" fill="${C.lime}" ${st}/>
+    <path d="M 14 -486 q 22 6 32 30" fill="none" stroke="${C.paper}" stroke-width="7" stroke-linecap="round"/>
+    <rect x="-64" y="-450" width="118" height="16" rx="8" fill="${C.ink}"/>`;
+  return `<g transform="translate(${f2(x)},${f2(g)}) scale(${f2(sc)}) translate(0,${f2(-bob)}) rotate(${f2(lean)})">
+    <!-- delivery box with the kiwi wheel -->
+    <g transform="translate(-178,-300) rotate(${f2(-2 + 2 * Math.sin(t * 9))})">
+      <rect x="-82" y="-86" width="164" height="150" rx="18" fill="${C.cream}" ${st}/>
+      <rect x="-82" y="-86" width="164" height="30" rx="14" fill="${C.lime}" ${st}/>
+      ${logo(0, 6, 44, wheelAng * .25)}
+    </g>
+    <!-- scooter body -->
+    <path d="M -238 -128 Q -236 -206 -150 -214 L -40 -214 Q 0 -214 6 -176 L 14 -132 L 120 -132 L 142 -116 L 142 -96 L -226 -96 Q -240 -100 -238 -128 Z" fill="${C.green}" ${st}/>
+    <rect x="-200" y="-240" width="168" height="34" rx="17" fill="${C.peel}" ${st}/>
+    <!-- front fork + shield -->
+    <path d="M 168 -62 L 120 -330" ${st} stroke-width="22" fill="none"/>
+    <path d="M 120 -330 L 120 -330" stroke="${C.ink}" stroke-width="22" stroke-linecap="round"/>
+    <path d="M 100 -310 Q 80 -230 104 -132 L 140 -132 Q 150 -230 132 -306 Z" fill="${C.green}" ${st}/>
+    <path d="M 92 -338 L 150 -344" ${st} stroke-width="16" fill="none"/>
+    <circle cx="146" cy="-282" r="18" fill="${C.lime}" ${st}/>
+    <!-- rider: leg, torso, arm -->
+    <path d="M -96 -236 L 30 -226 L 52 -140" fill="none" stroke="${C.ink}" stroke-width="50" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M -96 -236 L 30 -226 L 52 -140" fill="none" stroke="${C.peel}" stroke-width="32" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M 34 -136 L 86 -136" stroke="${C.ink}" stroke-width="30" stroke-linecap="round"/>
+    <path d="M -128 -230 Q -132 -330 -60 -380 Q -10 -394 20 -364 Q 10 -290 -30 -232 Z" fill="${C.green}" ${st}/>
+    <path d="M -70 -326 L 8 -306" stroke="${C.lime}" stroke-width="12" stroke-linecap="round"/>
+    ${head}
+    <path d="M -10 -350 L 54 -300 L 110 -336" fill="none" stroke="${C.ink}" stroke-width="40" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M -10 -350 L 54 -300 L 110 -336" fill="none" stroke="${C.green}" stroke-width="22" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="112" cy="-336" r="15" fill="${C.sand}" ${st}/>
+    <!-- wheels: the logo -->
+    ${logo(-160, -66, 66, wheelAng)}
+    ${logo(168, -66, 66, wheelAng)}
+  </g>`;
+}
+function speedLines(t, x, cy, spread, color, a, seed, n = 6, maxLen = 220) {
+  if (a <= 0) return '';
+  let out = '';
+  for (let i = 0; i < n; i++) {
+    const r1 = rnd(seed + i), r2 = rnd(seed + i + 50);
+    const y = cy + (r1 - .5) * spread;
+    const len = maxLen * (0.45 + .55 * r2) * a;
+    const phase = ((t * 3.2 + r2) % 1);
+    const xx = x - 30 - phase * 140 - len;
+    const hgt = i % 3 === 0 ? 14 : 8;
+    out += `<rect x="${f2(xx)}" y="${f2(y - hgt / 2)}" width="${f2(len)}" height="${hgt}" rx="${hgt / 2}" fill="${color}" opacity="${f2(a * .9)}"/>`;
+  }
+  return out;
+}
+function road(t, color, a = 1) {
+  const s = 820 * t, dash = 170, off = s % dash;
+  let o = `<rect x="0" y="${GROUND}" width="${W}" height="12" fill="${color}" opacity="${f2(a)}"/>`;
+  for (let k = -1; k < 8; k++) o += `<rect x="${f2(k * dash - off)}" y="${GROUND + 34}" width="90" height="12" rx="6" fill="${color}" opacity="${f2(.35 * a)}"/>`;
+  return o;
+}
+function burst(t, t0, x, y, color, seed, n = 10, dist = 300, life = .45) {
+  const u = prog(t, t0, t0 + life);
+  if (t < t0 || u >= 1) return '';
+  let out = '';
+  for (let i = 0; i < n; i++) {
+    const ang = (i / n) * 360 + rnd(seed + i) * 20;
+    const d = 40 + dist * eOutExpo(u) * (0.7 + .3 * rnd(seed + i + 9));
+    const sc = 1 - eInQ(u);
+    out += `<g transform="rotate(${f2(ang)} ${x} ${y}) translate(${x} ${f2(y - d)}) scale(${f2(sc)})"><rect x="-7" y="-22" width="14" height="44" rx="7" fill="${color}"/></g>`;
+  }
+  return out;
+}
+
+// ---------- icons (ink line art on a lime disc, local coords, ~r 120) ----------
+const IS = `stroke="${C.ink}" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"`;
+function iconWallet(t) {
+  return `<g transform="rotate(-8) translate(-6,-70)"><rect x="-82" y="-34" width="164" height="76" rx="10" fill="${C.paper}" ${IS}/>
+      <circle r="18" fill="none" ${IS}/></g>
+    <rect x="-106" y="-56" width="212" height="150" rx="26" fill="${C.green}" ${IS}/>
+    <rect x="22" y="-6" width="96" height="58" rx="16" fill="${C.lime}" ${IS}/>
+    <circle cx="56" cy="23" r="10" fill="${C.ink}"/>`;
+}
+function iconCalendar(t, t0) {
+  let cells = '';
+  const picks = [0, 2, 3, 5];
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) {
+    const i = r * 3 + c, x = -70 + c * 70, y = -2 + r * 62;
+    const on = picks.includes(i), tk = t0 + .18 + picks.indexOf(i) * BEAT / 2;
+    const u = on ? eOutBack(prog(t, tk, tk + .2), 2.5) : 0;
+    cells += `<rect x="${x - 25}" y="${y - 22}" width="50" height="44" rx="10" fill="${C.paper}" stroke="${C.ink}" stroke-width="8"/>`;
+    if (u > 0) cells += `<g transform="translate(${x},${y}) scale(${f2(u)})"><rect x="-25" y="-22" width="50" height="44" rx="10" fill="${C.lime}" stroke="${C.ink}" stroke-width="8"/><path d="M -12 0 l 8 9 l 16 -18" fill="none" stroke="${C.ink}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  }
+  return `<rect x="-118" y="-104" width="236" height="210" rx="24" fill="${C.paper}" ${IS}/>
+    <path d="M -118 -54 V -80 Q -118 -104 -94 -104 H 94 Q 118 -104 118 -80 V -54 Z" fill="${C.ink}"/>
+    <rect x="-70" y="-128" width="20" height="46" rx="10" fill="${C.ink}"/><rect x="50" y="-128" width="20" height="46" rx="10" fill="${C.ink}"/>
+    ${cells}`;
+}
+function iconFuel(t) {
+  const drip = (t * 1.6) % 1;
+  return `<path d="M 40 -40 H 72 Q 92 -40 92 -20 V 52 Q 92 70 106 70 Q 120 70 120 52 V -40 L 96 -76" fill="none" ${IS}/>
+    <rect x="-112" y="-110" width="152" height="214" rx="20" fill="${C.green}" ${IS}/>
+    <rect x="-88" y="-84" width="104" height="66" rx="12" fill="${C.lime}" ${IS}/>
+    <rect x="-130" y="96" width="188" height="26" rx="12" fill="${C.ink}"/>
+    <g transform="translate(-36,${f2(28 + 6 * Math.sin(t * 6))})"><path d="M 0 -30 C 14 -12 22 0 22 12 A 22 22 0 0 1 -22 12 C -22 0 -14 -12 0 -30 Z" fill="${C.paper}" ${IS} stroke-width="9"/></g>`;
+}
+function iconPhone(t, t0) {
+  const u = prog(t, t0 + .2, t0 + 1.2);
+  const px = lerp(-26, 22, eInOutC(u)), py = lerp(52, -38, eInOutC(u));
+  return `<rect x="-74" y="-124" width="148" height="248" rx="28" fill="${C.ink}"/>
+    <rect x="-56" y="-98" width="112" height="190" rx="12" fill="${C.paper}"/>
+    <path d="M -26 60 Q -40 10 0 0 Q 40 -10 22 -50" fill="none" stroke="${C.green}" stroke-width="9" stroke-dasharray="2 16" stroke-linecap="round"/>
+    <circle cx="-26" cy="60" r="10" fill="${C.green}"/>
+    <g transform="translate(${f2(px)},${f2(py)})"><path d="M 0 0 C -10 -14 -24 -24 -24 -40 A 24 24 0 0 1 24 -40 C 24 -24 10 -14 0 0 Z" fill="${C.lime}" stroke="${C.ink}" stroke-width="8" stroke-linejoin="round"/><circle cx="0" cy="-40" r="8" fill="${C.ink}"/></g>
+    <rect x="-18" y="102" width="36" height="8" rx="4" fill="${C.paper}"/>
+    <g transform="translate(74,-104) scale(${f2(eOutBack(prog(t, t0 + 1.0, t0 + 1.2), 2.6))})"><circle r="34" fill="${C.lime}" ${IS} stroke-width="9"/><path d="M -14 0 l 9 10 l 19 -20" fill="none" stroke="${C.ink}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+}
+
+// ---------- layout (after fonts) ----------
+let L = {};
+function layout() {
+  L.hook = fit([COPY.hook1, COPY.hook2], 'ID', 660, 210);
+  L.ben = [COPY.benefit1, COPY.benefit2, COPY.benefit3, COPY.benefit4].map(s => wrap(s, 'ID', 820, 400, 150));
+  L.ben[2].size = Math.min(L.ben[2].size, wrap(COPY.benefit3, 'ID', 820, 310, 150).size);
+  L.note = 60;
+  L.end = wrap(COPY.endTitle, 'ID', 820, 300, 150);
+  L.end = wrap(COPY.endTitle, 'ID', 820, 250, 130);
+  L.cta1 = fit([COPY.endCta1], 'IX', 820, 72, -0.02);
+  L.cta2 = fit([COPY.endCta2], 'IX', 720, 66, -0.02);
+  L.ctaW = measure(COPY.endCta2, 'IX', L.cta2, -0.02) + 100;
+}
+
+// ---------- scenes ----------
+function hook(t) { // 0 – 2.1: lime, stamp «Ищем курьеров!»
+  let o = `<rect width="${W}" height="${H}" fill="${C.lime}"/>`;
+  const T1 = .30, T2 = .70;
+  const sx = shake(t, T1, 16) + shake(t, T2, 26), sy = shake(t, T1, 12, 11) - shake(t, T2, 18, 11);
+  const s1 = L.hook, y1 = 760, y2 = y1 + s1 * 1.02;
+  const boxW = 780, boxTop = y1 - s1 * .98, boxH = s1 * 2.1;
+  o += `<g transform="translate(${f2(sx)},${f2(sy)})">`;
+  o += road(t, C.ink, prog(t, .9, 1.1));
+  // courier zips in 1.0–1.45 and keeps riding in place
+  const cu = prog(t, 1.0, 1.5);
+  if (cu > 0) {
+    const cx = lerp(-420, 540, eOutBack(cu, 1.3));
+    o += speedLines(t, cx - 140, GROUND - 200, 200, C.ink, 1 - prog(t, 1.5, 1.8), 21, 6, 260);
+    o += courier(cx, GROUND, .64, t, t * 520, -6 * (1 - eOutC(cu)), Math.abs(Math.sin(Math.PI * t / BEAT)) * 8);
+  }
+  // ink splats on impact
+  o += burst(t, T1, CX, y1 - s1 * .36, C.ink, 5, 10, 470);
+  o += burst(t, T2, CX, y2 - s1 * .36, C.ink, 33, 12, 520);
+  // exit 1.82–2.0
+  const ex = prog(t, 1.82, 2.02);
+  const exS = 1 - .35 * eInC(ex), exY = -420 * eInC(ex), exO = 1 - eInQ(ex);
+  o += `<g opacity="${f2(exO)}" transform="translate(${CX},${f2(840 + exY)}) scale(${f2(exS)}) rotate(-5) translate(${-CX},-840)">`;
+  // line 1 stamp
+  const stamp = (t0, inner) => {
+    if (t < t0 - .14) return '';
+    const u = prog(t, t0 - .14, t0);
+    const s = lerp(2.6, 1, eInC(u));
+    const sq = t >= t0 ? 1 - .05 * damped(t - t0, 6, 16) : 1;
+    const op = clamp(u * 3);
+    return `<g opacity="${f2(op)}" transform="translate(${CX},${f2(y1 + s1 * .1)}) scale(${(s * sq).toFixed(4)}) translate(${-CX},${f2(-(y1 + s1 * .1))})">${inner}</g>`;
+  };
+  o += stamp(T1, `<g filter="url(#stampink)">${text(COPY.hook1, CX, y1, s1, C.ink)}</g>`);
+  o += stamp(T2, `<g filter="url(#stampink)"><rect x="${CX - boxW / 2}" y="${f2(boxTop)}" width="${boxW}" height="${f2(boxH)}" rx="34" fill="none" stroke="${C.ink}" stroke-width="18"/>
+      ${text(COPY.hook2, CX, y2, s1, C.ink)}</g>`);
+  o += '</g></g>';
+  return o;
+}
+
+function benefits(t) { // 2.0 – 9.0: paper, four benefits on the beat, courier riding below
+  let o = `<rect width="${W}" height="${H}" fill="${C.paper}"/>`;
+  o += road(t, C.ink);
+  const IY = 470, IR = 160;
+  const icons = [iconWallet, iconCalendar, iconFuel, iconPhone];
+  const texts = [COPY.benefit1, COPY.benefit2, COPY.benefit3, COPY.benefit4];
+  for (let i = 0; i < 4; i++) {
+    const t0 = TB[i], t1 = i < 3 ? TB[i + 1] : TEND;
+    if (t < t0 - .01 || t >= t1) continue;
+    const outU = prog(t, t1 - .14, t1);
+    // icon disc
+    const u = prog(t, t0, t0 + .32);
+    const s = eOutBack(u, 2.4) * (1 - .9 * eInC(outU));
+    const beatPh = ((t - 2.0) % BEAT) / BEAT;
+    const wob = 1 + .025 * damped(beatPh * BEAT, 4, 12);
+    o += burst(t, t0, CX, IY, C.lime, 70 + i * 13, 12, 230, .4);
+    o += `<g transform="translate(${CX},${IY}) scale(${(s * wob).toFixed(4)}) rotate(${f2(-14 * (1 - eOutC(u)))})">
+      <circle r="${IR}" fill="${C.lime}" stroke="${C.ink}" stroke-width="12"/>
+      <g transform="scale(1.0)">${icons[i](t, t0)}</g></g>`;
+    // copy
+    const b = L.ben[i], lead = b.size * 1.04;
+    const n = b.lines.length + (i === 2 ? 1 : 0);
+    const blockH = b.lines.length * lead + (i === 2 ? 80 : 0);
+    const top = 680 + (400 - blockH) / 2;
+    b.lines.forEach((ln, k) => {
+      o += popText(t, t0 + .1 + k * .09, ln, CX, top + b.size * .76 + k * lead, b.size, C.ink, { out: [t1 - .14, t1], rot: k % 2 ? 4 : -4 });
+    });
+    if (i === 2) o += popText(t, t0 + .1 + b.lines.length * .09, COPY.benefit3note, CX, top + b.lines.length * lead + 46, L.note, C.green, { font: 'IX', ls: -0.02, out: [t1 - .14, t1] });
+  }
+  // courier rides through the whole section, bouncing on the beat
+  const bt = Math.max(0, t - 2.0), ph = (bt % BEAT) / BEAT;
+  const bob = 14 * Math.sin(Math.PI * ph);
+  let cx = 540;
+  const go = prog(t, TEND - .3, TEND + .1);
+  cx += 1100 * eInC(go);
+  o += speedLines(t, cx - 160, GROUND - 200, 220, C.ink, .55 + .45 * go, 41, 6, 200 + 200 * go);
+  o += courier(cx, GROUND, .64, t, t * 520, -4 * go, bob);
+  return o;
+}
+
+function endCard(t) { // 9.0 – 12.0: lime, logo, title, app CTA, courier parks
+  const LY = 420, LR = 140;
+  let o = '';
+  const ir = 1900 * eOutC(prog(t, TEND, TEND + .34));
+  o += `<circle cx="${CX}" cy="${LY}" r="${f2(ir)}" fill="${C.lime}"/>`;
+  o += road(t < 10.95 ? t : 10.95, C.ink, prog(t, TEND + .1, TEND + .4));
+  // logo spins in, overshoots, settles; hop on the title beat
+  const u = prog(t, TEND + .02, TEND + .7);
+  const sc = eOutBack(u, 1.8);
+  const ang = -540 * (1 - eOutC(u)) + 6 * Math.sin(2 * Math.PI * (t - TEND) / (4 * BEAT)) * prog(t, 10.6, 11.0);
+  const hop = t > TEND + .7 && t < TEND + .7 + 2 * BEAT ? 26 * Math.sin(Math.PI * (t - TEND - .7) / (2 * BEAT)) : 0;
+  if (u > 0) o += logo(CX, LY - hop, LR * sc, ang);
+  // title
+  const e = L.end, lead = e.size * 1.04, top = 610;
+  const T = TEND + 2 * BEAT; // 9.875
+  e.lines.forEach((ln, k) => {
+    o += popText(t, T - .45 + k * BEAT / 2, ln, CX, top + e.size * .76 + k * lead, e.size, C.ink, { rot: k ? 5 : -5, from: 1.8 });
+  });
+  const yA = top + e.lines.length * lead + 40;
+  // CTA line 1 (ink text) + line 2 (ink pill, lime text)
+  const pt = TEND + 3 * BEAT; // 10.31
+  o += popText(t, pt, COPY.endCta1, CX, yA + L.cta1 * .76, L.cta1, C.ink, { font: 'IX', ls: -0.02, from: 1.5 });
+  const pt2 = pt + BEAT;      // 10.75
+  if (t >= pt2) {
+    const pu = prog(t, pt2, pt2 + .3);
+    const py = yA + L.cta1 * 1.02 + 34, ph = 128, s = eOutBack(pu, 2.4);
+    const pulse = 1 + .03 * Math.max(0, Math.sin(2 * Math.PI * (t - pt2 - .3) / (2 * BEAT))) * prog(t, pt2 + .4, pt2 + .6);
+    o += `<g transform="translate(${CX},${py + ph / 2}) scale(${(s * pulse).toFixed(4)}) translate(${-CX},${-(py + ph / 2)})">
+      <rect x="${f2(CX - L.ctaW / 2)}" y="${py}" width="${f2(L.ctaW)}" height="${ph}" rx="${ph / 2}" fill="${C.ink}"/>
+      ${text(COPY.endCta2, CX, py + ph / 2 + L.cta2 * .36, L.cta2, C.lime, 'IX', -0.02)}</g>`;
+  }
+  // courier rolls back in and parks under the CTA (bell on the stop)
+  const cu = prog(t, 10.45, 10.95);
+  if (cu > 0) {
+    const cx = lerp(-380, 540, eOutBack(cu, 1.4));
+    const land = t > 10.95 ? damped(t - 10.95, 3, 9) : 0;
+    o += speedLines(t, cx - 120, GROUND - 150, 160, C.ink, 1 - prog(t, 10.9, 11.15), 61, 5, 200);
+    o += courier(cx, GROUND, .5, t, (cx + 380) / 33 * 57.3, -5 * land, 0);
+  }
+  return o;
+}
+
+function render(t) {
+  let o = '';
+  if (t < 1.9) o = hook(t);
+  else if (t < TEND) {
+    // paper iris from the icon position
+    const ir = 2000 * eOutC(prog(t, 1.9, 2.18));
+    if (t < 2.18) o += hook(t);
+    o += `<defs><clipPath id="iris"><circle cx="${CX}" cy="470" r="${f2(ir)}"/></clipPath></defs><g clip-path="url(#iris)">${benefits(t)}</g>`;
+  } else {
+    if (t < TEND + .36) o += benefits(t);
+    o += endCard(t);
+  }
+  document.getElementById('root').innerHTML = o;
+}
+
+window.READY = false;
+Promise.all([document.fonts.load('900 100px ID'), document.fonts.load('800 100px IX')])
+  .then(() => document.fonts.ready)
+  .then(() => { layout(); render(0); window.READY = true; });
+</script>
+</body></html>

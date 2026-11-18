@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Kiwi Go Reel 05</title>
+<style>
+@font-face{font-family:'ID';src:url('file:///usr/share/fonts/opentype/inter/InterDisplay-Black.otf') format('opentype');font-weight:900}
+@font-face{font-family:'IX';src:url('file:///home/user/kyz-uzatuu/kiwi-go-soon/fonts/Inter-ExtraBold.otf') format('opentype');font-weight:800}
+*{margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#FFFDF7}
+svg{display:block}
+</style>
+<script src="geo.js"></script>
+</head>
+<body>
+<svg id="s" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs"></defs>
+  <defs id="dyn"></defs>
+  <g id="root"></g>
+  <g id="measure" opacity="0"></g>
+</svg>
+<script>
+// Kiwi Go — Reel 05 «По всему Кыргызстану». Deterministic: render(t) draws the frame at time t (s).
+const C = { lime:'#B8F03C', ink:'#111410', paper:'#FFFDF7', cream:'#F6F1E4', sand:'#ECE6D6',
+            peel:'#7A5A3C', green:'#3F6212', rim:'#6BA82B' };
+const W = 1080, H = 1920, CX = 530, DUR = 10.0;
+
+// ---------- math / easing ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, u) => a + (b - a) * u;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOutC = u => 1 - Math.pow(1 - u, 3);
+const eInC = u => u * u * u;
+const eInQ = u => u * u;
+const eInOutC = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+const eInOutS = u => u * u * (3 - 2 * u);
+const eOutBack = (u, s = 1.70158) => { const c = s + 1; return 1 + c * Math.pow(u - 1, 3) + s * Math.pow(u - 1, 2); };
+const eOutExpo = u => u >= 1 ? 1 : 1 - Math.pow(2, -10 * u);
+const damped = (tau, f = 3, d = 7) => tau < 0 ? 0 : Math.exp(-d * tau) * Math.cos(2 * Math.PI * f * tau);
+const rnd = i => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const f2 = n => (+n).toFixed(2);
+
+// ---------- logo (exactly as logo/kiwi-go-logo.svg) ----------
+let seeds = '';
+for (let i = 0; i < 12; i++) seeds += `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`;
+const G = window.GEO;
+document.getElementById('defs').innerHTML =
+  `<g id="logo"><circle r="100" fill="${C.ink}"/><circle r="86" fill="${C.rim}"/><circle r="80.5" fill="${C.lime}"/>` +
+  `<g fill="${C.ink}">${seeds}</g><circle r="26" fill="${C.cream}"/><circle r="8.5" fill="${C.ink}"/></g>` +
+  `<clipPath id="cc"><path d="${G.outer}${G.holes.join('')}" clip-rule="evenodd"/></clipPath>` +
+  `<pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse" x="20" y="10"><circle cx="22" cy="22" r="2.4" fill="${C.sand}"/></pattern>`;
+const logo = (x, y, r, ang = 0, op = 1) =>
+  `<g opacity="${f2(op)}" transform="translate(${f2(x)},${f2(y)}) rotate(${f2(ang)}) scale(${(r / 100).toFixed(4)})"><use href="#logo"/></g>`;
+
+// ---------- text ----------
+function measure(str, font, size, ls) {
+  const m = document.getElementById('measure');
+  m.innerHTML = `<text font-family="${font}" font-size="${size}" style="letter-spacing:${ls * size}px">${str}</text>`;
+  return m.firstChild.getComputedTextLength();
+}
+function fit(strs, font, maxW, cap, ls = -0.035) {
+  let s = cap;
+  for (const str of strs) s = Math.min(s, cap * maxW / measure(str, font, cap, ls));
+  return Math.floor(s);
+}
+function text(str, x, y, size, fill, font = 'ID', ls = -0.035) {
+  return `<text x="${f2(x)}" y="${f2(y)}" font-family="${font}" font-size="${f2(size)}" fill="${fill}" text-anchor="middle" style="letter-spacing:${f2(ls * size)}px">${str}</text>`;
+}
+function popWrap(t, t0, inner, x, cy, opts = {}) {
+  if (t < t0) return '';
+  const { dur = .26, from = 1.6, rot = 0, out = null, back = 2.2 } = opts;
+  const u = prog(t, t0, t0 + dur);
+  let s = lerp(from, 1, eOutBack(u, back)), op = clamp((t - t0) / .05), dy = 0;
+  if (out) { const v = prog(t, out[0], out[1]); if (v >= 1) return ''; op *= 1 - eInQ(v); dy = -60 * eInC(v); s *= 1 - .15 * eInC(v); }
+  return `<g opacity="${f2(op)}" transform="translate(${f2(x)},${f2(cy + dy)}) rotate(${f2(rot * (1 - eOutC(u)))}) scale(${s.toFixed(4)}) translate(${f2(-x)},${f2(-cy)})">${inner}</g>`;
+}
+
+// ---------- map geometry ----------
+const MAP = { w: G.W, h: G.H };
+const R = G.regions;
+// fill order spreads out from the centre, alternating sides; Bishkek fills with its surrounding oblast
+const ORDER = [['KG.NA'], ['KG.DA'], ['KG.YK'], ['KG.834', 'KG.GB'], ['KG.OS'], ['KG.TL'], ['KG.BA']];
+const T0 = 3.0, STEP = .55;               // ping times 3.00, 3.55 … 6.30 (beat grid, 0.55 s)
+const PING = ORDER.map((_, i) => T0 + i * STEP);
+const LIT = 6.85;                          // whole-country chord
+const HUB = G.hub;
+const DOT = { 'KG.NA': [500, 205], 'KG.DA': [236, 168], 'KG.YK': [664, 118], 'KG.834': [430, 72],
+              'KG.OS': [318, 312], 'KG.TL': [214, 88], 'KG.BA': [128, 345] };
+let ROUTES = [], HW = null, HWLEN = 0, OUTLEN = 0, outEl = null;
+
+function quadAt(p0, p1, p2, u) { const a = 1 - u; return [a * a * p0[0] + 2 * a * u * p1[0] + u * u * p2[0], a * a * p0[1] + 2 * a * u * p1[1] + u * u * p2[1]]; }
+function buildRoutes() {
+  ROUTES = ORDER.map(([id], i) => {
+    const p2 = DOT[id], p0 = HUB, dx = p2[0] - p0[0], dy = p2[1] - p0[1], L = Math.hypot(dx, dy);
+    const sgn = i % 2 ? 1 : -1, b = .22 * L;
+    const p1 = [(p0[0] + p2[0]) / 2 - dy / L * b * sgn, (p0[1] + p2[1]) / 2 + dx / L * b * sgn];
+    return { p0, p1, p2 };
+  });
+  // the highway the kiwi-wheel rolls along: west → centre → east (Catmull-Rom through the dots)
+  const pts = [DOT['KG.BA'], DOT['KG.OS'], DOT['KG.DA'], HUB, DOT['KG.NA'], DOT['KG.YK']];
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += `C${f2(c1[0])},${f2(c1[1])} ${f2(c2[0])},${f2(c2[1])} ${p2[0]},${p2[1]}`;
+  }
+  const m = document.getElementById('measure');
+  m.innerHTML = `<path id="hwm" d="${d}"/><path id="outm" d="${G.outer}"/>`;
+  HW = { d, el: document.getElementById('hwm') }; HWLEN = HW.el.getTotalLength();
+  outEl = document.getElementById('outm'); OUTLEN = outEl.getTotalLength();
+  // pre-sample both paths (getPointAtLength is slow-ish; keep it deterministic)
+  HW.pts = []; for (let i = 0; i <= 600; i++) { const p = HW.el.getPointAtLength(HWLEN * i / 600); HW.pts.push([p.x, p.y]); }
+  outEl.pts = []; for (let i = 0; i <= 1500; i++) { const p = outEl.getPointAtLength(OUTLEN * i / 1500); outEl.pts.push([p.x, p.y]); }
+  m.innerHTML = '';
+}
+function sample(arr, u) { const f = clamp(u) * (arr.length - 1), i = Math.min(arr.length - 2, Math.floor(f)), k = f - i; return [lerp(arr[i][0], arr[i + 1][0], k), lerp(arr[i][1], arr[i + 1][1], k)]; }
+
+// ---------- pieces ----------
+function pen(x, y, ang, op) { // stylised ink pen, tip at (x,y)
+  return `<g opacity="${f2(op)}" transform="translate(${f2(x)},${f2(y)}) rotate(${f2(ang)})">
+    <path d="M0,0 L-16,-46 L16,-46 Z" fill="${C.ink}"/>
+    <path d="M0,-6 L-5,-30 L5,-30 Z" fill="${C.lime}"/>
+    <rect x="-22" y="-80" width="44" height="36" rx="6" fill="${C.lime}" stroke="${C.ink}" stroke-width="6"/>
+    <rect x="-22" y="-250" width="44" height="174" rx="14" fill="${C.ink}"/>
+    <rect x="22" y="-226" width="10" height="90" rx="5" fill="${C.ink}"/>
+  </g>`;
+}
+function seedBurst(t, t0, x, y, color, seed, n = 12, dist = 520) {
+  const u = prog(t, t0, t0 + .6);
+  if (t < t0 || u >= 1) return '';
+  let out = '';
+  for (let i = 0; i < n; i++) {
+    const ang = (i / n) * 360 + rnd(seed + i) * 18;
+    const d = 90 + dist * eOutExpo(u) * (0.7 + .3 * rnd(seed + i + 9));
+    const sc = 1 - eInQ(u);
+    out += `<g transform="rotate(${f2(ang)} ${x} ${y}) translate(${x} ${f2(y - d)}) scale(${f2(sc)})"><ellipse rx="9" ry="20" fill="${color}"/></g>`;
+  }
+  return out;
+}
+
+// the map, drawn in map-local coordinates (0..840 × 0..414)
+function mapLayer(t) {
+  let o = '', dyn = '';
+  // ---- region fills (lime), each grows as a circle from its dot
+  let fills = '';
+  ORDER.forEach((ids, i) => {
+    const u = eOutC(prog(t, PING[i], PING[i] + .5));
+    if (u <= 0) return;
+    const dot = DOT[ids[0]];
+    dyn += `<clipPath id="cr${i}"><circle cx="${dot[0]}" cy="${dot[1]}" r="${f2(10 + 470 * u)}"/></clipPath>`;
+    const ds = ids.map(id => R[id].d).join('');
+    fills += `<g clip-path="url(#cr${i})"><path d="${ds}" fill="${C.lime}" stroke="${C.lime}" stroke-width="10" stroke-linejoin="round"/></g>`;
+  });
+  // flash of the whole country at LIT
+  const fl = t >= LIT ? Math.exp(-(t - LIT) * 5) : 0;
+  o += `<g clip-path="url(#cc)">${fills}${fl > .01 ? `<rect x="-20" y="-20" width="${MAP.w + 40}" height="${MAP.h + 40}" fill="${C.paper}" opacity="${f2(.75 * fl)}"/>` : ''}</g>`;
+  // ---- internal (oblast) borders, appear after the outline closes
+  const ib = prog(t, 2.0, 2.5);
+  if (ib > 0) o += `<g clip-path="url(#cc)"><path d="${G.inner}" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 9" opacity="${f2(.55 * ib)}"/></g>`;
+  // ---- outline drawing (ink stroke) 0.15–1.85
+  const dp = eInOutS(prog(t, .15, 1.85));
+  if (dp > 0) {
+    const dl = OUTLEN * dp;
+    o += `<path d="${G.outer}" fill="none" stroke="${C.ink}" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="${f2(dl)} ${f2(OUTLEN + 10)}"/>`;
+  }
+  const hu = eOutBack(prog(t, 1.8, 2.05), 2);
+  if (hu > 0) o += `<g transform="translate(0,0)">${G.holes.map(h => `<path d="${h}" fill="${C.paper}" stroke="${C.ink}" stroke-width="${f2(4 * hu)}" stroke-linejoin="round"/>`).join('')}</g>`;
+  // routes fade out once the text starts
+  const rf = 1 - prog(t, 7.0, 7.3);
+  // ---- highway the wheel lays down (ink dashes, revealed behind the wheel)
+  const wu = eInOutS(prog(t, 2.45, 6.55));
+  if (wu > 0 && rf > 0) {
+    dyn += `<mask id="hwk" maskUnits="userSpaceOnUse" x="-50" y="-50" width="${MAP.w + 100}" height="${MAP.h + 100}"><path d="${HW.d}" fill="none" stroke="#fff" stroke-width="30" stroke-dasharray="${f2(HWLEN * wu)} ${f2(HWLEN + 10)}"/></mask>`;
+    o += `<g mask="url(#hwk)" opacity="${f2(rf)}"><path d="${HW.d}" fill="none" stroke="${C.ink}" stroke-width="8" stroke-linecap="round" stroke-dasharray="16 14"/></g>`;
+  }
+  // ---- star routes from the hub (thin ink dashes + lime comet head)
+  ROUTES.forEach((r, i) => {
+    const t1 = PING[i], u = eInOutS(prog(t, t1 - .42, t1));
+    if (u <= 0 || rf <= 0) return;
+    const c1 = [lerp(r.p0[0], r.p1[0], u), lerp(r.p0[1], r.p1[1], u)], e = quadAt(r.p0, r.p1, r.p2, u);
+    o += `<path d="M${r.p0[0]},${r.p0[1]} Q${f2(c1[0])},${f2(c1[1])} ${f2(e[0])},${f2(e[1])}" fill="none" stroke="${C.ink}" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" opacity="${f2(rf)}"/>`;
+    if (u < 1) o += `<circle cx="${f2(e[0])}" cy="${f2(e[1])}" r="9" fill="${C.lime}" stroke="${C.ink}" stroke-width="4"/>`;
+  });
+  // ---- destination dots + ripple
+  ORDER.forEach(([id], i) => {
+    const t1 = PING[i];
+    if (t < t1) return;
+    const [x, y] = DOT[id], s = eOutBack(prog(t, t1, t1 + .25), 3);
+    const ru = prog(t, t1, t1 + .6);
+    if (ru < 1) o += `<circle cx="${x}" cy="${y}" r="${f2(14 + 70 * eOutC(ru))}" fill="none" stroke="${C.ink}" stroke-width="${f2(5 * (1 - ru))}"/>`;
+    o += `<g transform="translate(${x},${y}) scale(${f2(s)})"><circle r="15" fill="${C.ink}"/><circle r="8" fill="${C.lime}"/></g>`;
+  });
+  // ---- hub
+  const hs = eOutBack(prog(t, 2.0, 2.25), 3);
+  if (hs > 0) {
+    const pr = t > 2.0 ? (((t - 2.0) % STEP) / STEP) : 0;
+    if (t < LIT && t > 2.3) o += `<circle cx="${HUB[0]}" cy="${HUB[1]}" r="${f2(20 + 46 * pr)}" fill="none" stroke="${C.ink}" stroke-width="${f2(4 * (1 - pr))}"/>`;
+    o += `<g transform="translate(${HUB[0]},${HUB[1]}) scale(${f2(hs)})"><circle r="20" fill="${C.ink}"/><circle r="9" fill="${C.lime}"/></g>`;
+  }
+  // ---- the pen while drawing
+  if (t > .02 && t < 2.15) {
+    const p = sample(outEl.pts, dp), op = clamp(t / .12) * (1 - prog(t, 1.9, 2.1));
+    const wob = 6 * Math.sin(t * 23) + 4 * Math.sin(t * 41);
+    o += pen(p[0], p[1], 32 + wob, op);
+  }
+  // ---- the kiwi-wheel rolling along the highway
+  const wa = prog(t, 2.3, 2.5), wo = 1 - prog(t, 6.95, 7.2);
+  if (wa > 0 && wo > 0) {
+    const rr = 40;
+    const p = sample(HW.pts, wu);
+    const hop = t >= LIT ? 26 * Math.sin(Math.PI * prog(t, LIT, LIT + .3)) : 0;
+    const ang = (HWLEN * wu) / rr * 180 / Math.PI;
+    const s = eOutBack(wa, 2.5) * (1 - eInC(prog(t, 6.95, 7.2)));
+    o += `<ellipse cx="${f2(p[0])}" cy="${f2(p[1] + 6)}" rx="${f2(rr * s)}" ry="${f2(rr * .5 * s)}" fill="${C.ink}" opacity=".18"/>`;
+    o += logo(p[0], p[1] - hop, rr * s, ang);
+  }
+  return { o, dyn };
+}
+
+// ---------- layout constants (once fonts are ready) ----------
+let Lh = {};
+function layout() {
+  Lh.h = fit(['Доставка', 'по всему', 'Кыргызстану'], 'ID', 800, 150);
+  Lh.kw = measure('Кыргызстану', 'ID', Lh.h, -0.035);
+  Lh.pill = fit(['от 350 сом'], 'ID', 640, 120);
+  Lh.pillW = measure('от 350 сом', 'ID', Lh.pill, -0.03) + 110;
+  Lh.url = 80;
+  buildRoutes();
+}
+
+function render(t) {
+  let o = `<rect width="${W}" height="${H}" fill="${C.paper}"/><rect width="${W}" height="${H}" fill="url(#grid)"/>`;
+  // map transform: centred in the safe zone, then shrinks to the top for the copy
+  const mu = eInOutC(prog(t, 6.95, 7.45));
+  const sc0 = 1 + .045 * damped(t - LIT, 2.2, 6) * (t >= LIT ? 1 : 0) + .02 * eOutC(prog(t, .0, 1.9)) - .02;
+  const sc = lerp(1, .74, mu) * sc0;
+  const cy = lerp(870, 288 + MAP.h * .74 / 2, mu);
+  const { o: mo, dyn } = mapLayer(t);
+  document.getElementById('dyn').innerHTML = dyn;
+  o += `<g transform="translate(${CX},${f2(cy)}) scale(${sc.toFixed(4)}) translate(${f2(-MAP.w / 2)},${f2(-MAP.h / 2)})">${mo}</g>`;
+  // celebration seeds when the whole country is lit
+  o += seedBurst(t, LIT, CX, 870, C.ink, 5, 14, 520);
+  // ---- headline 7.2 – 8.5
+  const hy = 800, hs = Lh.h * 1.06, out = [8.42, 8.52];
+  o += popWrap(t, 7.2, text('Доставка', CX, hy, Lh.h, C.ink), CX, hy - Lh.h * .36, { out, rot: -5 });
+  o += popWrap(t, 7.36, text('по всему', CX, hy + hs, Lh.h, C.ink), CX, hy + hs - Lh.h * .36, { out });
+  {
+    const y3 = hy + 2 * hs, bw = Lh.kw + 44, bh = Lh.h * .98;
+    const sw = eOutC(prog(t, 7.52, 7.8));
+    const band = `<rect x="${f2(CX - bw / 2)}" y="${f2(y3 - Lh.h * .36 - bh / 2)}" width="${f2(bw * sw)}" height="${f2(bh)}" rx="18" fill="${C.lime}"/>`;
+    o += popWrap(t, 7.52, band + text('Кыргызстану', CX, y3, Lh.h, C.ink), CX, y3 - Lh.h * .36, { out, rot: 5 });
+  }
+  // ---- end card 8.55 – 10: logo, price, url
+  if (t >= 8.55) {
+    const u = prog(t, 8.55, 9.0), s = eOutBack(u, 1.8);
+    const ang = -300 * (1 - eOutC(u)) + 8 * damped(t - 9.0, 1.6, 4);
+    o += logo(CX, 820, 155 * s, ang);
+  }
+  {
+    const py = 1035, ph = Lh.pill * 1.22;
+    const pill = `<rect x="${f2(CX - Lh.pillW / 2)}" y="${py}" width="${f2(Lh.pillW)}" height="${f2(ph)}" rx="${f2(ph / 2)}" fill="${C.ink}"/>` +
+      text('от 350 сом', CX, py + ph / 2 + Lh.pill * .36, Lh.pill, C.lime, 'ID', -0.03);
+    o += popWrap(t, 8.9, pill, CX, py + ph / 2, { from: .3, back: 2.6, rot: -4 });
+    const uy = py + ph + 135;
+    if (t >= 9.2) {
+      const v = eOutC(prog(t, 9.2, 9.5));
+      o += `<g opacity="${f2(clamp((t - 9.2) / .12))}" transform="translate(0,${f2(40 * (1 - v))})">${text('kiwigo.kg', CX, uy, Lh.url, C.ink, 'IX', -0.02)}</g>`;
+    }
+  }
+  document.getElementById('root').innerHTML = o;
+}
+
+window.READY = false;
+Promise.all([document.fonts.load('900 100px ID'), document.fonts.load('800 100px IX')])
+  .then(() => document.fonts.ready)
+  .then(() => { layout(); render(0); window.READY = true; });
+</script>
+</body></html>
