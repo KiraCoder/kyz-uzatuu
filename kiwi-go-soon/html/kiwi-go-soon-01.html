@@ -1,0 +1,38 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Kiwi Go — 01</title>
+<style>
+@font-face{font-family:'Inter';src:url('../fonts/Inter-Black.otf') format('opentype');font-weight:900}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-ExtraBold.otf') format('opentype');font-weight:800}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-Bold.otf') format('opentype');font-weight:700}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-SemiBold.otf') format('opentype');font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1080px;overflow:hidden;background:#FFFDF7}
+body{font-family:'Inter',sans-serif;color:#111410;position:relative;-webkit-font-smoothing:antialiased}
+.abs,.logo,.t,.wm{position:absolute}
+.t{white-space:nowrap;line-height:1}
+.wm{display:flex;align-items:center;gap:16px}
+.wm span{font-weight:900;letter-spacing:-0.02em;line-height:1}
+svg.scene{position:absolute;left:0;top:0}
+
+</style></head><body>
+<div class="wm" style="left:80px;top:80px;height:64px"><svg class="logo" width="64" height="64" viewBox="-100 -100 200 200" style="position:static" xmlns="http://www.w3.org/2000/svg"><circle r="100" fill="#111410"/><circle r="78" fill="#B8F03C"/><g fill="#111410"><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(0)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(45)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(90)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(135)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(180)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(225)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(270)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(315)"/></g><circle r="24" fill="#F6F1E4"/><circle r="8" fill="#111410"/></svg><span style="font-size:46px">Kiwi Go</span></div>
+<div class="t" id="big" style="left:66px;top:262px;font-weight:900;font-size:300px;letter-spacing:-0.055em">Скоро<span id="bl" style="display:inline-block;width:0;height:0"></span></div>
+<svg class="scene" width="1080" height="1080">
+  <!-- one lime shape: the full stop, a rolling dot -->
+  <circle id="dot" cx="0" cy="0" r="44" fill="#B8F03C"/>
+  <!-- road band under the word -->
+  <rect x="80" y="676" width="920" height="124" rx="62" fill="#111410"/>
+  <line x1="150" y1="738" x2="930" y2="738" stroke="#FFFDF7" stroke-width="10" stroke-linecap="round" stroke-dasharray="44 34"/>
+</svg>
+<div class="t" style="left:80px;top:900px;font-weight:700;font-size:50px;letter-spacing:-0.01em">Доставка по всему Кыргызстану</div>
+<script>
+// place the lime full stop right after the word, sitting on the baseline
+document.fonts.ready.then(() => {
+  const big = document.getElementById('big'), rg = document.createRange(); rg.selectNodeContents(big.firstChild);
+  const r = rg.getBoundingClientRect();
+  const base = document.getElementById('bl').getBoundingClientRect().bottom;
+  const dot = document.getElementById('dot');
+  dot.setAttribute('cx', r.right + 22 + 44); dot.setAttribute('cy', base - 44);
+  document.body.dataset.ready = '1';
+});
+</script>
+</body></html>

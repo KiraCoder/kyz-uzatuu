@@ -1,0 +1,42 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Kiwi Go — 05</title>
+<style>
+@font-face{font-family:'Inter';src:url('../fonts/Inter-Black.otf') format('opentype');font-weight:900}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-ExtraBold.otf') format('opentype');font-weight:800}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-Bold.otf') format('opentype');font-weight:700}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-SemiBold.otf') format('opentype');font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1080px;overflow:hidden;background:#FFFDF7}
+body{font-family:'Inter',sans-serif;color:#111410;position:relative;-webkit-font-smoothing:antialiased}
+.abs,.logo,.t,.wm{position:absolute}
+.t{white-space:nowrap;line-height:1}
+.wm{display:flex;align-items:center;gap:16px}
+.wm span{font-weight:900;letter-spacing:-0.02em;line-height:1}
+svg.scene{position:absolute;left:0;top:0}
+
+</style></head><body>
+<div class="t" style="left:0;width:1080px;text-align:center;top:110px;font-weight:900;font-size:124px;letter-spacing:-0.045em">Скоро поедем</div>
+<svg class="scene" width="1080" height="1080" stroke-linejoin="round">
+  <!-- top lid -->
+  <polygon points="230,410 790,410 890,326 330,326" fill="#ECE6D6" stroke="#111410" stroke-width="7"/>
+  <!-- tape on lid (kiwi-peel brown) -->
+  <polygon points="476,410 544,410 644,326 576,326" fill="#7A5A3C" stroke="#111410" stroke-width="5"/>
+  <!-- right side -->
+  <polygon points="790,410 890,326 890,686 790,770" fill="#ECE6D6" stroke="#111410" stroke-width="7"/>
+  <!-- front -->
+  <rect x="230" y="410" width="560" height="360" fill="#F6F1E4" stroke="#111410" stroke-width="7"/>
+  <!-- tape running down the front -->
+  <rect x="476" y="410" width="68" height="56" fill="#7A5A3C" stroke="#111410" stroke-width="5"/>
+  <!-- label -->
+  <rect x="310" y="484" width="400" height="228" rx="18" fill="#FFFDF7" stroke="#111410" stroke-width="6"/>
+  <line x1="338" y1="596" x2="682" y2="596" stroke="#111410" stroke-width="4" stroke-dasharray="10 10"/>
+  <!-- this-side-up arrows on the side -->
+  <g fill="none" stroke="#111410" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 840 550 l 0 -48 m -14 16 l 14 -16 l 14 16"/>
+  </g>
+  <!-- ground -->
+  <rect x="150" y="796" width="780" height="10" rx="5" fill="#111410"/>
+</svg>
+<div class="wm" style="left:342px;top:510px;height:64px"><svg class="logo" width="64" height="64" viewBox="-100 -100 200 200" style="position:static" xmlns="http://www.w3.org/2000/svg"><circle r="100" fill="#111410"/><circle r="78" fill="#B8F03C"/><g fill="#111410"><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(0)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(45)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(90)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(135)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(180)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(225)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(270)"/><ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(315)"/></g><circle r="24" fill="#F6F1E4"/><circle r="8" fill="#111410"/></svg><span style="font-size:44px">Kiwi Go</span></div>
+<div class="t" style="left:310px;width:400px;text-align:center;top:620px;font-weight:900;font-size:68px;letter-spacing:-0.04em">Скоро</div>
+<div class="t" style="left:0;width:1080px;text-align:center;top:910px;font-weight:700;font-size:48px;letter-spacing:-0.01em">Платите только за доставку</div>
+</body></html>
