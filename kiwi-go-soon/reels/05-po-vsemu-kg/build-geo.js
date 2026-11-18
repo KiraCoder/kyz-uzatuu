@@ -1,5 +1,6 @@
 // Builds geo.js (SVG path data in map-local pixels) from real boundary data:
 //  - country outline: Natural Earth 1:10m via world-atlas (ISO 3166 numeric 417)
+//  - Lake Issyk-Kul: OpenStreetMap-derived lakes via @geo-maps/earth-lakes-1km (largest polygon in 76–78.5°E, 42–43°N)
 //  - oblast (admin-1) shapes: Natural Earth admin-1 via @highcharts/map-collection (data/kg-admin1.topo.json)
 // Projection: equirectangular, x scaled by cos(41.5°), fitted to MAP_W px wide.
 const fs = require('fs');
@@ -34,7 +35,15 @@ for (const g of geoms) {
 const inner = tj.mesh(ad, ad.objects.default, (a, b) => a !== b);
 const innerD = inner.coordinates.map(l => l.map((p, i) => { const [x, y] = P(p); return (i ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1); }).join('')).join('');
 const all = rings[0].map(P); let cx = 0, cy = 0; { const c = centroid(rings[0]); cx = c[0]; cy = c[1]; }
-const out = { W: MAP_W, H: +MAP_H.toFixed(1), outer: d(rings[0]), holes: rings.slice(1).map(d), regions, inner: innerD, hub: [+cx.toFixed(1), +cy.toFixed(1)] };
+const lakes = JSON.parse(fs.readFileSync(require.resolve('@geo-maps/earth-lakes-1km/map.geo.json')));
+let best = null;
+for (const g of lakes.geometries) for (const poly of (g.type === 'MultiPolygon' ? g.coordinates : [g.coordinates])) {
+  const r = poly[0], xs = r.map(p => p[0]), ys = r.map(p => p[1]);
+  if (Math.min(...xs) > 76 && Math.max(...xs) < 78.5 && Math.min(...ys) > 42 && Math.max(...ys) < 43 && (!best || r.length > best.length)) best = r;
+}
+const lake = d(best);
+console.log('issyk-kul pts', best.length);
+const out = { lake, W: MAP_W, H: +MAP_H.toFixed(1), outer: d(rings[0]), holes: rings.slice(1).map(d), regions, inner: innerD, hub: [+cx.toFixed(1), +cy.toFixed(1)] };
 fs.writeFileSync(__dirname + '/geo.js', 'window.GEO = ' + JSON.stringify(out) + ';\n');
 console.log('W', MAP_W, 'H', out.H, 'pts', rings[0].length, 'holes', out.holes.length, 'hub', out.hub);
 for (const [k, v] of Object.entries(regions)) console.log(k, v.c);

@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@geo-maps/earth-lakes-1km": "^0.6.0",
     "topojson-client": "^3.1.0",
     "world-atlas": "^2.0.2"
   }
