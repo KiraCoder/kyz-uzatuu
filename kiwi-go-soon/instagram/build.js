@@ -44,11 +44,11 @@ const cover = (svg) => `<svg xmlns="http://www.w3.org/2000/svg" width="1080" hei
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:10px}.grid div{aspect-ratio:3/4;background-size:cover;background-position:center}
   </style></head><body>
   <div class="top">kiwigo.kg</div>
-  <div class="head"><div class="av"></div><div class="stats"><div class="name">Kiwi Go · Курьерская служба</div><div class="nums"><div><b>3</b>публикации</div><div><b>0</b>подписчиков</div><div><b>0</b>подписок</div></div></div></div>
+  <div class="head"><div class="av"></div><div class="stats"><div class="name">Kiwi Go · Курьерская служба</div><div class="nums"><div><b>6</b>публикаций</div><div><b>0</b>подписчиков</div><div><b>0</b>подписок</div></div></div></div>
   <div class="bio"><div class="cat">Курьерская служба</div>🥝 Курьерская доставка по всему Кыргызстану<br>💸 Платите только за доставку<br>🚀 Скоро запуск — подпишитесь!<div class="link">🔗 kiwigo.kg</div></div>
   <div class="btns"><div>Подписаться</div><div>Сообщение</div><div>Связаться</div></div>
   <div class="hls">${hl}</div>
-  <div class="grid"><div style="background-image:url(${img('../creative/kiwi-go-creative-03.png')})"></div><div style="background-image:url(${img('../reel/poster.png')})"></div><div style="background-image:url(${img('../creative/kiwi-go-creative-04.png')})"></div></div>
+  <div class="grid">${['banner/kiwi-go-banner-1-post3.png','banner/kiwi-go-banner-2-post2.png','banner/kiwi-go-banner-3-post1.png','../creative/kiwi-go-creative-03.png','../reel/poster.png','../creative/kiwi-go-creative-04.png'].map(f => `<div style="background-image:url(${img(f)})"></div>`).join('')}</div>
   </body></html>`;
   fs.writeFileSync('mockup.html', html);
   const m = await b.newPage({ viewport: { width: 430, height: 820 }, deviceScaleFactor: 2 });
