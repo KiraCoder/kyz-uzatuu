@@ -11,14 +11,13 @@ S = 1080; CX = CY = 540
 
 # ---------- logos (verbatim geometry from the brand guide) ----------
 def logo_full_inner():
-    seeds = ''.join(f'<ellipse cx="0" cy="{-40 if i % 2 == 0 else -52}" rx="5.5" ry="11" transform="rotate({i*22.5})"/>' for i in range(16))
-    return (f'<circle r="100" fill="{C["ink"]}"/><circle r="80" fill="{C["rim"]}"/><circle r="73" fill="{C["lime"]}"/>'
-            f'<g fill="{C["ink"]}">{seeds}</g><circle r="20" fill="{C["cream"]}"/><circle r="7" fill="{C["ink"]}"/>')
+    # exact approved logo: 12 seeds at one radius
+    seeds = ''.join(f'<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate({i*30})"/>' for i in range(12))
+    return (f'<circle r="100" fill="{C["ink"]}"/><circle r="86" fill="{C["rim"]}"/><circle r="80.5" fill="{C["lime"]}"/>'
+            f'<g fill="{C["ink"]}">{seeds}</g><circle r="26" fill="{C["cream"]}"/><circle r="8.5" fill="{C["ink"]}"/>')
 
 def logo_small_inner():
-    seeds = ''.join(f'<ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate({i*45})"/>' for i in range(8))
-    return (f'<circle r="100" fill="{C["ink"]}"/><circle r="78" fill="{C["lime"]}"/>'
-            f'<g fill="{C["ink"]}">{seeds}</g><circle r="24" fill="{C["cream"]}"/><circle r="8" fill="{C["ink"]}"/>')
+    return logo_full_inner()
 
 def logo(cx, cy, r, rot=0, kind='small'):
     inner = logo_small_inner() if kind == 'small' else logo_full_inner()

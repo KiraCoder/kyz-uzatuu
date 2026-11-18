@@ -11,23 +11,13 @@ const C = {
 };
 
 // ---------- logos ----------
+const LOGO_INNER = `<circle r="100" fill="#111410"/><circle r="86" fill="#6BA82B"/><circle r="80.5" fill="#B8F03C"/><g fill="#111410">${[...Array(12)].map((_, i) => `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`).join('')}</g><circle r="26" fill="#F6F1E4"/><circle r="8.5" fill="#111410"/>`;
 function logoFull(size, x = 0, y = 0, extra = '') {
-  let seeds = '';
-  for (let i = 0; i < 16; i++) {
-    const cy = i % 2 === 0 ? -40 : -52;
-    seeds += `<ellipse cx="0" cy="${cy}" rx="5.5" ry="11" transform="rotate(${i * 22.5})"/>`;
-  }
-  return `<svg class="logo" width="${size}" height="${size}" viewBox="-100 -100 200 200" style="left:${x}px;top:${y}px;${extra}" xmlns="http://www.w3.org/2000/svg">
-  <circle r="100" fill="${C.ink}"/><circle r="80" fill="${C.rim}"/><circle r="73" fill="${C.lime}"/>
-  <g fill="${C.ink}">${seeds}</g><circle r="20" fill="${C.cream}"/><circle r="7" fill="${C.ink}"/></svg>`;
+  return `<svg class="logo" width="${size}" height="${size}" viewBox="-100 -100 200 200" style="left:${x}px;top:${y}px;${extra}" xmlns="http://www.w3.org/2000/svg">${LOGO_INNER}</svg>`;
 }
-function logoSmallInner() {
-  let seeds = '';
-  for (let i = 0; i < 8; i++) seeds += `<ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(${i * 45})"/>`;
-  return `<circle r="100" fill="${C.ink}"/><circle r="78" fill="${C.lime}"/><g fill="${C.ink}">${seeds}</g><circle r="24" fill="${C.cream}"/><circle r="8" fill="${C.ink}"/>`;
-}
+function logoSmallInner() { return LOGO_INNER; }
 function logoSmall(size, style = '') {
-  return `<svg class="logo" width="${size}" height="${size}" viewBox="-100 -100 200 200" style="${style}" xmlns="http://www.w3.org/2000/svg">${logoSmallInner()}</svg>`;
+  return `<svg class="logo" width="${size}" height="${size}" viewBox="-100 -100 200 200" style="${style}" xmlns="http://www.w3.org/2000/svg">${LOGO_INNER}</svg>`;
 }
 // wordmark lockup: small logo + «Kiwi Go»
 function wordmark(x, y, size = 64, font = 46) {

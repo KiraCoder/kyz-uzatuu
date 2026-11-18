@@ -1,11 +1,12 @@
 // Instagram avatars built from logo option Б (full version, lime palette)
 const fs = require('fs'), path = require('path');
 const { chromium } = require('playwright');
-const seeds = [...Array(16)].map((_, i) =>
-  `<ellipse cx="0" cy="${i % 2 ? -52 : -40}" rx="5.5" ry="11" transform="rotate(${i * 22.5})"/>`).join('');
+const seeds = [...Array(12)].map((_, i) =>
+  `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`).join('');
+// exact logo Б geometry (measured from the approved logo)
 const logo = (r) => `<g transform="scale(${r / 100})">
-  <circle r="100" fill="#111410"/><circle r="80" fill="#6BA82B"/><circle r="73" fill="#B8F03C"/>
-  <g fill="#111410">${seeds}</g><circle r="20" fill="#F6F1E4"/><circle r="7" fill="#111410"/></g>`;
+  <circle r="100" fill="#111410"/><circle r="86" fill="#6BA82B"/><circle r="80.5" fill="#B8F03C"/>
+  <g fill="#111410">${seeds}</g><circle r="26" fill="#F6F1E4"/><circle r="8.5" fill="#111410"/></g>`;
 // viewBox -170..170 (340 units); Instagram crops to the inscribed circle r=170
 const V = {
   '1-full-bleed': { bg: '#FFFDF7', body: logo(160) },             // logo fills the circle

@@ -11,19 +11,9 @@ const C = {
 const FONTDIR = 'file:///usr/share/fonts/opentype/inter/';
 
 // ---------- logo (exact geometry from brief) ----------
-function logoInner() {
-  let seeds = '';
-  for (let i = 0; i < 16; i++) {
-    const cy = i % 2 === 0 ? -40 : -52;
-    seeds += `<ellipse cx="0" cy="${cy}" rx="5.5" ry="11" transform="rotate(${i * 22.5})"/>`;
-  }
-  return `<circle r="100" fill="${C.ink}"/><circle r="80" fill="${C.rim}"/><circle r="73" fill="${C.lime}"/><g fill="${C.ink}">${seeds}</g><circle r="20" fill="${C.cream}"/><circle r="7" fill="${C.ink}"/>`;
-}
-function logoSmallInner() {
-  let seeds = '';
-  for (let i = 0; i < 8; i++) seeds += `<ellipse cx="0" cy="-48" rx="7" ry="14" transform="rotate(${i * 45})"/>`;
-  return `<circle r="100" fill="${C.ink}"/><circle r="78" fill="${C.lime}"/><g fill="${C.ink}">${seeds}</g><circle r="24" fill="${C.cream}"/><circle r="8" fill="${C.ink}"/>`;
-}
+// exact approved logo (12 seeds) — same at every size
+function logoInner() { return `<circle r="100" fill="#111410"/><circle r="86" fill="#6BA82B"/><circle r="80.5" fill="#B8F03C"/><g fill="#111410">${[...Array(12)].map((_, i) => `<ellipse cx="0" cy="-56.3" rx="5" ry="14" transform="rotate(${i * 30})"/>`).join('')}</g><circle r="26" fill="#F6F1E4"/><circle r="8.5" fill="#111410"/>`; }
+function logoSmallInner() { return logoInner(); }
 // as an HTML element, centred on (cx,cy)
 function logo(d, cx, cy, rot = 0, extra = '') {
   const inner = d < 120 ? logoSmallInner() : logoInner();
