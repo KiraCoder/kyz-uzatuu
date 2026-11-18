@@ -1,0 +1,119 @@
+{
+ "budget": 100.0,
+ "balance_before": 455.17,
+ "balance_after": 409.67,
+ "spend": 45.5,
+ "jobs": [
+  {
+   "name": "S6-take1",
+   "file": "S6-take1.mp4",
+   "job_id": "a31495e5-2ce8-4b59-b542-03a051a7d3e0",
+   "model_config": "kling3_0 pro sound off 9:16 5s",
+   "start_image": "b5ab0b88-a618-418e-b26d-1484abbf2d29 (gate2 S6-c)",
+   "cost_credits": 7.5,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_104838_a31495e5-2ce8-4b59-b542-03a051a7d3e0.mp4",
+   "prompt": "The parked truck stays completely still and its wheels do not turn. The camera trucks slowly and steadily to the right, parallel to the truck's side, keeping it strictly side-on, ending with the rear wheel near the centre of the frame; constant speed, no rotation, no zoom, no tilt; the background moves with parallax only. No people or figures appear. The truck body, round wheels and blank panels keep their exact shape — no morphing, no warping. All surfaces stay blank; no text, letters, numbers or logos.",
+   "qa": "FAIL",
+   "qa_notes": "1080x1912 24fps 121f. Background scrolls RIGHT ~10-21 px/frame while the truck holds frame position (rear-wheel template x 677-725, +-15 px wobble), then slides left 690->539 in the last 1 s: reads as a truck driving forward with a tracking camera, not a parked truck with a dolly right. Wheels round (Hough r 141-146, stable), no people, panels blank, no text."
+  },
+  {
+   "name": "S3-take1",
+   "file": "S3-take1.mp4",
+   "job_id": "9e98d655-dde3-4f87-81d8-9ae527ab7379",
+   "model_config": "kling_o3_flf pro sound off 9:16 5s",
+   "start_image": "324ec8f8-b5b6-40a1-a6cc-6e80f037b3a4 (gate1 S3-start-b)",
+   "end_image": "602189d5-b9ad-4ff0-86a6-1b18773c6d53 (gate1 S3-end-a)",
+   "cost_credits": 6.25,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_104841_9e98d655-dde3-4f87-81d8-9ae527ab7379.mp4",
+   "prompt": "The tiny truck drives forward along the winding road with its headlights on. One continuous camera move: hold for half a second, then a smooth crane up and tilt up over the ridge, rising through a thin layer of soft cloud while the light warms from blue night to golden dawn, revealing the miniature city in front of the mountains and ending exactly on the last frame. Slow ease-in and ease-out, no cuts. Road, hills and buildings stay rigid — no morphing, no melting, no warping; the road and city do not transform into each other. All surfaces stay blank; no text, letters, signage or logos.",
+   "qa": "FAIL",
+   "qa_notes": "No crane: horizon static. The night hills dissolve in place into the dawn city (2.25-3.0 s) with no cloud cover; the truck drives toward camera and balloons past it. Fails 'no dissolve-like morph' and 'cloud pass hides the scene change'."
+  },
+  {
+   "name": "S4",
+   "file": "S4.mp4",
+   "job_id": "4d406df1-c911-426a-8297-a33cd00b8c35",
+   "model_config": "kling3_0 pro sound off 9:16 4s",
+   "start_image": "bd9b5b2e-d648-4b15-b14f-ffe3c1fdaf3d (gate1 S4-a)",
+   "cost_credits": 6.0,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_104844_4d406df1-c911-426a-8297-a33cd00b8c35.mp4",
+   "prompt": "The young woman keeps holding the parcel against her chest and gives a small grateful nod; the courier keeps his back to camera as he walks out to the left; he does not turn his face toward camera. Locked camera with a very slow push in. The parcel does not rotate in her arms; it keeps its shape and blank sticker; her hands stay still on the box with no extra fingers; no morphing of faces or bodies. All surfaces stay blank; no text, letters or logos; balconies, doors and walls stay blank, no numbers.",
+   "qa": "PASS",
+   "usable_in_out_s": [
+    0.25,
+    2.75
+   ],
+   "qa_notes": "97f. Courier (lime cap, back/profile) walks out left, gone by ~0.6 s, never faces camera. Recipient face/hands stable, mitten hands clean; nod ~2.0-2.5 s with a slight box tilt, no rotation; sticker blank throughout; buildings rigid; luma flat (140.7-142.5); no text."
+  },
+  {
+   "name": "S1",
+   "file": "S1.mp4",
+   "job_id": "d70009b5-fa1a-4372-9b33-1a0d1281ec28",
+   "model_config": "kling3_0 pro sound off 9:16 5s",
+   "start_image": "30a03622-bd67-4026-baf5-3565c4a2db05 (gate2 S1-c)",
+   "cost_credits": 7.5,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_104858_d70009b5-fa1a-4372-9b33-1a0d1281ec28.mp4",
+   "prompt": "The seller slowly lowers the phone a little and exhales, her shoulders sinking softly; the cool phone light flickers gently on her face; the parcels stay perfectly still. The room lighting stays exactly as in the first frame; lamps stay off; her mouth stays closed, no smile. Very slow push in, already moving from the first frame. Faces, hands and felt textures keep their exact shape — no morphing, no warping, no extra fingers; the phone back stays plain. All surfaces stay blank; no text, letters or logos.",
+   "qa": "PASS",
+   "usable_in_out_s": [
+    0.0,
+    2.5
+   ],
+   "qa_notes": "121f. Push-in moving from f0; lamps stay off, cool phone glow only; luma rises slowly 54->58 over 0-2.5 s (push-in, no flicker, max jump 0.3). Face stable while looking at phone; lips part slightly ~1.0-1.5 s (exhale), no smile. After ~2.5 s she looks up and the face drifts rounder with bigger eyes: do not use past 2.5 s. Phone back blank, parcels still, stickers blank."
+  },
+  {
+   "name": "S5",
+   "file": "S5.mp4",
+   "job_id": "19e91d95-6115-4abd-a440-9e6df73de263",
+   "model_config": "kling3_0 pro sound off 9:16 3s",
+   "start_image": "4abd8ed0-1599-47a5-b92d-51d0a04b8095 (gate2 S5-c)",
+   "cost_credits": 4.5,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_104900_19e91d95-6115-4abd-a440-9e6df73de263.mp4",
+   "prompt": "The seller leans back a little on the sofa and her smile grows softly with a slow breath; the warm lamp and window light stay steady. Very slow push in. Faces and hands keep their shape — no morphing, no extra fingers; the phone screen stays turned away. All surfaces stay blank; no text, letters or logos.",
+   "qa": "PASS",
+   "usable_in_out_s": [
+    0.25,
+    1.75
+   ],
+   "qa_notes": "73f. Lamp and window light steady (luma 153->159 smooth with the push-in), she leans back and smiles, identity stable, phone screen away, no text. Still sharp: add the planned defocus in post."
+  },
+  {
+   "name": "S3",
+   "file": "S3.mp4",
+   "job_id": "fdf05b3a-8c4c-41a0-bb29-31edab99b083",
+   "model_config": "kling_o3_flf pro sound off 9:16 5s",
+   "start_image": "324ec8f8-b5b6-40a1-a6cc-6e80f037b3a4 (gate1 S3-start-b)",
+   "end_image": "602189d5-b9ad-4ff0-86a6-1b18773c6d53 (gate1 S3-end-a)",
+   "cost_credits": 6.25,
+   "retry_of": "9e98d655-dde3-4f87-81d8-9ae527ab7379",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_105353_fdf05b3a-8c4c-41a0-bb29-31edab99b083.mp4",
+   "prompt": "The tiny truck drives slowly away from camera up the winding road with its headlights on and stays tiny and far away; it never comes toward the camera and never grows larger. One continuous camera move: hold for one second, then the camera rises vertically, straight up, into a thick layer of soft white cloud that drifts across and fully fills the frame for about half a second; as the camera rises out above the cloud, the light has warmed from blue night to golden dawn and the miniature city in front of the mountains is revealed, ending exactly on the last frame. Slow ease-in and ease-out, no cuts. The road and the city do not transform into each other; hills, road and buildings stay rigid — no morphing, no melting, no warping. All surfaces stay blank; no text, letters, signage or logos.",
+   "qa": "PASS (with notes)",
+   "usable_in_out_s": [
+    0.0,
+    4.75
+   ],
+   "qa_notes": "121f. Night road with headlights 0-2.25 s (truck on the switchbacks 0-1.75 s for the trail track), a thick cloud wall rolls up 2.25-3.25 s and fully hides the night->dawn change, clouds part on the dawn city 3.25-4.75 s, ends on the end frame. No visible morph of road into city; buildings rigid. Notes: the camera does not crane up (horizon stays put; the cloud acts as a wipe); the truck ignores 'away' and drives toward camera, growing to a large close-up 2.0-3.0 s; a dark-blue sky corner lingers top-left at ~3.0 s under the cloud. Retime 1.25x to 4.0 s as planned."
+  },
+  {
+   "name": "S6",
+   "file": "S6.mp4",
+   "job_id": "49794db4-0dfe-43d4-9757-6ccf5ff055f4",
+   "model_config": "kling3_0 pro sound off 9:16 5s",
+   "start_image": "b5ab0b88-a618-418e-b26d-1484abbf2d29 (gate2 S6-c)",
+   "cost_credits": 7.5,
+   "retry_of": "a31495e5-2ce8-4b59-b542-03a051a7d3e0",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_33Kys8Zpb8C4Bj4qjaLPdipbHP9/hf_20261118_105355_49794db4-0dfe-43d4-9757-6ccf5ff055f4.mp4",
+   "prompt": "The truck is parked with its engine off: it does not drive, does not move and its wheels do not turn. The camera slides very slowly and steadily to the right along the street, so the truck and the apartment block behind it both drift slowly to the left across the frame, the truck slightly faster than the blurred building; the background moves with parallax only. Constant speed, no rotation, no zoom, no tilt, the truck stays strictly side-on. No people or figures appear. The truck body, round wheels and blank panels keep their exact shape — no morphing, no warping. All surfaces stay blank; no text, letters, numbers or logos.",
+   "qa": "FAIL",
+   "qa_notes": "Same failure: background scrolls right 10-19 px/frame for the whole clip while the truck wobbles in place (rear wheel x 690-723, never reaches 490), so it reads as driving. Also the box grows taller/cab narrows, a centre dot appears on the hubs and the far-side wheel peeks behind the rear wheel (~2.5 s). Use the plan's 0-cr 2.5D fallback (§3.6)."
+  }
+ ],
+ "final_picks": {
+  "S1": "S1.mp4",
+  "S3": "S3.mp4 (retry)",
+  "S4": "S4.mp4",
+  "S5": "S5.mp4",
+  "S6": "FAIL -> 2.5D fallback on gate2/S6-c.png"
+ }
+}

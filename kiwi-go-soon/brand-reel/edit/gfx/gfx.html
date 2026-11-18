@@ -1,0 +1,231 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  /* Onest bundled locally; no web or system fallback in the stack (07 §5.4). */
+  @font-face { font-family: "Onest Local"; font-weight: 600; src: url("../fonts/onest-600.ttf") format("truetype"); }
+  @font-face { font-family: "Onest Local"; font-weight: 700; src: url("../fonts/onest-700.ttf") format("truetype"); }
+  html, body { margin: 0; background: transparent; font-family: "Onest Local"; }
+</style></head>
+<body>
+<span style="font-weight:600">ёЁ«»—…✓</span><span style="font-weight:700">ёЁ«»—…✓</span>
+<script>
+// Every component renders at S x the 1080x1920 frame scale into its own transparent canvas,
+// and reports its 1x placement (x, y = top-left in the frame). Python downsamples (Lanczos) and animates.
+const S = 2;
+let CFG = null, LOGO_IMG = null;
+
+function col(name, a) {
+  const hex = CFG.colors[name] || name;
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return a === undefined ? `rgb(${r},${g},${b})` : `rgba(${r},${g},${b},${a})`;
+}
+function font(w, px) { return `${w} ${px * S}px "Onest Local"`; }
+function measure(text, w, px) {
+  const c = document.createElement('canvas').getContext('2d');
+  c.font = font(w, px);
+  const m = c.measureText(text);
+  return { w: m.width / S, asc: m.fontBoundingBoxAscent / S, desc: m.fontBoundingBoxDescent / S,
+           aasc: m.actualBoundingBoxAscent / S, adesc: m.actualBoundingBoxDescent / S };
+}
+function newCanvas(w, h) {
+  const c = document.createElement('canvas');
+  c.width = Math.ceil(w * S); c.height = Math.ceil(h * S);
+  const ctx = c.getContext('2d');
+  ctx.scale(S, S);
+  return [c, ctx];
+}
+function rr(ctx, x, y, w, h, r) {
+  // r: number or [tl, tr, br, bl]
+  const R = Array.isArray(r) ? r : [r, r, r, r];
+  ctx.beginPath();
+  ctx.moveTo(x + R[0], y);
+  ctx.lineTo(x + w - R[1], y); ctx.quadraticCurveTo(x + w, y, x + w, y + R[1]);
+  ctx.lineTo(x + w, y + h - R[2]); ctx.quadraticCurveTo(x + w, y + h, x + w - R[2], y + h);
+  ctx.lineTo(x + R[3], y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - R[3]);
+  ctx.lineTo(x, y + R[0]); ctx.quadraticCurveTo(x, y, x + R[0], y);
+  ctx.closePath();
+}
+function out(name, canvas, x, y, w, h, extra) {
+  return Object.assign({ name, x, y, w, h, png: canvas.toDataURL('image/png') }, extra || {});
+}
+
+// ---------- chat bubbles (BU-1..5) ----------
+function bubble(id, b) {
+  const fs = b.size, padX = Math.round(fs * 0.46), padY = Math.round(fs * 0.30);
+  const m = measure(b.text, 600, fs);
+  const lineH = Math.round(fs * 1.22);
+  const icon = b.icon || 0, iconGap = icon ? 14 : 0;
+  const bw = Math.round(padX + icon + iconGap + m.w + padX);
+  const bh = lineH + 2 * padY;
+  const M = 40; // margin for shadow + tail
+  const [c, ctx] = newCanvas(bw + 2 * M, bh + 2 * M);
+  const bx = M, by = M, r = Math.round(bh * 0.30);
+  const incoming = b.kind === 'in';
+  // tail + body as one path so the shadow is continuous
+  ctx.save();
+  ctx.shadowColor = col('ink', 0.20); ctx.shadowBlur = 26 * S; ctx.shadowOffsetY = 7 * S;
+  ctx.fillStyle = incoming ? col('paper') : col('lime');
+  rr(ctx, bx, by, bw, bh, incoming ? [r, r, r, 8] : [r, r, 8, r]);
+  ctx.fill();
+  ctx.beginPath();
+  if (incoming) { ctx.moveTo(bx + 2, by + bh - 26); ctx.quadraticCurveTo(bx + 2, by + bh + 2, bx - 14, by + bh + 4); ctx.quadraticCurveTo(bx + 14, by + bh + 6, bx + 26, by + bh - 2); }
+  else { ctx.moveTo(bx + bw - 2, by + bh - 26); ctx.quadraticCurveTo(bx + bw - 2, by + bh + 2, bx + bw + 14, by + bh + 4); ctx.quadraticCurveTo(bx + bw - 14, by + bh + 6, bx + bw - 26, by + bh - 2); }
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+  if (!incoming) { ctx.strokeStyle = col('ink', 0.10); ctx.lineWidth = 1.5; rr(ctx, bx, by, bw, bh, [r, r, 8, r]); ctx.stroke(); }
+  // text
+  const base = by + padY + (lineH - (m.asc + m.desc)) / 2 + m.asc;
+  let tx = bx + padX;
+  if (icon) { ctx.drawImage(LOGO_IMG, tx, by + (bh - icon) / 2, icon, icon); tx += icon + iconGap; }
+  ctx.font = font(600, fs); ctx.fillStyle = col('ink'); ctx.textBaseline = 'alphabetic';
+  ctx.fillText(b.text, tx, base);
+  const left = incoming ? b.x : b.right - bw;
+  return out(id, c, left - M, b.y - M, bw + 2 * M, bh + 2 * M,
+    { body: [left, b.y, bw, bh], text_w: m.w, anchor: incoming ? [left, b.y + bh] : [left + bw, b.y + bh] });
+}
+
+// ---------- supers (SP-1..4): cream pill, lime dot, ink text ----------
+function superPill(id, sp, st) {
+  const fs = st.size, lh = fs * st.leading;
+  const widths = sp.lines.map(t => measure(t, 600, fs).w);
+  const m = measure(sp.lines[0], 600, fs);
+  const tw = Math.max(...widths);
+  const pw = Math.round(st.pad_l + st.dot + st.gap + tw + st.pad_r);
+  const ph = Math.round(lh * sp.lines.length + 2 * st.pad_y);
+  const px = Math.round(st.cx - pw / 2), py = Math.round(st.cy - ph / 2);
+  const M = 36;
+  const [c, ctx] = newCanvas(pw + 2 * M, ph + 2 * M);
+  ctx.save();
+  ctx.shadowColor = col('ink', 0.14); ctx.shadowBlur = 24 * S; ctx.shadowOffsetY = 6 * S;
+  ctx.fillStyle = col('cream', st.fill_alpha);
+  rr(ctx, M, M, pw, ph, st.radius); ctx.fill();
+  ctx.restore();
+  ctx.font = font(600, fs); ctx.fillStyle = col('ink');
+  const tx = M + st.pad_l + st.dot + st.gap;
+  sp.lines.forEach((t, i) => {
+    const base = M + st.pad_y + i * lh + (lh - (m.asc + m.desc)) / 2 + m.asc;
+    ctx.fillText(t, tx, base);
+    if (i === 0) {
+      const xh = measure('х', 600, fs).aasc;
+      ctx.fillStyle = col('lime'); ctx.beginPath();
+      ctx.arc(M + st.pad_l + st.dot / 2, base - xh / 2, st.dot / 2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = col('ink');
+    }
+  });
+  return out(id, c, px - M, py - M, pw + 2 * M, ph + 2 * M, { body: [px, py, pw, ph], line_w: widths });
+}
+
+// ---------- PiP mini phone «Kiwi Go для магазинов» ----------
+function pipBase(p) {
+  const M = 40;
+  const [c, ctx] = newCanvas(p.w + 2 * M, p.h + 2 * M);
+  ctx.save();
+  ctx.shadowColor = col('ink', 0.28); ctx.shadowBlur = 34 * S; ctx.shadowOffsetY = 10 * S;
+  ctx.fillStyle = col('ink'); rr(ctx, M, M, p.w, p.h, p.radius); ctx.fill();
+  ctx.restore();
+  const sx = M + p.bezel, sy = M + p.bezel, sw = p.w - 2 * p.bezel, sh = p.h - 2 * p.bezel;
+  ctx.fillStyle = col('paper'); rr(ctx, sx, sy, sw, sh, p.radius - p.bezel); ctx.fill();
+  // camera island
+  ctx.fillStyle = col('ink'); rr(ctx, sx + sw / 2 - 34, sy + 9, 68, 16, 8); ctx.fill();
+  // header: icon 40 + «Kiwi Go» Bold 34 over «для магазинов» SemiBold 24
+  const hx = sx + 16, hy = sy + 40;
+  ctx.drawImage(LOGO_IMG, hx, hy, 40, 40);
+  ctx.fillStyle = col('ink');
+  ctx.font = font(700, 34); ctx.fillText(p.title, hx + 52, hy + 27);
+  ctx.font = font(600, 24); ctx.fillStyle = col('ink70'); ctx.fillText(p.subtitle, hx + 52, hy + 56);
+  ctx.fillStyle = col('sand'); ctx.fillRect(sx + 14, hy + 72, sw - 28, 2);
+  // order card: neutral placeholder bars only (no invented words) until real screenshots arrive (Q-3)
+  const oy = hy + 86;
+  ctx.fillStyle = col('cream'); rr(ctx, sx + 14, oy, sw - 28, 92, 14); ctx.fill();
+  ctx.fillStyle = '#DCD6C6';
+  rr(ctx, sx + 28, oy + 18, 150, 14, 7); ctx.fill();
+  rr(ctx, sx + 28, oy + 42, 220, 12, 6); ctx.fill();
+  rr(ctx, sx + 28, oy + 64, 120, 12, 6); ctx.fill();
+  const chipTop = oy + 108;
+  return [out('PIP', c, p.x - M, p.y - M, p.w + 2 * M, p.h + 2 * M, { screen: [p.x + p.bezel, p.y + p.bezel, sw, sh] }), chipTop - M + p.y, sx - M + p.x];
+}
+function chip(name, label, state, x, y) {
+  const fs = 28, h = 46, pad = 18;
+  const m = measure(label, 600, fs);
+  const w = Math.round(m.w + 2 * pad);
+  const M = 4;
+  const [c, ctx] = newCanvas(w + 2 * M, h + 2 * M);
+  if (state === 'active') { ctx.fillStyle = col('lime'); }
+  else if (state === 'past') { ctx.fillStyle = col('cream'); }
+  else { ctx.fillStyle = col('sand'); }
+  rr(ctx, M, M, w, h, h / 2); ctx.fill();
+  if (state !== 'inactive') { ctx.strokeStyle = col('ink', state === 'active' ? 0.15 : 0.10); ctx.lineWidth = 1.5; rr(ctx, M, M, w, h, h / 2); ctx.stroke(); }
+  ctx.font = font(600, fs);
+  ctx.fillStyle = state === 'inactive' ? col('ink', 0.45) : col('ink');
+  ctx.fillText(label, M + pad, M + (h - (m.asc + m.desc)) / 2 + m.asc);
+  return out(name, c, x - M, y - M, w + 2 * M, h + 2 * M, { text_w: m.w });
+}
+
+// ---------- end card text ----------
+function cardText(name, e, cx) {
+  const m = measure(e.text, e.weight, e.size);
+  const M = 12;
+  const w = Math.ceil(m.w) + 2 * M, h = Math.ceil(m.asc + m.desc) + 2 * M + (e.underline ? 16 : 0);
+  const [c, ctx] = newCanvas(w, h);
+  const left = cx - m.w / 2;            // pre-rendered, centred once; never re-centred
+  const x0 = Math.floor(left) - M, y0 = Math.floor(e.baseline - m.asc) - M;
+  const lx = left - x0, base = e.baseline - y0;
+  ctx.font = font(e.weight, e.size); ctx.fillStyle = col(e.color);
+  if (e.underline) {
+    const i = e.text.indexOf(e.underline);
+    const a = measure(e.text.slice(0, i), e.weight, e.size).w;
+    const b = measure(e.text.slice(0, i + e.underline.length), e.weight, e.size).w;
+    ctx.fillStyle = col('lime'); ctx.fillRect(lx + a, base + 10, b - a, 8);
+    ctx.fillStyle = col(e.color);
+  }
+  ctx.fillText(e.text, lx, base);
+  // glyph steps for the type-on mask: right edge of each glyph prefix, in frame px
+  const steps = [];
+  for (let i = 1; i <= [...e.text].length; i++) steps.push(left + measure([...e.text].slice(0, i).join(''), e.weight, e.size).w);
+  return out(name, c, x0, y0, w, h, { text_w: m.w, left, right: left + m.w, steps, ink_top: e.baseline - m.aasc, ink_bottom: e.baseline + m.adesc });
+}
+function urlPill(e, cx) {
+  const M = 4;
+  const [c, ctx] = newCanvas(e.w + 2 * M, e.h + 2 * M);
+  ctx.fillStyle = col('lime'); rr(ctx, M, M, e.w, e.h, e.h / 2); ctx.fill();
+  ctx.strokeStyle = col('ink', 0.15); ctx.lineWidth = 1.5; rr(ctx, M, M, e.w, e.h, e.h / 2); ctx.stroke();
+  const m = measure(e.text, e.weight, e.size);
+  ctx.font = font(e.weight, e.size); ctx.fillStyle = col(e.color);
+  ctx.fillText(e.text, M + (e.w - m.w) / 2, M + (e.h - (m.asc + m.desc)) / 2 + m.asc);
+  return out('CARD-url_pill', c, cx - e.w / 2 - M, e.cy - e.h / 2 - M, e.w + 2 * M, e.h + 2 * M, { text_w: m.w });
+}
+
+async function renderAll(cfg, logoSvg) {
+  CFG = cfg;
+  await document.fonts.ready;
+  for (const w of [600, 700]) await document.fonts.load(`${w} 72px "Onest Local"`, 'ёЁ«»—…✓');
+  const checks = {
+    f600: document.fonts.check('600 72px "Onest Local"', 'ёЁ«»—…✓'),
+    f700: document.fonts.check('700 72px "Onest Local"', 'ёЁ«»—…✓'),
+    computed: getComputedStyle(document.body).fontFamily,
+  };
+  LOGO_IMG = new Image();
+  LOGO_IMG.src = 'data:image/svg+xml;base64,' + btoa(logoSvg);
+  await LOGO_IMG.decode();
+
+  const els = [];
+  const ui = cfg.ui;
+  for (const [id, b] of Object.entries(ui.bubbles)) els.push(bubble(id, b));
+  for (const [id, sp] of Object.entries(ui.supers)) els.push(superPill(id, sp, ui.super_style));
+  const [pip, chipTop, chipX] = pipBase(ui.pip);
+  els.push(pip);
+  for (let i = 0; i < 4; i++) {
+    const y = chipTop + i * 56, x = chipX + 14 + 6 + 40;  // chips sit inside the screen, left-aligned
+    els.push(chip(`CHIP-${i}-inactive`, ui.pip.chips_inactive[i], 'inactive', x - 46, y));
+    els.push(chip(`CHIP-${i}-active`, ui.pip.chips_active[i], 'active', x - 46, y));
+    els.push(chip(`CHIP-${i}-past`, ui.pip.chips_past[i], 'past', x - 46, y));
+  }
+  const cx = ui.card.icon_final[0];
+  for (const k of ['wordmark', 'descriptor', 'price', 'price_note', 'cta', 'whatsapp']) els.push(cardText('CARD-' + k, ui.card[k], cx));
+  els.push(urlPill(ui.card.url_pill, cx));
+  return { checks, els };
+}
+window.renderAll = renderAll;
+</script>
+</body></html>
