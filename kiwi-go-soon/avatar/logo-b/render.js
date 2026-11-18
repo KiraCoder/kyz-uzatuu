@@ -13,6 +13,7 @@ const V = {
   '2-lime':       { bg: '#B8F03C', body: logo(128) },
   '3-ink':        { bg: '#111410', body: `<circle r="134" fill="#FFFDF7"/>${logo(122)}` },
   '4-paper':      { bg: '#FFFDF7', body: logo(118) },
+  '5-edge':       { bg: '#111410', body: logo(170) },             // logo = the whole circle crop, no ring on dark mode
 };
 (async () => {
   const b = await chromium.launch();
